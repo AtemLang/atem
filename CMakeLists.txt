@@ -5,6 +5,7 @@ project ("meta")
 set (LLVM "E:/llvm-project/build/")
 
 include_directories ("${LLVM}/include")
+include_directories ("${CMAKE_CURRENT_SOURCE_DIR} ")
 link_directories ("${LLVM}/lib")
 
 add_subdirectory ("meta-compiler")

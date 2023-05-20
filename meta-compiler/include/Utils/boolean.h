@@ -5,7 +5,7 @@
 #include <compare>
 
 namespace meta {
-    struct boolean {
+    struct boolean final {
         bool _val;
 
         // [1]
