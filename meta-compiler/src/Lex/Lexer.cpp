@@ -18,9 +18,9 @@ namespace meta {
         for(;it < end; it++) {
             if(std::isspace(*it)) continue;
 
-            if(std::isalpha(*it)) {
+            if(std::isalpha(*it) or *it == '_') {
                 std::string identifier_str{};
-                while(std::isalnum(*it) or *it == '.' or *it == '_') {
+                while(std::isalnum(*it) or *it == '_') {
                     identifier_str += *it;
                     it++;
                     if(it >= end or *it == '\0') break;
