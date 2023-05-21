@@ -4,6 +4,7 @@
 #include "meta-compiler/include/Utils/addressof.h"
 
 #include <coroutine>
+#include <cassert>
 
 namespace meta {    //RAII-helper coroutine type
 
@@ -58,6 +59,16 @@ namespace meta {    //RAII-helper coroutine type
 
         [[noreturn]] void assert_coro_did_yield(std::coroutine_handle<>, const void *) noexcept;
 
+        void assert_coro_yield_once(std::coroutine_handle<> coro) noexcept {
+            assert(coro.done());
+            __builtin_unreachable();
+        }
+
+        void assert_coro_did_yield(std::coroutine_handle<> coro,
+                                                    const void*             yielded_value) noexcept {
+            assert(!coro.done() && yielded_value != nullptr);
+            __builtin_unreachable();
+        }
     }  // namespace cor_detail
 
 /**
