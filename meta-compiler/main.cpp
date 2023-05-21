@@ -1,6 +1,12 @@
 #include <iostream>
+#include "meta-compiler/include/Utils/co_resource.h"
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    auto coro = []() -> meta::co_resource<int> {
+        std::cout << "cores test" << std::endl;
+        co_yield 1;
+        std::cout << "test done" << std::endl;
+    }();
+    std::cout << *coro << std::endl;
     return 0;
 }

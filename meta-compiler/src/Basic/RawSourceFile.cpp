@@ -5,7 +5,8 @@ namespace meta {
         : source_file_path_(source_file_path)
     {
         if(this->source_file_path_.extension() != "metalang") {
-
+            //todo: exception based on Boost.Leaf
         }
+        
     }
 }
