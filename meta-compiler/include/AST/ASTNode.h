@@ -10,8 +10,8 @@
 namespace meta {
     class ASTNode {
     public:
-        virtual ~ASTNode();
-        virtual auto CodeGen() -> llvm::Value*;
+        virtual ~ASTNode() {}
+        virtual auto CodeGen() -> llvm::Value* = 0;
     };
 }
 
