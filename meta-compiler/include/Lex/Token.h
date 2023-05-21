@@ -13,6 +13,13 @@ namespace meta {
         auto Is(TokenEnum tok) const noexcept -> bool;
         auto IsNot(TokenEnum tok) const noexcept -> bool;
     };
+
+    class AbstractToken {
+    public:
+        virtual ~AbstractToken() = 0;
+    };
+
+    class
 }
 
 #endif //META_TOKEN_H

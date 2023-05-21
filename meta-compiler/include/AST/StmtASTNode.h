@@ -9,6 +9,12 @@ namespace meta {
         ~StmtASTNode() override {}
         auto CodeGen() -> llvm::Value* override = 0;
     };
+
+    class ValueStmtASTNode : public StmtASTNode {
+    public:
+        ~ValueStmtASTNode() override {}
+        auto CodeGen() -> llvm::Value* override = 0;
+    };
 }
 
 #endif //META_STMTASTNODE_H
