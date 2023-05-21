@@ -1,0 +1,28 @@
+module std.keywords;
+
+import std.meta;
+import std.reflection;
+
+if_impl: 
+@language_construct(
+    type = "language.statement",
+    pattern = ^{
+        `if`(${cond: ^Expression})
+            {true_branch: () -> ()}
+        `else`
+            {false_branch: () -> ()}
+    }
+) 
+@expect(cond.value().type().is_convertible_to(bool))
+@constant_evaluated
+func = {
+    __builtin_if_statement(cond.is_constant_expression()) {
+        __builtin_if_statement(cond.value()) {
+            return true_branch;
+        } false: {
+            return false_branch;
+        }
+    } false: {
+        return __builtin_if_statement($cond, true_branch, false_branch)
+    }
+}
