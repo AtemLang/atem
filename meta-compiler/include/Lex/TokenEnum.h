@@ -4,6 +4,8 @@
 namespace meta {
     enum class TokenEnum {
         TOK_EOF,
+        TOK_IDENTIFIER,
+        TOK_NUMBER_LITERAL,
         TOK_FUNC,
         TOK_TYPE,
         TOK_RETURN,
@@ -11,7 +13,6 @@ namespace meta {
         TOK_IMPORT,
         TOK_EXPORT,
         TOK_MODULE,
-        TOK_OPERATOR,
         TOK_NAMESPACE,
         TOK_AUTO,
         TOK_SELF

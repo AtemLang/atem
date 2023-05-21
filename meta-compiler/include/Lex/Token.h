@@ -9,6 +9,7 @@ namespace meta {
         TokenEnum tok_type_;
 
     public:
+        explicit Token(TokenEnum type);
         auto Is(TokenEnum tok) const noexcept -> bool;
         auto IsNot(TokenEnum tok) const noexcept -> bool;
     };

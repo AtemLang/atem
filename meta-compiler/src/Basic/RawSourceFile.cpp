@@ -34,13 +34,12 @@ namespace meta {
 
         ifs.seekg(0, std::ios::beg);
         this->low_level_buffer_ = this->alloc_.allocate(this->source_file_size_);
-        memset(this->low_level_buffer_, 0, this->source_file_size_);
+        memset(this->low_level_buffer_, '\0', this->source_file_size_);
         if(ifs.is_open()) {
             ifs.read(this->low_level_buffer_, this->source_file_size_);
         }
         this->buffer_view_ = this->low_level_buffer_;
-        std::cout << "Source File Read!" << std::endl;
-        std::cout << this->buffer_view_;
+        std::cout << "Source File Read Successfully!" << std::endl;
     }
 
     RawSourceFile::~RawSourceFile() {
