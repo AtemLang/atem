@@ -13,6 +13,7 @@ endif ()
 
 find_package(Boost REQUIRED)
 find_package(clipp CONFIG REQUIRED)
+find_package(matchit CONFIG REQUIRED)
 
 include_directories ("${LLVM}/include")
 include_directories("/")
@@ -23,6 +24,7 @@ add_executable (meta "main.cpp" include/Utils/boolean.h src/Lex/Lexer.cpp includ
 target_link_libraries(meta
         PRIVATE
             clipp::clipp
+            matchit::matchit
         )
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
