@@ -1,11 +1,12 @@
 module std.keywords;
 
+import std.language_construct;
 import std.meta;
 import std.reflection;
 
 if_impl: 
 @language_construct(
-    type = "language.statement",
+    type = language.statement,
     pattern = ^{
         `if`(${cond: ^Expression})
             {true_branch: () -> ()}
