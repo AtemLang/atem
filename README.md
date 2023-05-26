@@ -102,23 +102,23 @@ func = {
 
 *You mean we can define our unique keywords and statements?*
 
-Not only keywords and statements, but Atem also provides a rich set of tools to define your *own* operators, types, expressions, or even extensions to the metaprogramming system! The unique capacity of Atem enables us to transform our favorite programming paradigms and models into a "language that uses our favorite syntaxes. For example, we could build a different generics model that has complete type-checking and uses witness-table-based boxing to implement (The default generics model of Atem is compile-time duck-typed and uses template-based monomorphization to implement), or even implement a borrow checker that ensures strict memory safety in a Rust-like way.
+Not only keywords and statements, but Atem also provides a rich set of tools to define your *own* operators, types, expressions, or even extensions to the metaprogramming system! The unique capacity of Atem enables us to transform our favorite programming paradigms and models into a "language" that uses our favorite syntaxes. For example, we could build a different generics model that has complete type-checking and uses witness-table-based boxing to implement (The default generics model of Atem is compile-time duck-typed and uses template-based monomorphization to implement), or even implement a borrow checker that ensures strict memory safety in a Rust-like way.
 
 ## Why Atem Exists?
 
 What should the "Programming Language of the Future" looks like?
 
-Should it support low-level assembly-like operations like C?
-
-Should it support a flexible dynamic system like Python?
-
-Should it support zero-overhead abstraction like C++?
-
-Should it support functional programming like Haskell?
-
-Should it support safety-by-construction like Rust?
-
-...
+> Should it support low-level assembly-like operations like C?
+>
+> Should it support a flexible dynamic system like Python?
+>
+> Should it support zero-overhead abstraction like C++?
+>
+> Should it support functional programming like Haskell?
+>
+> Should it support safety-by-construction like Rust?
+>
+> ...
 
 There are so many potential designs for the problem, and all of them have their own advantages and disadvantages. Is there a way to combine all designs together and avoid their drawbacks?
 
