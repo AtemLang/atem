@@ -35,7 +35,29 @@ main: func = {
 }
 ```
 
-...then you will find the compiler says there is no identifier named "if"!
+...then you will find the compiler says there is no identifier named "`if`"!
+
+To make the if example well-formed, all we need to do is to add a simple `import`.
+
+```atem
+module main;
+
+import std.infrastructure.keywords;
+
+main: func = {
+	if (//something...){
+		//something...
+	} 
+	else {
+		//something...
+	}
+}
+```
+
+Now the compiler will compile it happily!
 
 ## *...to get unlimited possibilities*
 
+*But what really happens?*
+
+The simple `if` example shows us the unlimited power of Atem. Actually
