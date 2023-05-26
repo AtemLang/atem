@@ -1,5 +1,5 @@
-#ifndef META_DECLASTNODE_H
-#define META_DECLASTNODE_H
+#ifndef ATEM_DECLASTNODE_H
+#define ATEM_DECLASTNODE_H
 
 #include "atem-compiler/include/AST/ASTNode.h"
 
@@ -29,4 +29,4 @@ namespace atem {
     };
 }
 
-#endif //META_DECLASTNODE_H
+#endif //ATEM_DECLASTNODE_H

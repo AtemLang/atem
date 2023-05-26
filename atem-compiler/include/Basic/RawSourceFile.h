@@ -1,5 +1,5 @@
-#ifndef META_RAWSOURCEFILE_H
-#define META_RAWSOURCEFILE_H
+#ifndef ATEM_RAWSOURCEFILE_H
+#define ATEM_RAWSOURCEFILE_H
 
 #include <filesystem>
 #include <memory_resource>
@@ -27,4 +27,4 @@ namespace atem {
     };
 }
 
-#endif //META_RAWSOURCEFILE_H
+#endif //ATEM_RAWSOURCEFILE_H

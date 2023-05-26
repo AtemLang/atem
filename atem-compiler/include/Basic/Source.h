@@ -1,5 +1,5 @@
-#ifndef META_SOURCE_H
-#define META_SOURCE_H
+#ifndef ATEM_SOURCE_H
+#define ATEM_SOURCE_H
 
 namespace atem {
     class SourceFile {
@@ -7,4 +7,4 @@ namespace atem {
     };
 }
 
-#endif //META_SOURCE_H
+#endif //ATEM_SOURCE_H

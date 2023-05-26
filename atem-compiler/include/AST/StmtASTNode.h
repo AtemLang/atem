@@ -1,5 +1,5 @@
-#ifndef META_STMTASTNODE_H
-#define META_STMTASTNODE_H
+#ifndef ATEM_STMTASTNODE_H
+#define ATEM_STMTASTNODE_H
 
 #include "atem-compiler/include/AST/ASTNode.h"
 
@@ -17,4 +17,4 @@ namespace atem {
     };
 }
 
-#endif //META_STMTASTNODE_H
+#endif //ATEM_STMTASTNODE_H

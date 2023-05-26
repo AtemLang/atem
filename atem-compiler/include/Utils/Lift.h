@@ -1,5 +1,5 @@
-#ifndef META_LIFT_H
-#define META_LIFT_H
+#ifndef ATEM_LIFT_H
+#define ATEM_LIFT_H
 
 #include "atem-compiler/include/Utils/fwd.h"
 
@@ -10,4 +10,4 @@ noexcept(noexcept(func(FWD(args)...)))\
     return func(FWD(args)...);\
 }
 
-#endif //META_LIFT_H
+#endif //ATEM_LIFT_H

@@ -1,5 +1,5 @@
-#ifndef META_ADDRESSOF_H
-#define META_ADDRESSOF_H
+#ifndef ATEM_ADDRESSOF_H
+#define ATEM_ADDRESSOF_H
 
 #ifdef __has_builtin
 #define HAS_BUILTIN(X) __has_builtin(X)
@@ -48,4 +48,4 @@ namespace atem {
 #undef HAS_ADDROF_INTRIN
 #endif
 
-#endif //META_ADDRESSOF_H
+#endif //ATEM_ADDRESSOF_H

@@ -1,5 +1,5 @@
-#ifndef META_EXPRASTNODE_H
-#define META_EXPRASTNODE_H
+#ifndef ATEM_EXPRASTNODE_H
+#define ATEM_EXPRASTNODE_H
 
 #include "atem-compiler/include/AST/StmtASTNode.h"
 
@@ -17,4 +17,4 @@ namespace atem {
     };
 }
 
-#endif //META_EXPRASTNODE_H
+#endif //ATEM_EXPRASTNODE_H

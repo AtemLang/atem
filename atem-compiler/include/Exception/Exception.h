@@ -1,5 +1,5 @@
-#ifndef META_EXCEPTION_H
-#define META_EXCEPTION_H
+#ifndef ATEM_EXCEPTION_H
+#define ATEM_EXCEPTION_H
 
 #include <filesystem>
 #include <string>
@@ -20,4 +20,4 @@ namespace atem::exception {
     };
 }
 
-#endif //META_EXCEPTION_H
+#endif //ATEM_EXCEPTION_H

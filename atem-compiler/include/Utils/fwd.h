@@ -1,5 +1,5 @@
-#ifndef META_FWD_H
-#define META_FWD_H
+#ifndef ATEM_FWD_H
+#define ATEM_FWD_H
 
 namespace atem::move_detail {
 
@@ -36,4 +36,4 @@ namespace atem::move_detail {
  */
 #define FWD(...) static_cast<decltype(__VA_ARGS__)&&>(__VA_ARGS__)
 
-#endif //META_FWD_H
+#endif //ATEM_FWD_H

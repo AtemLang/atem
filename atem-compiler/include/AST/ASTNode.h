@@ -1,5 +1,5 @@
-#ifndef META_ASTNODE_H
-#define META_ASTNODE_H
+#ifndef ATEM_ASTNODE_H
+#define ATEM_ASTNODE_H
 
 #include "llvm/IR/DerivedTypes.h"
 #include "llvm/IR/IRBuilder.h"
@@ -15,4 +15,4 @@ namespace atem {
     };
 }
 
-#endif //META_ASTNODE_H
+#endif //ATEM_ASTNODE_H

@@ -1,5 +1,5 @@
-#ifndef META_TOKEN_H
-#define META_TOKEN_H
+#ifndef ATEM_TOKEN_H
+#define ATEM_TOKEN_H
 
 #include "atem-compiler/include/Lex/TokenEnum.h"
 
@@ -80,4 +80,4 @@ namespace atem {
     };
 }
 
-#endif //META_TOKEN_H
+#endif //ATEM_TOKEN_H

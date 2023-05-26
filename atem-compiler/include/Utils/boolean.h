@@ -1,5 +1,5 @@
-#ifndef META_BOOLEAN_H
-#define META_BOOLEAN_H
+#ifndef ATEM_BOOLEAN_H
+#define ATEM_BOOLEAN_H
 
 #include <concepts>
 #include <compare>
@@ -36,4 +36,4 @@ namespace atem {
     };
 }
 
-#endif //META_BOOLEAN_H
+#endif //ATEM_BOOLEAN_H

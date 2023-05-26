@@ -1,5 +1,5 @@
-#ifndef META_TOKENENUM_H
-#define META_TOKENENUM_H
+#ifndef ATEM_TOKENENUM_H
+#define ATEM_TOKENENUM_H
 
 namespace atem {
     enum class TokenEnum {
@@ -19,4 +19,4 @@ namespace atem {
     };
 }
 
-#endif //META_TOKENENUM_H
+#endif //ATEM_TOKENENUM_H

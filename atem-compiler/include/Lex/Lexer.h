@@ -1,5 +1,5 @@
-#ifndef META_LEXER_H
-#define META_LEXER_H
+#ifndef ATEM_LEXER_H
+#define ATEM_LEXER_H
 
 #include "atem-compiler/include/Lex/Token.h"
 #include "atem-compiler/include/Basic/RawSourceFile.h"
@@ -20,4 +20,4 @@ namespace atem {
     };
 }
 
-#endif //META_LEXER_H
+#endif //ATEM_LEXER_H

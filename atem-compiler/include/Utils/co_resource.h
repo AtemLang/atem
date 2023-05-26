@@ -1,5 +1,5 @@
-#ifndef META_CO_RESOURCE_H
-#define META_CO_RESOURCE_H
+#ifndef ATEM_CO_RESOURCE_H
+#define ATEM_CO_RESOURCE_H
 
 #include "atem-compiler/include/Utils/addressof.h"
 
@@ -130,4 +130,4 @@ namespace atem {    //RAII-helper coroutine type
         }
     };
 }
-#endif //META_CO_RESOURCE_H
+#endif //ATEM_CO_RESOURCE_H

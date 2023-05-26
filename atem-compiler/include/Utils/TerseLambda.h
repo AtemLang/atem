@@ -1,5 +1,5 @@
-#ifndef META_TERSELAMBDA_H
-#define META_TERSELAMBDA_H
+#ifndef ATEM_TERSELAMBDA_H
+#define ATEM_TERSELAMBDA_H
 
 #include "atem-compiler/include/Utils/fwd.h"
 #include "atem-compiler/include/Utils/declval.h"
@@ -70,4 +70,4 @@ namespace atem::tl_detail {
 
 #define TL [&] CTL
 
-#endif //META_TERSELAMBDA_H
+#endif //ATEM_TERSELAMBDA_H
