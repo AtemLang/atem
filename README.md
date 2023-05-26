@@ -104,7 +104,7 @@ func = {
 
 Not only keywords and statements, Atem also provides a rich set of tools to define your *own* operators, types, expressions, or even extension to the metaprogramming system! The unique capacity of Atem enable us to transform our favorite programming paradigms and models into a *real* language that use your favorite syntaxes. For example, we could build a different generics model that has complete type-checking and uses witness table based boxing to implement (The default generics model of Atem is compile-time duck-typed and uses template based monomorphization to implement), or even implement a borrow checker that ensures strict memory safety in a Rust-like way.
 
-## Design Goals
+## Why Atem Exists?
 
 What should the "Programming Language of Future" looks like?
 
@@ -123,6 +123,19 @@ Should it support safety-by-construction like Rust?
 There are so many potential designs to the problem, and all of them have their own advantages and disadvantages. Is there a way to combine all designs together and avoid their drawbacks?
 
 Atem has a answer: A "Programming Language of Programming Language".
+
+More specifically, Atem provides a programmatically way to implement different(and often contradictory) language designs in library code. Atem does this by containing a smallest, assembly-like core language and a powerful metaprogramming system. Users can define their own "language" by their own requirements and personal preferences. Atem also has a standard library which provides a out-of-the-box programming style(hereinafter referred to as "std-style") for those who doesn't want to write complicated library code.
+
+The following are the design goals of the std-style (in no particular order):
+
+* Follow the zero-overhead abstraction
+* Expressive and intuitive
+* Friendly to the non-experts
+* Consistent and context-free syntax
+* Easy to customize and extend
+* ...
+
+The list is open to suggestions and will possibly change in future.
 
 ## How to...
 
