@@ -4,13 +4,13 @@
 
 Atem is a minimalist, general-purpose, and modern programming language focusing on providing a fine-grained powerful metaprogramming system.
 
-Atem is originally based on the "freedom of programming paradigms" provided by C++ metaprogramming system, and it also takes inspirations from many other languages like [Cpp2](https://github.com/hsutter/cppfront), [Circle](circle-lang.org), [Carbon](https://github.com/carbon-language/carbon-lang), [Rust](https://www.rust-lang.org/), [Swift](https://www.swift.org/documentation/), [D](https://dlang.org/) and [Zig](https://ziglang.org/).
+Atem is originally based on the "freedom of programming paradigms" provided by the C++ metaprogramming system, and it also takes inspiration from many other languages like [Cpp2](https://github.com/hsutter/cppfront), [Circle](circle-lang.org), [Carbon](https://github.com/carbon-language/carbon-lang), [Rust](https://www.rust-lang.org/), [Swift](https://www.swift.org/documentation/), [D](https://dlang.org/), and [Zig](https://ziglang.org/).
 
-**WARNING: Atem is a highly experimental and is still in the proof-of-concept stage.**
+**WARNING: Atem is highly experimental and is still in the proof-of-concept stage.**
 
-## *We limited us to a hilariously simple core language...*
+## *We limited ourselves to a hilariously simple core language...*
 
-At first glance, there's nothing new showed in the Atem "Hello World!" example...
+At first glance, there's nothing new shown in the Atem "Hello World!" example...
 
 ```atem
 module main;
@@ -62,7 +62,7 @@ Now the compiler will compile it happily!
 
 *But what really happens?*
 
-The simple `if` example shows us the unlimited power of Atem. Actually the `if` statement is implemented by the standard library!
+The simple `if` example shows us the unlimited power of Atem. Actually, the `if` statement is implemented by the standard library!
 
 *How is it possible?*
 
@@ -102,11 +102,11 @@ func = {
 
 *You mean we can define our unique keywords and statements?*
 
-Not only keywords and statements, Atem also provides a rich set of tools to define your *own* operators, types, expressions, or even extension to the metaprogramming system! The unique capacity of Atem enable us to transform our favorite programming paradigms and models into a *real* language that use your favorite syntaxes. For example, we could build a different generics model that has complete type-checking and uses witness table based boxing to implement (The default generics model of Atem is compile-time duck-typed and uses template based monomorphization to implement), or even implement a borrow checker that ensures strict memory safety in a Rust-like way.
+Not only keywords and statements, but Atem also provides a rich set of tools to define your *own* operators, types, expressions, or even extensions to the metaprogramming system! The unique capacity of Atem enables us to transform our favorite programming paradigms and models into a "language that uses our favorite syntaxes. For example, we could build a different generics model that has complete type-checking and uses witness-table-based boxing to implement (The default generics model of Atem is compile-time duck-typed and uses template-based monomorphization to implement), or even implement a borrow checker that ensures strict memory safety in a Rust-like way.
 
 ## Why Atem Exists?
 
-What should the "Programming Language of Future" looks like?
+What should the "Programming Language of the Future" looks like?
 
 Should it support low-level assembly-like operations like C?
 
@@ -120,11 +120,11 @@ Should it support safety-by-construction like Rust?
 
 ...
 
-There are so many potential designs to the problem, and all of them have their own advantages and disadvantages. Is there a way to combine all designs together and avoid their drawbacks?
+There are so many potential designs for the problem, and all of them have their own advantages and disadvantages. Is there a way to combine all designs together and avoid their drawbacks?
 
 Atem has a answer: A "Programming Language of Programming Language".
 
-More specifically, Atem provides a programmatically way to implement different(and often contradictory) language designs in library code. Atem does this by containing a smallest, assembly-like core language and a powerful metaprogramming system. Users can define their own "language" by their own requirements and personal preferences. Atem also has a standard library which provides a out-of-the-box programming style(hereinafter referred to as "std-style") for those who doesn't want to write complicated library code.
+More specifically, Atem provides a programmatic way to implement different(and often contradictory) language designs in library code. Atem does this by containing the smallest, assembly-like core language and a powerful metaprogramming system. Users can define their own "language" to their own requirements and personal preferences. Atem also has a standard library that provides an out-of-the-box programming style(hereinafter referred to as "std-style") for those who don't want to write complicated library code.
 
 The following are the design goals of the std-style (in no particular order):
 
@@ -135,7 +135,7 @@ The following are the design goals of the std-style (in no particular order):
 * Easy to customize and extend
 * ...
 
-The list is open to suggestions and will possibly change in future.
+The list is open to suggestions and will possibly change in the future.
 
 ## How to...
 
