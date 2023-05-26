@@ -83,16 +83,16 @@ namespace meta {
             if(*it == '/') {
                 if(maybe_comment) {
                     cout << "Got a comment" << endl;
-                    do {
+                    while (it < end or *it != '\0' or *it != '\n') {
                         it++;
-                    } while ((isdigit(*it) or *it == '.') and (it < end or *it != '\0' or *it != '\n' or *it != 'r'));
+                    }
                     maybe_comment = false;
                 } else {
                     maybe_comment = true;
                 }
             }
 
-            if(*it == '\0') {
+            if(it == end) {
                 cout << "Got a TOK_EOF" << endl;
                 return Token{TokenEnum::TOK_EOF};
             }
