@@ -1,0 +1,56 @@
+[TOC]
+
+# std-style Basics Design Note
+
+##Declarations
+
+### Variables
+
+Variable declaration syntax:
+$$
+\textcolor{aqua}{variable\text{-}name}_{opt} : \textcolor{aqua}{type\text{-}id}  = \textcolor{aqua}{initializer}_{opt}; \\
+\textcolor{aqua}{variable\text{-}name}_{opt} := \textcolor{aqua}{initializer}; \\
+$$
+Example:
+
+```atem
+Abc: type;
+Xyz: type;
+foo : (u: i32) -> Abc func;
+
+a: i32 = 2;
+b: = 2:i32;       // (:i32 = 2)
+c: = a:Abc;       // (:Abc = a)
+d: = ():Abc;      // Default Constructor
+e: = (a + b):Abc; // (:Abc = a + b)
+r: = foo(a):Abc;  // (:Abc = foo(a))
+s: = foo(2):Abc.start():Xyz.value; // Function Chaining
+t: = a++:Abc;     // (:Abc = a++)
+u: = a:Abc++;     // (:Abc = a)++
+x: = 2:i32:Abc;   // (:Abc = :i32 = 2) Constructor Chaining
+y: = (2:i32 + 4:i32):Abc; // (:Abc = (:i32 = 2) + (:i32 = 4))
+z: = ("text", 2:i32):Abc; // (:Abc = ("text", (:i32 = 2)))
+```
+
+
+
+### Functions
+
+#### Ordinary Function
+
+#### Lambdas
+
+#### Annotations
+
+#### Language Construct Implementations
+
+### User-Defined Types
+
+## Operators
+
+## Expression
+
+### Call Expression
+
+### Typed Expression
+

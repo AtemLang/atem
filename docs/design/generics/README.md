@@ -1,0 +1,2 @@
+# Atem Design Note: Generics
+
