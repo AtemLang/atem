@@ -6,7 +6,7 @@
 
 ### Variables
 
-Variable declaration syntax:
+Syntax for declaring variables:
 $$
 \textcolor{aqua}{variable\text{-}name}_{opt} : \textcolor{aqua}{type\text{-}id}  = \textcolor{aqua}{initializer}_{opt}; \\
 \textcolor{aqua}{variable\text{-}name}_{opt} := \textcolor{aqua}{initializer}; \\
@@ -32,13 +32,25 @@ y: = (2:i32 + 4:i32):Abc; // (:Abc = (:i32 = 2) + (:i32 = 4))
 z: = ("text", 2:i32):Abc; // (:Abc = ("text", (:i32 = 2)))
 ```
 
-
-
 ### Functions
 
 #### Ordinary Function
 
+Syntax for declaring ordinary functions:
+$$
+\textcolor{aqua}{function\text{-}name}_{opt} : (\textcolor{aqua}{parameter\text{-}list})_{opt} \ \text{->} \ \textcolor{aqua}{return\text{-}type}_{opt} \ \textcolor{lime}{func} = \textcolor{yellow}{function\text{-}body}_{opt};
+$$
+
 #### Lambdas
+
+Syntax for declaring lambdas:
+$$
+: [\textcolor{aqua}{lambda\text{-}catch\text{-}list}]_{opt} \ (\textcolor{aqua}{lambda\text{-}parameter\text{-}list}_{opt}) \ \text{->} \ {lambda\text{-}return\text{-}type}_{opt} = \textcolor{yellow}{lambda}
+$$
+
+#### Expression Lambda
+
+
 
 #### Annotations
 
