@@ -6,21 +6,10 @@
 
 ```mermaid
 ---
-title: "Reflection Types Hierarchies"
+title: "Reflection Types Hierarchies - User Interfaces"
 ---
 classDiagram
-	Reflect <|-- ASTNode
 	Reflect <|-- Object
-	
-	ASTNode <|-- Declaration
-	Declaration <|-- NamedDeclaration
-	NamedDeclaration <|-- ValueDeclaration
-	ValueDeclaration <|-- FunctionDeclaration
-	
-	ASTNode <|-- Statement
-	
-	Statement <|-- ValueStatement
-	ValueStatement <-- Expression
 	
 	Object <|-- Named
 	
@@ -43,5 +32,33 @@ classDiagram
 	Type <|-- Record
 	Record <|-- Class
 	Record <|-- Struct
+```
+
+```mermaid
+---
+title: "Reflection Types Hierarchies - AST Nodes"
+---
+classDiagram
+	Reflect <|-- ASTNode
+	
+	ASTNode <|-- Declaration
+	Declaration <|-- NamedDeclaration
+	NamedDeclaration <|-- ValueDeclaration
+	ValueDeclaration <|-- FunctionDeclaration
+	ValueDeclaration <|-- VariableDeclaration
+	ValueDeclaration <|-- TypeDeclaration
+	TypeDeclaration <|-- ClassDeclaration
+	TypeDeclaration <|-- StructDeclaration
+	TypeDeclaration <|-- EnumDeclaration
+	TypeDeclaration <|-- ConceptDeclaration
+	TypeDeclaration <|-- ImplDeclaration
+	
+	ASTNode <|-- Statement
+	
+	Statement <|-- ValueStatement
+	ValueStatement <-- Expression
+	Expression <|-- Literal
+	Expression <|-- StatementExpression
+	Expression <|-- AsE
 ```
 
