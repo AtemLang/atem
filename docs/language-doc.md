@@ -109,12 +109,12 @@ main: func {
 
 ### Built-in Values
 
-| Value     | Description  |
-| --------- | ------------ |
-| true      | `bool` value |
-| false     | `bool` value |
-| undefined |              |
-| null      |              |
+| Value     | Description                              |
+| --------- | ---------------------------------------- |
+| true      | `bool` value                             |
+| false     | `bool` value                             |
+| undefined | Used to leave variables' value undefined |
+| null      | The value of null optionals and pointers |
 
 ### Integer Literals
 
@@ -208,9 +208,30 @@ main: func {
 
 #### Logical Operators
 
+| Syntax    | Description | Operator Category               | Example |
+| --------- | ----------- | ------------------------------- | ------- |
+| `not a`   | Logical NOT | stdatem.operator.logical.unary  |         |
+| `a and b` | Logical AND | stdatem.operator.logical.binary |         |
+| `a or b`  | Logical OR  | stdatem.operator.logical.binary |         |
+
 #### Bitwise Operators
 
+| Syntax     | Description                   | Operator Category               | Example |
+| ---------- | ----------------------------- | ------------------------------- | ------- |
+| `~a`       | Bitwise NOT                   | stdatem.operator.bitwise.unary  |         |
+| `a & b`    | Bitwise AND                   | stdatem.operator.bitwise.binary |         |
+| `a \| b`   | Bitwise OR                    | stdatem.operator.bitwise.binary |         |
+| `a ^ b`    | Bitwise XOR                   | stdatem.operator.bitwise.binary |         |
+| `a << b`   | Bitwise Left Shift            | stdatem.operator.bitwise.binary |         |
+| `a <<\| b` | Saturating Bitwise Left Shift | stdatem.operator.bitwise.binary |         |
+| `a >> b`   | Bitwise Right Shift           | stdatem.operator.bitwise.binary |         |
+
 #### Reflection Operators
+
+| Syntax | Description | Operator Category                 | Example |
+| ------ | ----------- | --------------------------------- | ------- |
+| `^a`   | Reflection  | stdatem.operator.reflection.unary |         |
+| `#a`   | Reification | stdatem.operator.reflection.unary |         |
 
 #### Other Operators
 
