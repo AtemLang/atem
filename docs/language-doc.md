@@ -152,47 +152,47 @@ main: func {
 
 #### Arithmetic Operators
 
-| Syntax    | Description               | Operator Category                  | Example |
-| --------- | ------------------------- | ---------------------------------- | ------- |
-| `a + b`   | Addition                  | stdatem.operator.arithmetic.binary |         |
-| `a +% b`  | Wrapping Addition         | stdatem.operator.arithmetic.binary |         |
-| `a +| b`  | Saturating Addition       | stdatem.operator.arithmetic.binary |         |
-| `a - b`   | Subtraction               | stdatem.operator.arithmetic.binary |         |
-| `a -% b`  | Wrapping Subtraction      | stdatem.operator.arithmetic.binary |         |
-| `a -| b`  | Saturating Subtraction    | stdatem.operator.arithmetic.binary |         |
-| `a * b`   | Multiplication            | stdatem.operator.arithmetic.binary |         |
-| `a *% b`  | Wrapping Multiplication   | stdatem.operator.arithmetic.binary |         |
-| `a *| b`  | Saturating Multiplication | stdatem.operator.arithmetic.binary |         |
-| `a / b `  | Division                  | stdatem.operator.arithmetic.binary |         |
-| `a % b`   | Remainder Division        | stdatem.operator.arithmetic.binary |         |
-| `-a`      | Negation                  | stdatem.operator.arithmetic.unary  |         |
-| `-%a`     | Wrapping Negation         | stdatem.operator.arithmetic.unary  |         |
-| `a ** b`  | Power                     | stdatem.operator.arithmetic.binary |         |
-| `a **% b` | Wrapping Power            | stdatem.operator.arithmetic.binary |         |
-| `a **| b` | Saturating Power          | stdatem.operator.arithmetic.binary |         |
+| Syntax     | Description               | Operator Category                  | Example |
+| ---------- | ------------------------- | ---------------------------------- | ------- |
+| `a + b`    | Addition                  | stdatem.operator.arithmetic.binary |         |
+| `a +% b`   | Wrapping Addition         | stdatem.operator.arithmetic.binary |         |
+| `a +\| b`  | Saturating Addition       | stdatem.operator.arithmetic.binary |         |
+| `a - b`    | Subtraction               | stdatem.operator.arithmetic.binary |         |
+| `a -% b`   | Wrapping Subtraction      | stdatem.operator.arithmetic.binary |         |
+| `a -\| b`  | Saturating Subtraction    | stdatem.operator.arithmetic.binary |         |
+| `a * b`    | Multiplication            | stdatem.operator.arithmetic.binary |         |
+| `a *% b`   | Wrapping Multiplication   | stdatem.operator.arithmetic.binary |         |
+| `a *\| b`  | Saturating Multiplication | stdatem.operator.arithmetic.binary |         |
+| `a / b `   | Division                  | stdatem.operator.arithmetic.binary |         |
+| `a % b`    | Remainder Division        | stdatem.operator.arithmetic.binary |         |
+| `-a`       | Negation                  | stdatem.operator.arithmetic.unary  |         |
+| `-%a`      | Wrapping Negation         | stdatem.operator.arithmetic.unary  |         |
+| `a ** b`   | Power                     | stdatem.operator.arithmetic.binary |         |
+| `a **% b`  | Wrapping Power            | stdatem.operator.arithmetic.binary |         |
+| `a **\| b` | Saturating Power          | stdatem.operator.arithmetic.binary |         |
 
 #### Assignment Operators
 
-| Syntax    | Description                              | Operator Category                  | Example |
-| --------- | ---------------------------------------- | ---------------------------------- | ------- |
-| `a = b`   | Simple Assignment                        | stdatem.operator.assignment.binary |         |
-| `a += b`  | Addition Assignment                      | stdatem.operator.assignment.binary |         |
-| `a +&= b` | Wrapping Addition Assignment             | stdatem.operator.assignment.binary |         |
-| `a +|= b` | Saturating Addition Assignment           | stdatem.operator.assignment.binary |         |
-| `a -= b`  | Subtraction Assignment                   | stdatem.operator.assignment.binary |         |
-| `a -%= b` | Wrapping Subtraction Assignment          | stdatem.operator.assignment.binary |         |
-| `a -|= b` | Saturating Subtraction Assignment        | stdatem.operator.assignment.binary |         |
-| `a *= b`  | Multiplication Assignment                | stdatem.operator.assignment.binary |         |
-| `a *%= b` | Wrapping Multiplication Assignment       | stdatem.operator.assignment.binary |         |
-| `a *|= b` | Saturating Multiplication Assignment     | stdatem.operator.assignment.binary |         |
-| `a /= b`  | Division Assignment                      | stdatem.operator.assignment.binary |         |
-| `a %= b`  | Remainder Division Assignment            | stdatem.operator.assignment.binary |         |
-| `<<=`     | Bitwise Left Shift Assignment            | stdatem.operator.assignment.binary |         |
-| `<<|=`    | Saturating Bitwise Left Shift Assignment | stdatem.operator.assignment.binary |         |
-| `>>=`     | Bitwise Right Shift Assignment           | stdatem.operator.assignment.binary |         |
-| `&=`      | Bitwise AND Assignment                   | stdatem.operator.assignment.binary |         |
-| `|=`      | Bitwise OR Assignment                    | stdatem.operator.assignment.binary |         |
-| `^=`      | Bitwise NOT Assignment                   | stdatem.operator.assignment.binary |         |
+| Syntax     | Description                              | Operator Category                  | Example |
+| ---------- | ---------------------------------------- | ---------------------------------- | ------- |
+| `a = b`    | Simple Assignment                        | stdatem.operator.assignment.binary |         |
+| `a += b`   | Addition Assignment                      | stdatem.operator.assignment.binary |         |
+| `a +&= b`  | Wrapping Addition Assignment             | stdatem.operator.assignment.binary |         |
+| `a +\|= b` | Saturating Addition Assignment           | stdatem.operator.assignment.binary |         |
+| `a -= b`   | Subtraction Assignment                   | stdatem.operator.assignment.binary |         |
+| `a -%= b`  | Wrapping Subtraction Assignment          | stdatem.operator.assignment.binary |         |
+| `a -\|= b` | Saturating Subtraction Assignment        | stdatem.operator.assignment.binary |         |
+| `a *= b`   | Multiplication Assignment                | stdatem.operator.assignment.binary |         |
+| `a *%= b`  | Wrapping Multiplication Assignment       | stdatem.operator.assignment.binary |         |
+| `a *\|= b` | Saturating Multiplication Assignment     | stdatem.operator.assignment.binary |         |
+| `a /= b`   | Division Assignment                      | stdatem.operator.assignment.binary |         |
+| `a %= b`   | Remainder Division Assignment            | stdatem.operator.assignment.binary |         |
+| `<<=`      | Bitwise Left Shift Assignment            | stdatem.operator.assignment.binary |         |
+| `<<\|=`    | Saturating Bitwise Left Shift Assignment | stdatem.operator.assignment.binary |         |
+| `>>=`      | Bitwise Right Shift Assignment           | stdatem.operator.assignment.binary |         |
+| `&=`       | Bitwise AND Assignment                   | stdatem.operator.assignment.binary |         |
+| `|=`       | Bitwise OR Assignment                    | stdatem.operator.assignment.binary |         |
+| `^=`       | Bitwise NOT Assignment                   | stdatem.operator.assignment.binary |         |
 
 
 
