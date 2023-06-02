@@ -245,44 +245,8 @@ main: func {
 | `a[b]`           | Array Element Access                         | stdatem.operator.misc.binary | Yes          |         |
 | `a.[b]`          | Pack Value Element Access                    | stdatem.operator.misc.binary | Yes          |         |
 | `a::[b]`         | Pack Type Element Access                     | stdatem.operator.misc.binary | Yes          |         |
-|                  |                                              |                              |              |         |
-|                  |                                              |                              |              |         |
-|                  |                                              |                              |              |         |
-|                  |                                              |                              |              |         |
-|                  |                                              |                              |              |         |
-|                  |                                              |                              |              |         |
-|                  |                                              |                              |              |         |
-|                  |                                              |                              |              |         |
-|                  |                                              |                              |              |         |
-|                  |                                              |                              |              |         |
-|                  |                                              |                              |              |         |
-|                  |                                              |                              |              |         |
-
-#### Function-Like Operators
-
-| Syntax          | Description        | Operator Category             | Overloadable | Example |
-| --------------- | ------------------ | ----------------------------- | ------------ | ------- |
-| `@sizeOf(a)`    | Size Querying      | stdatem.operator.functionlike | **NO**       |         |
-| `@alignOf(a)`   | Alignment Querying | stdatem.operator.functionlike | **NO**       |         |
-| `@offsetOf(a)`  | Offset Querying    | stdatem.operator.functionlike | **NO**       |         |
-| `@addressOf(a)` | Address Querying   | stdatem.operator.functionlike | **NO**       |         |
-|                 |                    |                               |              |         |
-|                 |                    |                               |              |         |
-|                 |                    |                               |              |         |
-|                 |                    |                               |              |         |
-|                 |                    |                               |              |         |
-|                 |                    |                               |              |         |
-|                 |                    |                               |              |         |
-|                 |                    |                               |              |         |
-|                 |                    |                               |              |         |
-|                 |                    |                               |              |         |
-|                 |                    |                               |              |         |
-|                 |                    |                               |              |         |
-|                 |                    |                               |              |         |
-|                 |                    |                               |              |         |
-|                 |                    |                               |              |         |
-
-
+| `new TypeA`      | Memory Allocation                            | stdatem.operator.misc.unary  | Yes          |         |
+| `delete a`       | Memory Deallocation                          | stdatem.operator.misc.unary  | Yes          |         |
 
 ### Precedence
 
