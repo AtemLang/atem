@@ -235,6 +235,55 @@ main: func {
 
 #### Other Operators
 
+| Syntax           | Description                                  | Operator Category            | Overloadable | Example |
+| ---------------- | -------------------------------------------- | ---------------------------- | ------------ | ------- |
+| `a as TypeB`     | Type Casting                                 | stdatem.operator.misc.binary | Yes          |         |
+| `TypeA is TypeB` | Type Querying                                | stdatem.operator.misc.binary | Yes          |         |
+| `a.b`            | Member Access                                | stdatem.operator.misc.binary | Yes          |         |
+| `a ?? b`         | Unwrapping with Default Value                | stdatem.operator.misc.binary | Yes          |         |
+| `a.?`            | Unwrapping, equivalent to `a ?? unreachable` | stdatem.operator.misc.unary  | Yes          |         |
+| `a[b]`           | Array Element Access                         | stdatem.operator.misc.binary | Yes          |         |
+| `a.[b]`          | Pack Value Element Access                    | stdatem.operator.misc.binary | Yes          |         |
+| `a::[b]`         | Pack Type Element Access                     | stdatem.operator.misc.binary | Yes          |         |
+|                  |                                              |                              |              |         |
+|                  |                                              |                              |              |         |
+|                  |                                              |                              |              |         |
+|                  |                                              |                              |              |         |
+|                  |                                              |                              |              |         |
+|                  |                                              |                              |              |         |
+|                  |                                              |                              |              |         |
+|                  |                                              |                              |              |         |
+|                  |                                              |                              |              |         |
+|                  |                                              |                              |              |         |
+|                  |                                              |                              |              |         |
+|                  |                                              |                              |              |         |
+
+#### Function-Like Operators
+
+| Syntax          | Description        | Operator Category             | Overloadable | Example |
+| --------------- | ------------------ | ----------------------------- | ------------ | ------- |
+| `@sizeOf(a)`    | Size Querying      | stdatem.operator.functionlike | **NO**       |         |
+| `@alignOf(a)`   | Alignment Querying | stdatem.operator.functionlike | **NO**       |         |
+| `@offsetOf(a)`  | Offset Querying    | stdatem.operator.functionlike | **NO**       |         |
+| `@addressOf(a)` | Address Querying   | stdatem.operator.functionlike | **NO**       |         |
+|                 |                    |                               |              |         |
+|                 |                    |                               |              |         |
+|                 |                    |                               |              |         |
+|                 |                    |                               |              |         |
+|                 |                    |                               |              |         |
+|                 |                    |                               |              |         |
+|                 |                    |                               |              |         |
+|                 |                    |                               |              |         |
+|                 |                    |                               |              |         |
+|                 |                    |                               |              |         |
+|                 |                    |                               |              |         |
+|                 |                    |                               |              |         |
+|                 |                    |                               |              |         |
+|                 |                    |                               |              |         |
+|                 |                    |                               |              |         |
+
+
+
 ### Precedence
 
 ## Functions
@@ -247,6 +296,12 @@ main: func {
 
 ## Modules
 
+### Declaring Modules
+
+### Exporting
+
+### Importing
+
 ## Blocks
 
 ### Labelled Blocks
@@ -258,6 +313,8 @@ main: func {
 ### Enums
 
 ### Unions
+
+### Choices
 
 ### Classes
 
@@ -308,6 +365,8 @@ main: func {
 ## Safety
 
 ### Safety Profiles
+
+### Runtime Safety Check
 
 ## Undefined Behavior
 
