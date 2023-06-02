@@ -152,86 +152,86 @@ main: func {
 
 #### Arithmetic Operators
 
-| Syntax     | Description               | Operator Category                  | Example |
-| ---------- | ------------------------- | ---------------------------------- | ------- |
-| `a + b`    | Addition                  | stdatem.operator.arithmetic.binary |         |
-| `a +% b`   | Wrapping Addition         | stdatem.operator.arithmetic.binary |         |
-| `a +\| b`  | Saturating Addition       | stdatem.operator.arithmetic.binary |         |
-| `a - b`    | Subtraction               | stdatem.operator.arithmetic.binary |         |
-| `a -% b`   | Wrapping Subtraction      | stdatem.operator.arithmetic.binary |         |
-| `a -\| b`  | Saturating Subtraction    | stdatem.operator.arithmetic.binary |         |
-| `a * b`    | Multiplication            | stdatem.operator.arithmetic.binary |         |
-| `a *% b`   | Wrapping Multiplication   | stdatem.operator.arithmetic.binary |         |
-| `a *\| b`  | Saturating Multiplication | stdatem.operator.arithmetic.binary |         |
-| `a / b `   | Division                  | stdatem.operator.arithmetic.binary |         |
-| `a % b`    | Remainder Division        | stdatem.operator.arithmetic.binary |         |
-| `-a`       | Negation                  | stdatem.operator.arithmetic.unary  |         |
-| `-%a`      | Wrapping Negation         | stdatem.operator.arithmetic.unary  |         |
-| `a ** b`   | Power                     | stdatem.operator.arithmetic.binary |         |
-| `a **% b`  | Wrapping Power            | stdatem.operator.arithmetic.binary |         |
-| `a **\| b` | Saturating Power          | stdatem.operator.arithmetic.binary |         |
+| Syntax     | Description               | Operator Category                  | Overloadable | Example |
+| ---------- | ------------------------- | ---------------------------------- | ------------ | ------- |
+| `a + b`    | Addition                  | stdatem.operator.arithmetic.binary | Yes          |         |
+| `a +% b`   | Wrapping Addition         | stdatem.operator.arithmetic.binary | Yes          |         |
+| `a +\| b`  | Saturating Addition       | stdatem.operator.arithmetic.binary | Yes          |         |
+| `a - b`    | Subtraction               | stdatem.operator.arithmetic.binary | Yes          |         |
+| `a -% b`   | Wrapping Subtraction      | stdatem.operator.arithmetic.binary | Yes          |         |
+| `a -\| b`  | Saturating Subtraction    | stdatem.operator.arithmetic.binary | Yes          |         |
+| `a * b`    | Multiplication            | stdatem.operator.arithmetic.binary | Yes          |         |
+| `a *% b`   | Wrapping Multiplication   | stdatem.operator.arithmetic.binary | Yes          |         |
+| `a *\| b`  | Saturating Multiplication | stdatem.operator.arithmetic.binary | Yes          |         |
+| `a / b `   | Division                  | stdatem.operator.arithmetic.binary | Yes          |         |
+| `a % b`    | Remainder Division        | stdatem.operator.arithmetic.binary | Yes          |         |
+| `-a`       | Negation                  | stdatem.operator.arithmetic.unary  | Yes          |         |
+| `-%a`      | Wrapping Negation         | stdatem.operator.arithmetic.unary  | Yes          |         |
+| `a ** b`   | Power                     | stdatem.operator.arithmetic.binary | Yes          |         |
+| `a **% b`  | Wrapping Power            | stdatem.operator.arithmetic.binary | Yes          |         |
+| `a **\| b` | Saturating Power          | stdatem.operator.arithmetic.binary | Yes          |         |
 
 #### Assignment Operators
 
-| Syntax     | Description                              | Operator Category                  | Example |
-| ---------- | ---------------------------------------- | ---------------------------------- | ------- |
-| `a = b`    | Simple Assignment                        | stdatem.operator.assignment.binary |         |
-| `a += b`   | Addition Assignment                      | stdatem.operator.assignment.binary |         |
-| `a +&= b`  | Wrapping Addition Assignment             | stdatem.operator.assignment.binary |         |
-| `a +\|= b` | Saturating Addition Assignment           | stdatem.operator.assignment.binary |         |
-| `a -= b`   | Subtraction Assignment                   | stdatem.operator.assignment.binary |         |
-| `a -%= b`  | Wrapping Subtraction Assignment          | stdatem.operator.assignment.binary |         |
-| `a -\|= b` | Saturating Subtraction Assignment        | stdatem.operator.assignment.binary |         |
-| `a *= b`   | Multiplication Assignment                | stdatem.operator.assignment.binary |         |
-| `a *%= b`  | Wrapping Multiplication Assignment       | stdatem.operator.assignment.binary |         |
-| `a *\|= b` | Saturating Multiplication Assignment     | stdatem.operator.assignment.binary |         |
-| `a /= b`   | Division Assignment                      | stdatem.operator.assignment.binary |         |
-| `a %= b`   | Remainder Division Assignment            | stdatem.operator.assignment.binary |         |
-| `<<=`      | Bitwise Left Shift Assignment            | stdatem.operator.assignment.binary |         |
-| `<<\|=`    | Saturating Bitwise Left Shift Assignment | stdatem.operator.assignment.binary |         |
-| `>>=`      | Bitwise Right Shift Assignment           | stdatem.operator.assignment.binary |         |
-| `&=`       | Bitwise AND Assignment                   | stdatem.operator.assignment.binary |         |
-| `\|=`      | Bitwise OR Assignment                    | stdatem.operator.assignment.binary |         |
-| `^=`       | Bitwise NOT Assignment                   | stdatem.operator.assignment.binary |         |
+| Syntax     | Description                              | Operator Category                  | Overloadable | Example |
+| ---------- | ---------------------------------------- | ---------------------------------- | ------------ | ------- |
+| `a = b`    | Simple Assignment                        | stdatem.operator.assignment.binary | Yes          |         |
+| `a += b`   | Addition Assignment                      | stdatem.operator.assignment.binary | Yes          |         |
+| `a +&= b`  | Wrapping Addition Assignment             | stdatem.operator.assignment.binary | Yes          |         |
+| `a +\|= b` | Saturating Addition Assignment           | stdatem.operator.assignment.binary | Yes          |         |
+| `a -= b`   | Subtraction Assignment                   | stdatem.operator.assignment.binary | Yes          |         |
+| `a -%= b`  | Wrapping Subtraction Assignment          | stdatem.operator.assignment.binary | Yes          |         |
+| `a -\|= b` | Saturating Subtraction Assignment        | stdatem.operator.assignment.binary | Yes          |         |
+| `a *= b`   | Multiplication Assignment                | stdatem.operator.assignment.binary | Yes          |         |
+| `a *%= b`  | Wrapping Multiplication Assignment       | stdatem.operator.assignment.binary | Yes          |         |
+| `a *\|= b` | Saturating Multiplication Assignment     | stdatem.operator.assignment.binary | Yes          |         |
+| `a /= b`   | Division Assignment                      | stdatem.operator.assignment.binary | Yes          |         |
+| `a %= b`   | Remainder Division Assignment            | stdatem.operator.assignment.binary | Yes          |         |
+| `<<=`      | Bitwise Left Shift Assignment            | stdatem.operator.assignment.binary | Yes          |         |
+| `<<\|=`    | Saturating Bitwise Left Shift Assignment | stdatem.operator.assignment.binary | Yes          |         |
+| `>>=`      | Bitwise Right Shift Assignment           | stdatem.operator.assignment.binary | Yes          |         |
+| `&=`       | Bitwise AND Assignment                   | stdatem.operator.assignment.binary | Yes          |         |
+| `\|=`      | Bitwise OR Assignment                    | stdatem.operator.assignment.binary | Yes          |         |
+| `^=`       | Bitwise NOT Assignment                   | stdatem.operator.assignment.binary | Yes          |         |
 
 #### Comparison Operators
 
-| Syntax    | Description              | Operator Category                  | Example |
-| --------- | ------------------------ | ---------------------------------- | ------- |
-| `a > b`   | Greater than             | stdatem.operator.comparison.binary |         |
-| `a < b`   | Less than                | stdatem.operator.comparison.binary |         |
-| `a >= b`  | Greater than or Equal to | stdatem.operator.comparison.binary |         |
-| `a <= b`  | Less than or Equal to    | stdatem.operator.comparison.binary |         |
-| `a != b`  | Not Equal to             | stdatem.operator.comparison.binary |         |
-| `a == b`  | Equal to                 | stdatem.operator.comparison.binary |         |
-| `a <=> b` | Three-way Comparison     | stdatem.operator.comparison.binary |         |
+| Syntax    | Description              | Operator Category                  | Overloadable | Example |
+| --------- | ------------------------ | ---------------------------------- | ------------ | ------- |
+| `a > b`   | Greater than             | stdatem.operator.comparison.binary | Yes          |         |
+| `a < b`   | Less than                | stdatem.operator.comparison.binary | Yes          |         |
+| `a >= b`  | Greater than or Equal to | stdatem.operator.comparison.binary | Yes          |         |
+| `a <= b`  | Less than or Equal to    | stdatem.operator.comparison.binary | Yes          |         |
+| `a != b`  | Not Equal to             | stdatem.operator.comparison.binary | Yes          |         |
+| `a == b`  | Equal to                 | stdatem.operator.comparison.binary | Yes          |         |
+| `a <=> b` | Three-way Comparison     | stdatem.operator.comparison.binary | Yes          |         |
 
 #### Logical Operators
 
-| Syntax    | Description | Operator Category               | Example |
-| --------- | ----------- | ------------------------------- | ------- |
-| `not a`   | Logical NOT | stdatem.operator.logical.unary  |         |
-| `a and b` | Logical AND | stdatem.operator.logical.binary |         |
-| `a or b`  | Logical OR  | stdatem.operator.logical.binary |         |
+| Syntax    | Description | Operator Category               | Overloadable | Example |
+| --------- | ----------- | ------------------------------- | ------------ | ------- |
+| `not a`   | Logical NOT | stdatem.operator.logical.unary  | Yes          |         |
+| `a and b` | Logical AND | stdatem.operator.logical.binary | Yes          |         |
+| `a or b`  | Logical OR  | stdatem.operator.logical.binary | Yes          |         |
 
 #### Bitwise Operators
 
-| Syntax     | Description                   | Operator Category               | Example |
-| ---------- | ----------------------------- | ------------------------------- | ------- |
-| `~a`       | Bitwise NOT                   | stdatem.operator.bitwise.unary  |         |
-| `a & b`    | Bitwise AND                   | stdatem.operator.bitwise.binary |         |
-| `a \| b`   | Bitwise OR                    | stdatem.operator.bitwise.binary |         |
-| `a ^ b`    | Bitwise XOR                   | stdatem.operator.bitwise.binary |         |
-| `a << b`   | Bitwise Left Shift            | stdatem.operator.bitwise.binary |         |
-| `a <<\| b` | Saturating Bitwise Left Shift | stdatem.operator.bitwise.binary |         |
-| `a >> b`   | Bitwise Right Shift           | stdatem.operator.bitwise.binary |         |
+| Syntax     | Description                   | Operator Category               | Overloadable | Example |
+| ---------- | ----------------------------- | ------------------------------- | ------------ | ------- |
+| `~a`       | Bitwise NOT                   | stdatem.operator.bitwise.unary  | Yes          |         |
+| `a & b`    | Bitwise AND                   | stdatem.operator.bitwise.binary | Yes          |         |
+| `a \| b`   | Bitwise OR                    | stdatem.operator.bitwise.binary | Yes          |         |
+| `a ^ b`    | Bitwise XOR                   | stdatem.operator.bitwise.binary | Yes          |         |
+| `a << b`   | Bitwise Left Shift            | stdatem.operator.bitwise.binary | Yes          |         |
+| `a <<\| b` | Saturating Bitwise Left Shift | stdatem.operator.bitwise.binary | Yes          |         |
+| `a >> b`   | Bitwise Right Shift           | stdatem.operator.bitwise.binary | Yes          |         |
 
 #### Reflection Operators
 
-| Syntax | Description | Operator Category                 | Example |
-| ------ | ----------- | --------------------------------- | ------- |
-| `^a`   | Reflection  | stdatem.operator.reflection.unary |         |
-| `#a`   | Reification | stdatem.operator.reflection.unary |         |
+| Syntax | Description | Operator Category                 | Overloadable | Example |
+| ------ | ----------- | --------------------------------- | ------------ | ------- |
+| `^a`   | Reflection  | stdatem.operator.reflection.unary | **NO**       |         |
+| `#a`   | Reification | stdatem.operator.reflection.unary | **NO**       |         |
 
 #### Other Operators
 
