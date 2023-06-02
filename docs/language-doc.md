@@ -191,22 +191,20 @@ main: func {
 | `<<\|=`    | Saturating Bitwise Left Shift Assignment | stdatem.operator.assignment.binary |         |
 | `>>=`      | Bitwise Right Shift Assignment           | stdatem.operator.assignment.binary |         |
 | `&=`       | Bitwise AND Assignment                   | stdatem.operator.assignment.binary |         |
-| `|=`       | Bitwise OR Assignment                    | stdatem.operator.assignment.binary |         |
+| `\|=`      | Bitwise OR Assignment                    | stdatem.operator.assignment.binary |         |
 | `^=`       | Bitwise NOT Assignment                   | stdatem.operator.assignment.binary |         |
-
-
 
 #### Comparison Operators
 
-| Syntax    | Description | Operator Category | Example |
-| --------- | ----------- | ----------------- | ------- |
-| `a > b`   |             |                   |         |
-| `a < b`   |             |                   |         |
-| `a >= b`  |             |                   |         |
-| `a <= b`  |             |                   |         |
-| `a != b`  |             |                   |         |
-| `a == b`  |             |                   |         |
-| `a <=> b` |             |                   |         |
+| Syntax    | Description              | Operator Category                  | Example |
+| --------- | ------------------------ | ---------------------------------- | ------- |
+| `a > b`   | Greater than             | stdatem.operator.comparison.binary |         |
+| `a < b`   | Less than                | stdatem.operator.comparison.binary |         |
+| `a >= b`  | Greater than or Equal to | stdatem.operator.comparison.binary |         |
+| `a <= b`  | Less than or Equal to    | stdatem.operator.comparison.binary |         |
+| `a != b`  | Not Equal to             | stdatem.operator.comparison.binary |         |
+| `a == b`  | Equal to                 | stdatem.operator.comparison.binary |         |
+| `a <=> b` | Three-way Comparison     | stdatem.operator.comparison.binary |         |
 
 #### Logical Operators
 
