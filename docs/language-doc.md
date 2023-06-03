@@ -249,6 +249,57 @@ multiline_string : test "Multiline String Literals" = {
 
 ## Variables
 
+### No Identifier Shadowing
+
+Variable identifiers are never allowed to shadow the identifiers from outer scope:
+
+```atem
+foo := 1;
+{
+	foo := 2;	//compile error
+}
+```
+
+If you can confirm that you really need name shadowing(why?), you can annotate the variable with `@shadowing`:
+
+```atem
+foo := 1;
+{
+	foo @shadowing := 2;	//good
+}
+```
+
+Or you can just turn the compile-time safety check off by using the `@compileTimeSafetyProfile()`(but again, why you need this?):
+
+```atem
+foo := 1;
+@compileTimeSafetyProfile(safety.compiletime.ruleset.no_shadowing, false);
+{
+	foo @shadowing := 2;	//good
+}
+```
+
+### Long Identifiers
+
+Normal identifiers can only contains numbers, characters, and underscores. You can make the identifier to be regular string by using `@""`s to quote them:
+
+```atem
+@"hey i am a variable with a very long identifier!" := "Hello";
+```
+
+The long identifiers are also allowed to be the same as keywords:
+
+```atem
+@"true" := true;
+assert(@"true" == true);
+```
+
+### Variables and Constants
+
+
+
+### Storage Duration Specifiers
+
 ## Arrays
 
 ### Array Literals
