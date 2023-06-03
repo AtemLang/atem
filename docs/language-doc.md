@@ -147,38 +147,85 @@ nanosecond := 0.000_000_001;
 more_hex := 0x1234_5678.9ABC_CDEFp-10;
 ```
 
-### Char Literals
+### Character Literals
 
+A character literal is a character quote by `''`:
 
+```atem
+char : test "Character Literals" = {
+	c := 'a':c8;
+	nl := '\n':c8;
+}
+```
 
 ### String Literals
 
 #### String Literals
 
-A string literal is a character sequence quoted by `""`:
+A string literal is a character sequence quoted by `""`, the character sequence may contains [escape sequences](#escape-sequences):
 
 ```atem
-str1 := "Hello World!";
-escape := "next line\n";
+string : test "String Literals" = {
+	str1 := "Hello World!";
+	escape := "next line\n";
+}
 ```
 
 #### Interpolated String Literals
 
-A interpolated string literal is a character sequence which may contains capture expression. The interpolated string literal needs to be quoted by `f""`:
+A interpolated string literal is a character sequence which contains capture expressions. The interpolated string literal needs to be quoted by `""`:
 
 ```atem
-i := 42:i32;
-b := true;
-arr : [_]i32 = {1, 1, 5};
-fstr := f"i = i$, b = b$, arr = arr$";
-assert(fstr = "i = 42, b = true, arr = {1, 1, 5}");
+fstring : test "Interpolated String Literals" = {
+	i := 42:i32;
+	b := true;
+	arr : [_]i32 = {1, 1, 5};
+	fstr := "i = i$, b = b$, arr = arr$";
+	assert(fstr == "i = 42, b = true, arr = {1, 1, 5}");
+}
 ```
 
 #### Raw String Literals
 
-#### Interpolated String Literals
+A raw string literal is a character sequence quoted by `R"()"`:
+
+```atem
+raw_string : test "Raw String Literals" = {
+	no_escape := R"(next line\n)";
+	assert(no_escape == "next line\\n");
+}
+```
+
+#### Interpolated Raw String Literals
+
+A raw string literal is a character sequence quoted by `R"()"`, the character sequence contains capture expressions:
+
+```atem
+raw_fstring : test "Interpolated Raw String Literals" = {
+	i := 42:i32;
+	b := true;
+	arr : [_]i32 = {1, 1, 5};
+	fstr := R"(i = "i$", b = "b$", arr = "arr$")";
+	assert(fstr == "i = \"42\", b = \"true\", arr = \"{1, 1, 5}\"");
+}
+```
 
 #### Multiline String Literals
+
+Multiline string literals have no escapes and can span across multiple lines. To start a multiline string literal, use the `\\` token. Just like a comment, the string literal goes until the end of the line. The end of the line is not included in the string literal. However, if the next line begins with `\\` then a newline is appended and the string literal continues.
+
+```atem
+multiline_string : test "Multiline String Literals" = {
+	multiline_str := 
+	\\#include <stdio.h>
+    \\
+    \\int main(int argc, char **argv) {
+    \\    printf("hello world\n");
+    \\    return 0;
+    \\}
+    ;
+}
+```
 
 #### Escape Sequences
 
