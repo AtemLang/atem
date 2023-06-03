@@ -80,51 +80,125 @@ main: func {
 
 ### Built-in Types
 
-| Type | Description                                                  |
-| ---- | ------------------------------------------------------------ |
-| i8   | Signed 8-bit integer                                         |
-| i16  | Signed 16-bit integer                                        |
-| i32  | Signed 32-bit integer                                        |
-| i64  | Signed 64-bit integer                                        |
-| i128 | Signed 128-bit integer                                       |
-| u8   | Unsigned 8-bit integer                                       |
-| u16  | Unsigned 16-bit integer                                      |
-| u32  | Unsigned 32-bit integer                                      |
-| u64  | Unsigned 64-bit integer                                      |
-| u128 | Unsigned 128-bit integer                                     |
-| f16  | 16-bit floating point (10-bit mantissa) IEEE-754-2008 binary16 |
-| f32  | 32-bit floating point (23-bit mantissa) IEEE-754-2008 binary32 |
-| f64  | 64-bit floating point (52-bit mantissa) IEEE-754-2008 binary64 |
-| f80  | 80-bit floating point (64-bit mantissa) IEEE-754-2008 80-bit extended precision |
-| f128 | 128-bit floating point (112-bit mantissa) IEEE-754-2008 binary128 |
-| bool | `true` or `false`                                            |
-| void |                                                              |
-|      |                                                              |
-|      |                                                              |
-|      |                                                              |
-|      |                                                              |
-|      |                                                              |
-|      |                                                              |
-|      |                                                              |
+| Type      | Description                                                  | Default Initializer |
+| --------- | ------------------------------------------------------------ | ------------------- |
+| i8        | Signed 8-bit integer                                         | 0:i8                |
+| i16       | Signed 16-bit integer                                        | 0:i16               |
+| i32       | Signed 32-bit integer                                        | 0:i32               |
+| i64       | Signed 64-bit integer                                        | 0:i64               |
+| i128      | Signed 128-bit integer                                       | 0:i128              |
+| u8        | Unsigned 8-bit integer                                       | 0:u8                |
+| u16       | Unsigned 16-bit integer                                      | 0:u16               |
+| u32       | Unsigned 32-bit integer                                      | 0:u32               |
+| u64       | Unsigned 64-bit integer                                      | 0:u64               |
+| u128      | Unsigned 128-bit integer                                     | 0:u128              |
+| f16       | 16-bit floating point (10-bit mantissa) IEEE-754-2008 binary16 | 0.0:f16             |
+| f32       | 32-bit floating point (23-bit mantissa) IEEE-754-2008 binary32 | 0.0:f32             |
+| f64       | 64-bit floating point (52-bit mantissa) IEEE-754-2008 binary64 | 0.0:f64             |
+| f80       | 80-bit floating point (64-bit mantissa) IEEE-754-2008 80-bit extended precision | 0.0:f80             |
+| f128      | 128-bit floating point (112-bit mantissa) IEEE-754-2008 binary128 | 0.0:f128            |
+| bool      | `true` or `false`                                            | false               |
+| void      |                                                              | void{}              |
+| c8        | UTF-8 code unit                                              | '\xFF'              |
+| c16       | UTF-16 code unit                                             | '\uFFFF'            |
+| c32       | UTF-32 code unit                                             | '\U0000FFFF'        |
+| ct_int    | Type of integer literals, used in compile-time integer operations | 0                   |
+| ct_float  | Type of float literals, used in compile-time float operations | 0.0                 |
+| ct_string | Type of string literals, used in compile-time string operations | ""                  |
+| ct_char   | Type of char literals, used in compile-time char operations  | '\xFF'              |
 
 ### Built-in Values
 
-| Value     | Description                              |
-| --------- | ---------------------------------------- |
-| true      | `bool` value                             |
-| false     | `bool` value                             |
-| undefined | Used to leave variables' value undefined |
-| null      | The value of null optionals and pointers |
+| Value     | Description                                   |
+| --------- | --------------------------------------------- |
+| true      | `bool` value                                  |
+| false     | `bool` value                                  |
+| undefined | Used to leave variable's value undefined      |
+| null      | The value of null optionals and pointers      |
+| default   | Used to invoke variable's default initializer |
 
 ### Integer Literals
 
+```atem
+decimal := 114514;
+hex := 0xff;
+another_hex := 0xFF;
+octal := 0o76;
+binary := 0b100111;
+
+//underscores may be placed between two digits as a visual separator
+underscore_separator := 100_000_000;
+```
+
 ### Float Literals
+
+```atem
+floating_point := 123.0E+77;
+another_float := 123.0;
+yet_another := 123.0e+77;
+
+hex_floating_point := 0x103.70p-5;
+another_hex_float := 0x103.70;
+yet_another_hex_float := 0x103.70P-5;
+
+//underscores may be placed between two digits as a visual separator
+lightspeed := 299_792_458.000_000;
+nanosecond := 0.000_000_001;
+more_hex := 0x1234_5678.9ABC_CDEFp-10;
+```
+
+### Char Literals
+
+
 
 ### String Literals
 
-### Interpolated String Literals
+#### String Literals
 
-### Multiline String Literals
+A string literal is a character sequence quoted by `""`:
+
+```atem
+str1 := "Hello World!";
+escape := "next line\n";
+```
+
+#### Interpolated String Literals
+
+A interpolated string literal is a character sequence which may contains capture expression. The interpolated string literal needs to be quoted by `f""`:
+
+```atem
+i := 42:i32;
+b := true;
+arr : [_]i32 = {1, 1, 5};
+fstr := f"i = i$, b = b$, arr = arr$";
+assert(fstr = "i = 42, b = true, arr = {1, 1, 5}");
+```
+
+#### Raw String Literals
+
+#### Interpolated String Literals
+
+#### Multiline String Literals
+
+#### Escape Sequences
+
+| Escape Sequence | Description                                                  |
+| --------------- | ------------------------------------------------------------ |
+| `\\'`           | Single quote                                                 |
+| `\\"`           | Double quote                                                 |
+| `\\?`           | Question mark                                                |
+| `\\\\`          | Backslash                                                    |
+| `\\a`           | Audible bell                                                 |
+| `\\b`           | Backspace                                                    |
+| `\\f`           | Form feed - new page                                         |
+| `\\n`           | Line feed - new line                                         |
+| `\\r`           | Carriage return                                              |
+| `\\t`           | Horizontal tab                                               |
+| `\\v`           | Vertical tab                                                 |
+| `\\o{NN}`       | Arbitrary octal value                                        |
+| `\\x{NN}`       | Arbitrary hexadecimal value                                  |
+| `\\b{NN}`       | Arbitrary binary value                                       |
+| `\\u{NNN}`      | Arbitrary [Unicode](https://en.wikipedia.org/wiki/Unicode) value |
 
 ## Variables
 
@@ -247,6 +321,7 @@ main: func {
 | `a::[b]`         | Pack Type Element Access                     | stdatem.operator.misc.binary | Yes          |         |
 | `new TypeA`      | Memory Allocation                            | stdatem.operator.misc.unary  | Yes          |         |
 | `delete a`       | Memory Deallocation                          | stdatem.operator.misc.unary  | Yes          |         |
+| `?TypeA`         | Optional Type                                | stdatem.operator.misc.unary  |              |         |
 
 ### Precedence
 
