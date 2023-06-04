@@ -296,9 +296,52 @@ assert(@"true" == true);
 
 ### Variables and Constants
 
+You can specify the mutability of variables by adding a `const/mutable` specifier to it, you can't modify variable that is `const`:
 
+```atem
+foo := 1;
+//equals to:
+foo const := 1;
+foo = 2;	//error! try to assign a constant
+
+bar mutable := 2;
+bar = 42;	//good
+```
+
+`const/mutable` will be part of the variable's type:
+
+```atem
+foo const := 1:i32;
+bar mutable := 2:i32;
+//equals to:
+foo : const i32 := 1;
+bar : mutable i32 := 1;
+//or
+bar : i32 := 1;
+```
+
+You can remove the `const` in type by type traits:
+
+```atem
+foo : const i32 = 1;
+BarType := foo~getType()~removeConst();
+bar : BarType = 2;
+bar = 42;	//good
+```
 
 ### Storage Duration Specifiers
+
+#### Global Storage Duration Specifier
+
+The global variables have static lifetime and order-independent. Their initializer are implicitly compile-time. The variables declares in the module level are implicitly global.
+
+#### Static Storage Duration Specifier
+
+The static variables also have static lifetime and order-independent. Their initializer are implicitly compile-time. Only the variables declares in the block level can be static.
+
+#### Thread-Local Storage Duration Specifier
+
+#### Local Storage Duration Specifier
 
 ## Arrays
 
@@ -419,7 +462,8 @@ assert(@"true" == true);
 | `a::[b]`         | Pack Type Element Access                     | stdatem.operator.misc.binary | Yes          |         |
 | `new TypeA`      | Memory Allocation                            | stdatem.operator.misc.unary  | Yes          |         |
 | `delete a`       | Memory Deallocation                          | stdatem.operator.misc.unary  | Yes          |         |
-| `?TypeA`         | Optional Type                                | stdatem.operator.misc.unary  |              |         |
+| `?TypeA`         | Optional Type                                | stdatem.operator.misc.unary  | **NO**       |         |
+| `a~b`            | Type Trait                                   | stdatem.operator.misc.binary | **NO**       |         |
 
 ### Precedence
 
