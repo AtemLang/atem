@@ -533,6 +533,16 @@ The static variables also have static lifetime and order-independent. Their init
 
 ### Tuple Literals
 
+## Traits
+
+### Reflection Traits
+
+### Pack Traits
+
+### Type Traits
+
+### U
+
 ## Generics
 
 ### Introducing std-atem Generic Model
