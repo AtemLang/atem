@@ -102,6 +102,7 @@ main: func {
 | c8        | UTF-8 code unit                                              | '\xFF'              |
 | c16       | UTF-16 code unit                                             | '\uFFFF'            |
 | c32       | UTF-32 code unit                                             | '\U0000FFFF'        |
+| string    | Built-in runtime string type                                 | "":string           |
 | ct_int    | Type of integer literals, used in compile-time integer operations | 0                   |
 | ct_float  | Type of float literals, used in compile-time float operations | 0.0                 |
 | ct_string | Type of string literals, used in compile-time string operations | ""                  |
@@ -343,15 +344,148 @@ The static variables also have static lifetime and order-independent. Their init
 
 #### Local Storage Duration Specifier
 
+## Integers
+
+## Floats
+
+## Strings
+
+### Compile-time String Operations
+
+### Runtime String Operations
+
 ## Arrays
 
 ### Array Literals
 
-### Fixed-size Arrays
+### Fixed-sized Arrays
 
-### Dynamic-size Arrays
+You can create fixed-sized arrays by using `[size]Type`, the `size` must be a compile-time known positive integer:
+
+```atem
+arr: [5]i32 = {1, 2, 3, 4, 5};
+```
+
+You can also let the length of array to be deduced by using `[_]Type`:
+
+```atem
+arr: [_]bool = {true, false, false, true, true, true};
+```
+
+If you want to access the nth elements in the array, you can use `arr[index]` :
+
+```atem
+arr: [5]i32 = {1, 2, 3, 4, 5};
+foo := arr[3];
+bar := arr[foo];
+```
+
+The array element access is bound-checked when `@runtimeSafety` is on.
+
+#### Fixed-sized Array Members
+
+| Name            | Type                  | Description                                |
+| --------------- | --------------------- | ------------------------------------------ |
+| .length()       | Const Member Function | Return the length of the array             |
+| .memoryLayout() | Const Member Function | Return the memory layout type of the array |
+|                 |                       |                                            |
+
+### Multidimension Arrays
+
+Adding multiple square bracket will make a multidimension array, e.g. `[1][2][3]i32` will create a 1×2×3 array.
+
+```atem
+multi_arr: [2][4]i32 = { {1, 2}, {4, 8}, {16, 32}, {64, 128} };
+```
+
+To access the elements in the multidimension array, use `[a, b, c...]arr` syntax:
+
+```atem
+multi_arr: [2][4]i32 = { {1, 2}, {4, 8}, {16, 32}, {64, 128} };
+foo := multi_arr[1, 2];
+```
+
+#### Multidimension Array Members
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+|      |      |             |
+|      |      |             |
+|      |      |             |
+
+
+
+### Dynamic-sized Arrays
+
+You can create dynamic-sized arrays by using `[]Type`:
+
+```atem
+dynarr: []i32 = {1, 2, 3};
+```
+
+The length of dynamic-sized arrays can be modified by using the `setArrayLength()` member function:
+
+```atem
+dynarr mutable: []i32 = {1, 2, 3};
+dynarr.setArrayLength(8);
+dynarr[7] = 5;	//good
+```
+
+#### Dynamic-sized Array Members
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+|      |      |             |
+|      |      |             |
+|      |      |             |
+
+
 
 ### Associative Arrays
+
+You can create associative arrays by `[IndexType]ValueType`:
+
+```atem
+map mutable: [string]i32 = { {"world": 1}, {"!": 2} };
+map["hello"] = 42;
+foo = map["hello"];
+```
+
+To remove a key-value pair from associative arrays, use the `remove` member function:
+
+```atem
+map mutable: [string]i32 = { {"hello": 0}, {"world": 1}, {"!": 2} };
+map.remove("hello");
+```
+
+#### Associative Array Members
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+|      |      |             |
+|      |      |             |
+|      |      |             |
+
+
+
+### Partial Accessing
+
+```atem
+multiarr: [3][3]i32 = 
+{
+	{1, 2, 3},
+	{2, 3, 1},
+	{3, 2, 1}
+};
+arr := multiarr[1];
+//arr == {2, 3, 1}
+```
+
+### Negative Indexing
+
+### Slicing
+
+### Modifying Memory Layout
 
 ## Pointers
 
@@ -541,7 +675,7 @@ The static variables also have static lifetime and order-independent. Their init
 
 ### Type Traits
 
-### U
+### Universal Traits
 
 ## Generics
 
