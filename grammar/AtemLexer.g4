@@ -2,10 +2,14 @@ lexer grammar AtemLexer;
 
 //Keywords
 
+//Literals
+
 //Whitespaces and comments
 Whitespace: [ \t\r\n\f]+ -> channel(HIDDEN);
 Newline: ('\r' '\n'? | '\n') -> channel(HIDDEN);
-LineComment: '//' ~ [\r\n]* -> channel(HIDDEN);
+LineComment: ('//' (~[/!] | '//') ~[\r\n]* | '//') -> channel (HIDDEN);
+InnerLineDocComment: '//!' ~[\n\r]* -> channel (HIDDEN);
+OuterLineDocComment: '///!' (~[/] ~[\n\r]*)? -> channel (HIDDEN);
 
 BlockComment
    :
@@ -24,8 +28,6 @@ BlockComment
    ) -> channel (HIDDEN)
    ;
 
-InnerLineDocComment: '//!' ~[\n\r]* -> channel (HIDDEN); // isolated cr
-
 InnerBlockComment
    : '//!{'
    (
@@ -33,8 +35,6 @@ InnerBlockComment
       | ~[*]
    )*? '}//' -> channel (HIDDEN)
    ;
-
-OuterLineDocComment: '///!' (~[/] ~[\n\r]*)? -> channel (HIDDEN); // isolated cr
 
 OuterBlockComment
    : '///!{'
@@ -52,7 +52,7 @@ BlockCommentOrDoc
    :
    (
       BlockComment
-      | InnerLineDocComment
+      | InnerBlockComment
       | OuterBlockComment
    ) -> channel (HIDDEN)
    ;
