@@ -77,7 +77,7 @@ KeywordWhile: 'while';
 //Identifier
 
 Identifier:
-	IdentifierHead IdentifierCharacters?;
+	IdentifierHead IdentifierCharacter?;
 
 fragment IdentifierHead:
 	[a-zA-Z]
@@ -132,7 +132,7 @@ fragment IdentifierHead:
 	| [\u{D0000}-\u{DFFFD}]
 	| [\u{E0000}-\u{EFFFD}];
 
-fragment IdentifierCharacters:
+fragment IdentifierCharacter:
 	[0-9]
 	| [\u0300-\u036F]
 	| [\u1DC0-\u1DFF]
@@ -140,7 +140,46 @@ fragment IdentifierCharacters:
 	| [\uFE20-\uFE2F]
 	| IdentifierHead;
 
+fragment IdentifierCharacters: IdentifierCharacter+;
+
 //Literals
+
+BinaryLiteral: '0b' BinaryDigit BinaryLiteralCharacters?;
+fragment BinaryDigit: [01];
+fragment BinaryLiteralCharacter: BinaryDigit | '_';
+fragment BinaryLiteralCharacters: BinaryLiteralCharacter+;
+
+OctalLiteral: '0o' OctalDigit OctalLiteralCharacters?;
+fragment OctalDigit: [0-7];
+fragment OctalLiteralCharacter: OctalDigit | '_';
+fragment OctalLiteralCharacters: OctalLiteralCharacter+;
+
+DecimalDigits: DecimalDigit+;
+DecimalLiteral: DecimalDigit DecimalLiteralCharacters?;
+fragment DecimalDigit: [0-9];
+fragment DecimalLiteralCharacter: DecimalDigit | '_';
+fragment DecimalLiteralCharacters: DecimalLiteralCharacter+;
+
+HexadecimalLiteral:
+	'0x' HexadecimalDigit HexadecimalLiteralCharacters?;
+fragment HexadecimalDigit: [0-9a-fA-F];
+fragment HexadecimalLiteralCharacter: HexadecimalDigit | '_';
+fragment HexadecimalLiteralCharacters:
+	HexadecimalLiteralCharacter+;
+
+FloatingPointLiteral:
+	DecimalLiteral DecimalFraction? DecimalExponent?
+	| HexadecimalLiteral HexadecimalFraction? HexadecimalExponent;
+fragment DecimalFraction: '.' DecimalLiteral;
+fragment DecimalExponent:
+	FloatingPointE Sign? DecimalLiteral;
+fragment HexadecimalFraction:
+	'.' HexadecimalDigit HexadecimalLiteralCharacters?;
+fragment HexadecimalExponent:
+	FloatingPointP Sign? DecimalLiteral;
+fragment FloatingPointE: [eE];
+fragment FloatingPointP: [pP];
+fragment Sign: [+-];
 
 //Whitespaces and comments
 Whitespace: [ \t\r\n\f]+ -> channel(HIDDEN);
