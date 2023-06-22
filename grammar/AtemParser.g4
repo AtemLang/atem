@@ -38,9 +38,6 @@ control_transfer_statement:
 return_statement:
 	KeywordReturn expression?;
 
-expression:
-	try_operator;
-
 try_operator:
 	KeywordTry (Question | Bang)?;
 
@@ -48,7 +45,26 @@ code_block:
 	(Identifier Colon)? LeftCurly statements? RightCurly;
 
 attribute: At attribute_name;
-attribute_name: Identifier (Dot Identifier)*;
+attribute_name: simple_path;
+
+simple_path:
+	Dot? simple_path_element (Dot simple_path_element)*;
+
+simple_path_element:
+	Identifier |
+	KeywordSuper |
+	KeywordOuter |
+	KeywordThis |
+	KeywordSelf;
+
+expression:
+	try_operator? primary_expression;
+
+primary_expression:
+	literal_expression;
+
+literal_expression:
+	literal;
 
 literal:
 	numeric_literal |
