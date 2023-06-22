@@ -1,9 +1,9 @@
 Whitespace=1
 Newline=2
 LineComment=3
-BlockComment=4
-InnerLineDocComment=5
-InnerBlockComment=6
-OuterLineDocComment=7
+InnerLineDocComment=4
+OuterLineDocComment=5
+BlockComment=6
+InnerBlockComment=7
 OuterBlockComment=8
 BlockCommentOrDoc=9
