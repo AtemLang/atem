@@ -1,57 +1,5 @@
 lexer grammar AtemLexer;
 
-//Whitespaces and comments
-Whitespace: [ \t\r\n\f]+ -> channel(HIDDEN);
-Newline: ('\r' '\n'? | '\n') -> channel(HIDDEN);
-LineComment: ('//' (~[/!] | '//') ~[\r\n]* | '//') -> channel (HIDDEN);
-InnerLineDocComment: '//!' ~[\n\r]* -> channel (HIDDEN);
-OuterLineDocComment: '///!' (~[/] ~[\n\r]*)? -> channel (HIDDEN);
-
-BlockComment
-   :
-   (
-      '//{'
-      (
-         ~[*!]
-         | '**'
-         | BlockCommentOrDoc
-      )
-      (
-         BlockCommentOrDoc
-         | ~[*]
-      )*? '}//'
-      | '//{}//'
-   ) -> channel (HIDDEN)
-   ;
-
-InnerBlockComment
-   : '//!{'
-   (
-      BlockCommentOrDoc
-      | ~[*]
-   )*? '}//' -> channel (HIDDEN)
-   ;
-
-OuterBlockComment
-   : '///!{'
-   (
-      ~[*]
-      | BlockCommentOrDoc
-   )
-   (
-      BlockCommentOrDoc
-      | ~[*]
-   )*? '}///' -> channel (HIDDEN)
-   ;
-
-BlockCommentOrDoc
-   :
-   (
-      BlockComment
-      | InnerBlockComment
-      | OuterBlockComment
-   ) -> channel (HIDDEN)
-   ;
 //Keywords
 
 KeywordAbstract: 'abstract';
@@ -280,3 +228,89 @@ BitRightShiftAssign: '>>=';
 BitAndAssign: '&=';
 BitOrAssign: '|=';
 BitNotAssign: '~=';
+
+GreaterThan: '>';
+LessThan: '<';
+GreaterThanOrEqual: '>=';
+LessThanOrEqual: '<=';
+NotEqual: '!=';
+ThreeWayComparison: '<=>';
+
+BitNot: '~';
+BitAnd: '&';
+BitOr: '|';
+BitXor: '^^';
+BitLeftShift: '<<';
+SaturatingBitLeftShift: '<<|';
+BitRightShift: '>>';
+
+PointerType: '.&';
+PointerDeref: '.*';
+ObjectAddress: '.@';
+
+Reflect: '^';
+Reify: '#';
+
+ClosedRange: '...';
+RightOpenRange: '..<';
+LeftOpenRange: '<..';
+OpenedRange: '<.<';
+
+DefaultUnwrapping: '??';
+ThrowableUnwrapping: '.?';
+ForcedUnwrapping: '.!';
+ThrowableOptionalChaining: '?.';
+ForcedOptionalChaining: '!.';
+
+//Whitespaces and comments
+Whitespace: [ \t\r\n\f]+ -> channel(HIDDEN);
+Newline: ('\r' '\n'? | '\n') -> channel(HIDDEN);
+LineComment: ('//' (~[/!] | '//') ~[\r\n]* | '//') -> channel (HIDDEN);
+InnerLineDocComment: '//!' ~[\n\r]* -> channel (HIDDEN);
+OuterLineDocComment: '///!' (~[/] ~[\n\r]*)? -> channel (HIDDEN);
+
+BlockComment
+   :
+   (
+      '//{'
+      (
+         ~[*!]
+         | '**'
+         | BlockCommentOrDoc
+      )
+      (
+         BlockCommentOrDoc
+         | ~[*]
+      )*? '}//'
+      | '//{}//'
+   ) -> channel (HIDDEN)
+   ;
+
+InnerBlockComment
+   : '//!{'
+   (
+      BlockCommentOrDoc
+      | ~[*]
+   )*? '}//' -> channel (HIDDEN)
+   ;
+
+OuterBlockComment
+   : '///!{'
+   (
+      ~[*]
+      | BlockCommentOrDoc
+   )
+   (
+      BlockCommentOrDoc
+      | ~[*]
+   )*? '}///' -> channel (HIDDEN)
+   ;
+
+BlockCommentOrDoc
+   :
+   (
+      BlockComment
+      | InnerBlockComment
+      | OuterBlockComment
+   ) -> channel (HIDDEN)
+   ;
