@@ -195,6 +195,9 @@ Dot: '.';
 Colon: ':';
 Semicolon: ';';
 Comma: ',';
+At: '@';
+Question: '?';
+Bang: '!';
 
 Add: '+';
 OverflowAdd: '+&';
@@ -249,8 +252,6 @@ BitRightShift: '>>';
 PointerType: '.&';
 PointerDeref: '.*';
 ObjectAddress: '.@';
-
-OptionalType: '?';
 
 Reflect: '^';
 Reify: '#';

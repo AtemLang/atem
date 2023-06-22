@@ -33,10 +33,13 @@
 
 /.idea
 /cmake-build-debug
-/grammar/.antlr
+grammar/.antlr
 grammar/.antlr/AtemLexer.tokens
 grammar/.antlr/AtemLexer.tokens
 grammar/.antlr/AtemLexer.java
 grammar/.antlr/AtemLexer.interp
+grammar/.antlr/AtemLexer.java
+grammar/.antlr/AtemLexer.interp
+grammar/.antlr/AtemLexer.tokens
 grammar/.antlr/AtemLexer.java
 grammar/.antlr/AtemLexer.interp
