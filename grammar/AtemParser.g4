@@ -1,1 +1,1 @@
-grammar Atem;
+parser grammar AtemParser;
