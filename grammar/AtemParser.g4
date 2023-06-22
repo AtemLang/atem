@@ -49,3 +49,28 @@ code_block:
 
 attribute: At attribute_name;
 attribute_name: Identifier (Dot Identifier)*;
+
+literal:
+	numeric_literal |
+	boolean_literal |
+	null_literal |
+	undefined_literal;
+
+numeric_literal:
+	integer_literal |
+	floating_point_literal;
+
+integer_literal:
+	DecimalDigits |
+	DecimalLiteral |
+	BinaryLiteral |
+	OctalLiteral |
+	HexadecimalLiteral;
+
+floating_point_literal: FloatingPointLiteral;
+
+boolean_literal: KeywordTrue | KeywordFalse;
+
+null_literal: KeywordNull;
+
+undefined_literal: KeywordUndefined;
