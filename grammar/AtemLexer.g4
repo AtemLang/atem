@@ -267,7 +267,7 @@ ThrowableOptionalChaining: '?.';
 ForcedOptionalChaining: '!.';
 
 //Whitespaces and comments
-Whitespace: [ \t\r\n\f]+ -> channel(HIDDEN);
+Whitespace: [ \n\r\t\u000B\u000C\u0000]+ -> channel(HIDDEN);
 Newline: ('\r' '\n'? | '\n') -> channel(HIDDEN);
 LineComment: ('//' (~[/!] | '//') ~[\r\n]* | '//') -> channel (HIDDEN);
 InnerLineDocComment: '//!' ~[\n\r]* -> channel (HIDDEN);

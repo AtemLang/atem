@@ -4,4 +4,8 @@ options {
 	tokenVocab = AtemLexer;
 }
 
-top_level: EOF;
+TopLevel: Statements? EOF;
+
+Statement: Colon;
+
+Statements: Statement+;
