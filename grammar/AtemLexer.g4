@@ -1,5 +1,57 @@
 lexer grammar AtemLexer;
 
+//Whitespaces and comments
+Whitespace: [ \t\r\n\f]+ -> channel(HIDDEN);
+Newline: ('\r' '\n'? | '\n') -> channel(HIDDEN);
+LineComment: ('//' (~[/!] | '//') ~[\r\n]* | '//') -> channel (HIDDEN);
+InnerLineDocComment: '//!' ~[\n\r]* -> channel (HIDDEN);
+OuterLineDocComment: '///!' (~[/] ~[\n\r]*)? -> channel (HIDDEN);
+
+BlockComment
+   :
+   (
+      '//{'
+      (
+         ~[*!]
+         | '**'
+         | BlockCommentOrDoc
+      )
+      (
+         BlockCommentOrDoc
+         | ~[*]
+      )*? '}//'
+      | '//{}//'
+   ) -> channel (HIDDEN)
+   ;
+
+InnerBlockComment
+   : '//!{'
+   (
+      BlockCommentOrDoc
+      | ~[*]
+   )*? '}//' -> channel (HIDDEN)
+   ;
+
+OuterBlockComment
+   : '///!{'
+   (
+      ~[*]
+      | BlockCommentOrDoc
+   )
+   (
+      BlockCommentOrDoc
+      | ~[*]
+   )*? '}///' -> channel (HIDDEN)
+   ;
+
+BlockCommentOrDoc
+   :
+   (
+      BlockComment
+      | InnerBlockComment
+      | OuterBlockComment
+   ) -> channel (HIDDEN)
+   ;
 //Keywords
 
 KeywordAbstract: 'abstract';
@@ -47,6 +99,7 @@ KeywordNew: 'new';
 KeywordNot: 'not';	
 KeywordNull: 'null';	
 KeywordOpen: 'open';	
+KeywordOperator: 'operator';	
 KeywordOr: 'or';	
 KeywordOuter: 'outer';	
 KeywordOverride: 'override';	
@@ -76,8 +129,7 @@ KeywordWhile: 'while';
 
 //Identifier
 
-Identifier:
-	IdentifierHead IdentifierCharacter?;
+Identifier:	IdentifierHead IdentifierCharacters?;
 
 fragment IdentifierHead:
 	[a-zA-Z]
@@ -181,55 +233,50 @@ fragment FloatingPointE: [eE];
 fragment FloatingPointP: [pP];
 fragment Sign: [+-];
 
-//Whitespaces and comments
-Whitespace: [ \t\r\n\f]+ -> channel(HIDDEN);
-Newline: ('\r' '\n'? | '\n') -> channel(HIDDEN);
-LineComment: ('//' (~[/!] | '//') ~[\r\n]* | '//') -> channel (HIDDEN);
-InnerLineDocComment: '//!' ~[\n\r]* -> channel (HIDDEN);
-OuterLineDocComment: '///!' (~[/] ~[\n\r]*)? -> channel (HIDDEN);
+//Operators
 
-BlockComment
-   :
-   (
-      '//{'
-      (
-         ~[*!]
-         | '**'
-         | BlockCommentOrDoc
-      )
-      (
-         BlockCommentOrDoc
-         | ~[*]
-      )*? '}//'
-      | '//{}//'
-   ) -> channel (HIDDEN)
-   ;
+LeftCurly: '{';
+RightCurly: '}';
+LeftParenthese: '(';
+RightParenthese: ')';
+LeftSquare: '[';
+RightSquare: ']';
 
-InnerBlockComment
-   : '//!{'
-   (
-      BlockCommentOrDoc
-      | ~[*]
-   )*? '}//' -> channel (HIDDEN)
-   ;
+Dot: '.';
+Colon: ':';
+Semicolon: ';';
 
-OuterBlockComment
-   : '///!{'
-   (
-      ~[*]
-      | BlockCommentOrDoc
-   )
-   (
-      BlockCommentOrDoc
-      | ~[*]
-   )*? '}///' -> channel (HIDDEN)
-   ;
+Add: '+';
+OverflowAdd: '+&';
+SaturatingAdd: '+|';
+Sub: '-';
+OverflowSub: '-&';
+SaturatingSub: '-|';
+Mul: '*';
+OverflowMul: '*&';
+SaturatingMul: '*|';
+Divide: '/';
+RemainderDivide: '%';
+Power: '**';
+OverflowingPower: '**&';
+SaturatingPower: '**|';
 
-BlockCommentOrDoc
-   :
-   (
-      BlockComment
-      | InnerBlockComment
-      | OuterBlockComment
-   ) -> channel (HIDDEN)
-   ;
+Assign: '=';
+AddAssign: '+=';
+OverflowingAddAssign: '+&=';
+SaturatingAddAssign: '+|=';
+SubAssign: '-=';
+OverflowingSubAssign: '-&=';
+SaturatingSubAssign: '-|=';
+MulAssign: '*=';
+OverflowingMulAssign: '*&=';
+SaturatingMulAssign: '*|=';
+PowerAssign: '**=';
+OverflowingPowerAssign: '**&=';
+SaturatingPowerAssign: '**|=';
+BitLeftShiftAssign: '<<=';
+SaturatingBitLeftShiftAssign: '<<|=';
+BitRightShiftAssign: '>>=';
+BitAndAssign: '&=';
+BitOrAssign: '|=';
+BitNotAssign: '~=';
