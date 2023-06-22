@@ -24,6 +24,7 @@ KeywordDeinit: 'deinit';
 KeywordDelete: 'delete';	
 KeywordDo: 'do';	
 KeywordDyn: 'dyn';	
+KeywordElse: 'else';
 KeywordEnum: 'enum';	
 KeywordExtend: 'extend';
 KeywordExtern: 'extern';	
@@ -193,6 +194,7 @@ RightSquare: ']';
 Dot: '.';
 Colon: ':';
 Semicolon: ';';
+Comma: ',';
 
 Add: '+';
 OverflowAdd: '+&';
@@ -247,6 +249,8 @@ BitRightShift: '>>';
 PointerType: '.&';
 PointerDeref: '.*';
 ObjectAddress: '.@';
+
+OptionalType: '?';
 
 Reflect: '^';
 Reify: '#';
@@ -314,3 +318,75 @@ BlockCommentOrDoc
       | OuterBlockComment
    ) -> channel (HIDDEN)
    ;
+
+//String literals
+
+MultiLineExtendedStringOpen:
+	'#'+ '"""' -> pushMode(MultiLineExtended);
+
+SingleLineExtendedStringOpen:
+	'#'+ '"' -> pushMode(SingleLineExtended);
+
+MultiLineStringOpen: '"""' -> pushMode(MultiLine);
+
+SingleLineStringOpen: '"' -> pushMode(SingleLine);
+
+mode SingleLine;
+
+InterpolataionSingleLine:
+	'\\(' -> pushMode(DEFAULT_MODE);
+
+SingleLineStringClose: '"' -> popMode;
+
+QuotedSingleLineText: QuotedText;
+
+mode MultiLine;
+
+InterpolataionMultiLine:
+	'\\(' -> pushMode(DEFAULT_MODE);
+
+MultiLineStringClose: '"""' -> popMode;
+
+QuotedMultiLineText: MultilineQuotedText;
+
+mode SingleLineExtended;
+
+SingleLineExtendedStringClose: '"' '#'+ -> popMode;
+
+QuotedSingleLineExtendedText: ~[\r\n"]+;
+
+mode MultiLineExtended;
+
+MultiLineExtendedStringClose: '"""' '#'+ -> popMode;
+
+QuotedMultiLineExtendedText: ~["]+ | '"' '"'?;
+
+fragment QuotedText: QuotedTextItem+;
+
+fragment QuotedTextItem: EscapedCharacter | ~["\n\r\\];
+
+fragment MultilineQuotedText:
+	EscapedCharacter
+	| ~[\\"]+
+	| '"' '"'?
+	| EscapedNewline;
+
+fragment EscapeSequence: '\\' '#'*;
+
+fragment EscapedCharacter:
+	EscapeSequence (
+		[0\\tnr"'\u201c]
+		| 'u' '{' UnicodeScalarDigits '}'
+	);
+
+//Between one and eight hexadecimal digits
+fragment UnicodeScalarDigits:
+	HexadecimalDigit HexadecimalDigit? HexadecimalDigit? HexadecimalDigit? HexadecimalDigit?
+		HexadecimalDigit? HexadecimalDigit? HexadecimalDigit?;
+
+fragment EscapedNewline:
+	EscapeSequence InlineSpaces? LineBreak;
+
+fragment InlineSpaces: [\u0009\u0020];
+
+fragment LineBreak: [\u000A\u000D]| '\u000D' '\u000A';
