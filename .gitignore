@@ -34,3 +34,7 @@
 /.idea
 /cmake-build-debug
 /grammar/.antlr
+grammar/.antlr/AtemLexer.tokens
+grammar/.antlr/AtemLexer.tokens
+grammar/.antlr/AtemLexer.java
+grammar/.antlr/AtemLexer.interp
