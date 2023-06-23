@@ -67,6 +67,7 @@ KeywordModule: 'module';
 KeywordMutable: 'mutable';	
 KeywordNamespace: 'namespace';	
 KeywordNew: 'new';	
+KeywordNever: 'Never';
 KeywordNot: 'not';	
 KeywordNull: 'null';	
 KeywordOpen: 'open';	

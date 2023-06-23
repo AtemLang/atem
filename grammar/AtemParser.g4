@@ -7,12 +7,20 @@ options {
 top_level: statements? EOF;
 
 statement: 
-	(
+	((
 		loop_statement |
 		declaration |
 		control_transfer_statement |
+		branch_statement |
 		expression
-	)? Semicolon;
+	) Semicolon?) | 
+	((
+		loop_statement |
+		declaration |
+		control_transfer_statement |
+		branch_statement |
+		expression
+	)? Semicolon);
 
 statements: statement+;
 
@@ -25,6 +33,16 @@ for_statement:
 
 while_statement:
 	KeywordWhile;
+
+branch_statement:
+	if_statement;
+
+if_statement:
+	(KeywordIf LeftParenthese expression RightParenthese code_block
+	(KeywordElse code_block)? ) |
+	(KeywordIf LeftParenthese expression RightParenthese code_block
+	(KeywordElse if_statement)*?
+	(KeywordElse code_block)?);
 
 declaration:
 	function_declaration 	|
@@ -63,7 +81,7 @@ package_declaration:
 	attributes? KeywordPackage path_expression;
 
 module_declaration:
-	(path_expression Colon attributes? KeywordModule ) | (path_expression Colon attributes? KeywordModule Assign LeftCurly statements? RightCurly);
+	(path_expression Colon attributes? KeywordModule ) | (path_expression Colon attributes? KeywordModule Assign code_block_no_label);
 
 typealias_declaration:
 	attributes? access_level_specifier? typealias_name Colon KeywordAlias KeywordType Assign expression;
@@ -111,7 +129,7 @@ return_statement:
 	KeywordReturn expression?;
 
 closure_expression:
-	Colon closure_signature? Assign LeftCurly statements? RightCurly;
+	Colon closure_signature? Assign code_block;
 
 closure_signature:
 	capture_list? closure_parameter_clause KeywordThrows? function_result?;
@@ -121,6 +139,9 @@ capture_list_items: capture_list_item+;
 capture_list_item: Identifier;
 
 closure_parameter_clause: Identifier;
+
+code_block_no_label:
+	LeftCurly statements? RightCurly;
 
 code_block:
 	(Identifier Colon)? LeftCurly statements? RightCurly;
@@ -168,6 +189,14 @@ labeled_trailing_closure:
 labeled_trailing_closures: labeled_trailing_closure+;
 
 type:
+	parenthesized_type |
+	builtin_type |
+	type_expression
+	;
+
+parenthesized_type: RightParenthese type LeftParenthese;
+
+builtin_type:
 	basic_type |
 	optional_type;
 
@@ -278,6 +307,8 @@ expression
 	| KeywordIf LeftParenthese expression RightParenthese expression (KeywordElse expression)?	#if_expression_
 	| KeywordDo LeftCurly statements RightCurly	#do_expression_
 	| import_expression							#import_expression_
+	| expression type_casting_operator expression	#type_cast_expression_
+	| type_expression							#type_expression_
 	;
 
 import_expression:
@@ -304,6 +335,9 @@ path_expression_element:
 	KeywordModule |
 	KeywordPackage;
 
+type_expression:
+	KeywordComptime (type_literal | expression);
+
 literal_expression:
 	literal;
 
@@ -313,7 +347,11 @@ literal:
 	string_literal |
 	null_literal |
 	undefined_literal |
+	type_literal |
 	default_literal;
+
+type_literal:
+	Identifier | builtin_type | optional_type;
 
 numeric_literal:
 	integer_literal |
