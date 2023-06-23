@@ -4,7 +4,7 @@ options {
 	tokenVocab = AtemLexer;
 }
 
-top_level: statements? EOF;
+program: statements? EOF;
 
 statement: 
 	((
@@ -29,10 +29,10 @@ loop_statement:
 	while_statement;
 
 for_statement:
-	KeywordFor;
+	KeywordFor LeftParenthese Identifier Colon attributes? KeywordIn expression RightParenthese code_block;
 
 while_statement:
-	KeywordWhile;
+	KeywordWhile LeftParenthese expression RightParenthese code_block;
 
 branch_statement:
 	if_statement;
@@ -84,7 +84,7 @@ module_declaration:
 	(path_expression Colon attributes? KeywordModule ) | (path_expression Colon attributes? KeywordModule Assign code_block_no_label);
 
 typealias_declaration:
-	attributes? access_level_specifier? typealias_name Colon KeywordAlias KeywordType Assign expression;
+	attributes? access_level_specifier? typealias_name Colon KeywordAlias KeywordType Assign type_expression;
 
 typealias_name:
 	Identifier;
@@ -93,15 +93,15 @@ access_level_specifier:
 	KeywordPrivate | KeywordFilePrivate | KeywordInternal | KeywordPublic | KeywordOpen;
 
 function_declaration:
-	function_name Colon attributes? function_signature? KeywordFunc Assign code_block;
+	function_name Colon KeywordFunc attributes? function_type? Assign code_block;
 
 function_name: Identifier;
 
-function_signature:
+function_type:
 	function_parameter_clause KeywordThrows? function_result;
 
 function_result:
-	Arrow attributes? type;
+	Arrow attributes? type_expression;
 
 function_parameter_clause:
 	LeftParenthese function_parameter_list? RightParenthese;
@@ -115,7 +115,7 @@ function_parameter_label: Identifier;
 function_parameter_name: Identifier;
 default_argument_clause: Assign expression;
 
-type_annotation: attributes? type;
+type_annotation: attributes? type_expression;
 
 variable_declaration:
 	variable_name? Colon type_annotation? Assign expression;
@@ -190,20 +190,31 @@ labeled_trailing_closures: labeled_trailing_closure+;
 
 type:
 	parenthesized_type |
-	builtin_type |
-	type_expression
+	simple_type |
+	optional_type |
+	tuple_type |
+	function_type |
+	static_array_type |
+	never_type
 	;
 
 parenthesized_type: RightParenthese type LeftParenthese;
 
-builtin_type:
-	basic_type |
-	optional_type;
+never_type: KeywordNever;
+
+tuple_type:
+    LeftParenthese ((tuple_type_element Comma)+ tuple_type_element?)? RightParenthese;
+
+tuple_type_element:
+    attributes? type | Identifier Colon attributes? type;
 
 optional_type:
 	Question type;
 
-basic_type:
+static_array_type:
+    LeftSquare (expression | Underscore) RightSquare type;
+
+simple_type:
 	integer_type | floating_point_type | boolean_type | byte_type | unit_type | character_type | string_type | comptime_type;
 
 integer_type:
@@ -309,7 +320,11 @@ expression
 	| import_expression							#import_expression_
 	| expression type_casting_operator expression	#type_cast_expression_
 	| closure_expression						#closure_expression_
+	| type_expression                           #type_expression_
 	;
+
+type_expression:
+    type;
 
 import_expression:
 	attributes? KeywordImport import_kind? path_expression;
@@ -335,9 +350,6 @@ path_expression_element:
 	KeywordModule |
 	KeywordPackage;
 
-type_expression:
-	KeywordComptime (type_literal | expression);
-
 literal_expression:
 	literal;
 
@@ -348,9 +360,6 @@ literal:
 	null_literal |
 	undefined_literal |
 	default_literal;
-
-type_literal:
-	Identifier | builtin_type | optional_type;
 
 numeric_literal:
 	integer_literal |
