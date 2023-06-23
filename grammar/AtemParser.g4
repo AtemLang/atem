@@ -47,16 +47,16 @@ function_parameter_clause:
 function_parameter_list: function_parameter (Comma function_parameter)*;
 
 function_parameter:
-	attributes? function_parameter_label? function_parameter_name type_annotation default_argument_clause?;
+	attributes? function_parameter_label? function_parameter_name (Colon type_annotation)? default_argument_clause?;
 
 function_parameter_label: Identifier;
 function_parameter_name: Identifier;
 default_argument_clause: Assign expression;
 
-type_annotation: Colon attributes? type;
+type_annotation: attributes? type;
 
 variable_declaration:
-	variable_name? type_annotation? Assign expression;
+	variable_name? Colon type_annotation? Assign expression;
 
 variable_name: Identifier;
 
@@ -95,7 +95,7 @@ simple_path_element:
 	KeywordThis |
 	KeywordSelf;
 
-function_call_suffix:
+function_call_operator:
 	function_call_argument_clause? trailing_closures | 
 	function_call_argument_clause;
 
@@ -207,6 +207,7 @@ await_operator: KeywordAwait;
 expression
 	: LeftParenthese expression RightParenthese	#parentheses_expression_
 	| literal_expression						#literal_expression_
+	| expression function_call_operator			#function_call_expresison_
 	| expression arithmetic_operator expression #arithmetic_expression_
 	| path_expression							#path_expression_
 	| expression assignment_operator expression	#assignment_expression_
