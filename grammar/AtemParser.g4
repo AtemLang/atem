@@ -11,7 +11,7 @@ statement:
 		loop_statement |
 		declaration |
 		control_transfer_statement
-	) Semicolon;
+	)? Semicolon;
 
 statements: statement+;
 
@@ -204,15 +204,20 @@ type_casting_operator: (KeywordIs | (KeywordAs (Question | Bang)?));
 
 await_operator: KeywordAwait;
 
+async_operator: KeywordAsync;
+
 expression
 	: LeftParenthese expression RightParenthese	#parentheses_expression_
 	| literal_expression						#literal_expression_
+	| expression Dot Identifier					#field_expression_
+	| expression Dot path_expression function_call_operator	#member_function_call_expression_
 	| expression function_call_operator			#function_call_expresison_
 	| expression arithmetic_operator expression #arithmetic_expression_
 	| path_expression							#path_expression_
 	| expression assignment_operator expression	#assignment_expression_
 	| expression comparison_operator expression	#comparison_expression_
 	| try_operator expression					#try_expression_
+	| async_operator expression					#await_expression_
 	| await_operator expression					#await_expression_
 	| expression range_operator expression		#range_expression_
 	| expression binary_bit_operator expression #bit_expression_
@@ -220,6 +225,16 @@ expression
 	| expression binary_boolean_operator expression	#boolean_expression_
 	| unary_boolean_operator expression			#boolean_expression_
 	;
+
+tuple_expression:
+	LeftParenthese RightParenthese |
+	LeftParenthese tuple_element Comma tuple_element_list RightParenthese;
+
+tuple_element_list:
+	tuple_element (Comma tuple_element)*;
+
+tuple_element:
+	(Identifier Assign)? expression;
 
 path_expression:
 	(KeywordGlobal Dot)? path_expression_element (Dot path_expression_element)*;
@@ -238,6 +253,7 @@ literal_expression:
 literal:
 	numeric_literal |
 	boolean_literal |
+	string_literal |
 	null_literal |
 	undefined_literal |
 	default_literal;
@@ -262,3 +278,35 @@ null_literal: KeywordNull;
 undefined_literal: KeywordUndefined;
 
 default_literal: KeywordDefault;
+
+// String Literals
+string_literal:
+	extended_string_literal
+	| interpolated_string_literal
+	| static_string_literal;
+
+extended_string_literal:
+	MultiLineExtendedStringOpen QuotedMultiLineExtendedText+
+		MultiLineExtendedStringClose
+	| SingleLineExtendedStringOpen QuotedSingleLineExtendedText+
+		SingleLineExtendedStringClose;
+
+static_string_literal:
+	SingleLineStringOpen QuotedSingleLineText* SingleLineStringClose
+	| MultiLineStringOpen QuotedMultiLineText* MultiLineStringClose;
+
+interpolated_string_literal:
+	SingleLineStringOpen (
+		QuotedSingleLineText
+		| InterpolataionSingleLine (
+			expression
+			| tuple_element Comma tuple_element_list
+		) RightParenthese
+	)* SingleLineStringClose
+	| MultiLineStringOpen (
+		QuotedMultiLineText
+		| InterpolataionMultiLine (
+			expression
+			| tuple_element Comma tuple_element_list
+		) RightParenthese
+	)* MultiLineStringClose;
