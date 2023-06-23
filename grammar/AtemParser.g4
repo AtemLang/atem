@@ -170,6 +170,12 @@ comparison_operator:
 	GreaterThanOrEqual | LessThanOrEqual |
 	Equal | NotEqual | ThreeWayComparison;
 
+binary_boolean_operator:
+	KeywordAnd | KeywordOr;
+
+unary_boolean_operator:
+	KeywordNot;
+
 binary_bit_operator:
 	BitAnd | BitOr |
 	BitLeftShift | SaturatingBitLeftShift | BitRightShift;
@@ -196,11 +202,22 @@ try_operator: KeywordTry (Question | Bang)?;
 
 type_casting_operator: (KeywordIs | (KeywordAs (Question | Bang)?));
 
+await_operator: KeywordAwait;
+
 expression
-	: literal_expression	#literal_expression_
+	: LeftParenthese expression RightParenthese	#parentheses_expression_
+	| literal_expression						#literal_expression_
 	| expression arithmetic_operator expression #arithmetic_expression_
-	| path_expression	#path_expression_
+	| path_expression							#path_expression_
 	| expression assignment_operator expression	#assignment_expression_
+	| expression comparison_operator expression	#comparison_expression_
+	| try_operator expression					#try_expression_
+	| await_operator expression					#await_expression_
+	| expression range_operator expression		#range_expression_
+	| expression binary_bit_operator expression #bit_expression_
+	| unary_bit_operator expression				#bit_expression_
+	| expression binary_boolean_operator expression	#boolean_expression_
+	| unary_boolean_operator expression			#boolean_expression_
 	;
 
 path_expression:
