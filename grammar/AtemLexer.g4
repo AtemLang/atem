@@ -10,10 +10,19 @@ KeywordAsm: 'asm';
 KeywordAsync: 'async';	
 KeywordAt: 'at';
 KeywordAwait: 'await';	
+KeywordBool: 'Bool';
 KeywordBreak: 'break';	
+KeywordByte: 'Byte';
 KeywordCase: 'case';	
 KeywordCatch: 'catch';	
+KeywordChar8: 'Char8';
+KeywordChar16: 'Char16';
+KeywordChar32: 'Char32';
 KeywordClass: 'class';	
+KeywordCompileTimeInt: 'CompileTimeInt';
+KeywordCompileTimeFloat: 'CompileTimeFloat';
+KeywordCompileTimeString: 'CompileTimeString';
+KeywordCompileTimeChar: 'CompileTimeChar';
 KeywordComptime: 'comptime';	
 KeywordConcept: 'concept';	
 KeywordConst: 'const';	
@@ -31,13 +40,24 @@ KeywordExtern: 'extern';
 KeywordFalse: 'false';	
 KeywordFilePrivate: 'filePrivate';	
 KeywordFinal: 'final';	
+KeywordFloat16: 'Float16';
+KeywordFloat32: 'Float32';
+KeywordFloat64: 'Float64';
+KeywordFloat80: 'Float80';
+KeywordFloat128: 'Float128';
 KeywordFor: 'for';	
 KeywordFunc: 'func';	
 KeywordGet: 'get';	
+KeywordIf: 'if';
 KeywordImpl: 'impl';	
 KeywordImport: 'import';	
 KeywordIn: 'in';
 KeywordInit: 'init';	
+KeywordInt8: 'Int8';
+KeywordInt16: 'Int16';
+KeywordInt32: 'Int32';
+KeywordInt64: 'Int64';
+KeywordInt128: 'Int128';
 KeywordInternal: 'internal';	
 KeywordIs: 'is';	
 KeywordLazy: 'lazy';	
@@ -62,6 +82,7 @@ KeywordSelf: 'self';
 KeywordSet: 'set';	
 KeywordSome: 'some';	
 KeywordStatic: 'static';	
+KeywordString: 'String';
 KeywordStruct: 'stuct';	
 KeywordSuper: 'super';	
 KeywordThis: 'this';	
@@ -70,8 +91,14 @@ KeywordThrows: 'throws';
 KeywordTrue: 'true';	
 KeywordTry: 'try';	
 KeywordType: 'type';	
+KeywordUInt8: 'UInt8';
+KeywordUInt16: 'UInt16';
+KeywordUInt32: 'UInt32';
+KeywordUInt64: 'UInt64';
+KeywordUInt128: 'UInt128';
 KeywordUndefined: 'undefined';	
 KeywordUnion: 'union';	
+KeywordUnit: 'Unit';
 KeywordUsing: 'using';	
 KeywordVirtual: 'virtual';	
 KeywordWhile: 'while';	
@@ -266,6 +293,32 @@ ThrowableUnwrapping: '.?';
 ForcedUnwrapping: '.!';
 ThrowableOptionalChaining: '?.';
 ForcedOptionalChaining: '!.';
+
+Arrow: '->';
+
+OperatorHeadOther:
+	[\u00A1-\u00A7]
+	| [\u00A9\u00AB]
+	| [\u00AC\u00AE]
+	| [\u00B0-\u00B1\u00B6\u00BB\u00BF\u00D7\u00F7]
+	| [\u2016-\u2017\u2020-\u2027]
+	| [\u2030-\u203E]
+	| [\u2041-\u2053]
+	| [\u2055-\u205E]
+	| [\u2190-\u23FF]
+	| [\u2500-\u2775]
+	| [\u2794-\u2BFF]
+	| [\u2E00-\u2E7F]
+	| [\u3001-\u3003]
+	| [\u3008-\u3020\u3030];
+
+OperatorFollowingCharacter:
+	[\u0300-\u036F]
+	| [\u1DC0-\u1DFF]
+	| [\u20D0-\u20FF]
+	| [\uFE00-\uFE0F]
+	| [\uFE20-\uFE2F]
+	| [\u{E0100}-\u{E01EF}];
 
 //Whitespaces and comments
 Whitespace: [ \n\r\t\u000B\u000C\u0000]+ -> channel(HIDDEN);
