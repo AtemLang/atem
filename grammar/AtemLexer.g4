@@ -3,6 +3,7 @@ lexer grammar AtemLexer;
 //Keywords
 
 KeywordAbstract: 'abstract';
+KeywordAlias:	'alias';
 KeywordAnd: 'and';
 KeywordAny: 'any';	
 KeywordAs: 'as';	

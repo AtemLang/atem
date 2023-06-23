@@ -27,9 +27,52 @@ while_statement:
 	KeywordWhile;
 
 declaration:
-	function_declaration |
-	variable_declaration
+	function_declaration 	|
+	variable_declaration 	|
+	import_declaration 		|
+	package_declaration 	|
+	project_declaration		|
+	module_declaration		|
+	import_alias_declaration|
+	typealias_declaration
 	;
+
+import_alias_declaration:
+	attributes? access_level_specifier? import_alias_name Colon KeywordAlias Assign import_expression;
+
+import_alias_name:
+	Identifier;
+
+import_declaration:
+	attributes? KeywordImport import_kind? path_expression;
+
+import_kind:
+	KeywordAlias
+	| KeywordStruct
+	| KeywordClass
+	| KeywordEnum
+	| KeywordConcept
+	| KeywordConst
+	| KeywordMutable
+	| KeywordFunc;
+
+project_declaration:
+	path_expression Colon attributes? KeywordProject;
+
+package_declaration:
+	attributes? KeywordPackage path_expression;
+
+module_declaration:
+	(path_expression Colon attributes? KeywordModule ) | (path_expression Colon attributes? KeywordModule Assign LeftCurly statements? RightCurly);
+
+typealias_declaration:
+	attributes? access_level_specifier? typealias_name Colon KeywordAlias KeywordType Assign expression;
+
+typealias_name:
+	Identifier;
+
+access_level_specifier:
+	KeywordPrivate | KeywordFilePrivate | KeywordInternal | KeywordPublic | KeywordOpen;
 
 function_declaration:
 	function_name Colon attributes? function_signature? KeywordFunc Assign code_block;
@@ -234,7 +277,11 @@ expression
 	| unary_boolean_operator expression			#boolean_expression_
 	| KeywordIf LeftParenthese expression RightParenthese expression (KeywordElse expression)?	#if_expression_
 	| KeywordDo LeftCurly statements RightCurly	#do_expression_
+	| import_expression							#import_expression_
 	;
+
+import_expression:
+	attributes? KeywordImport import_kind? path_expression;
 
 tuple_expression:
 	LeftParenthese RightParenthese |
