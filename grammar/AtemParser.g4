@@ -10,7 +10,8 @@ statement:
 	(
 		loop_statement |
 		declaration |
-		control_transfer_statement
+		control_transfer_statement |
+		expression
 	)? Semicolon;
 
 statements: statement+;
@@ -124,7 +125,11 @@ labeled_trailing_closure:
 labeled_trailing_closures: labeled_trailing_closure+;
 
 type:
-	basic_type;
+	basic_type |
+	optional_type;
+
+optional_type:
+	Question type;
 
 basic_type:
 	integer_type | floating_point_type | boolean_type | byte_type | unit_type | character_type | string_type | comptime_type;
@@ -192,8 +197,9 @@ reflect_operator:
 range_operator:
 	ClosedRange | RightOpenRange | LeftOpenRange | OpenedRange;
 
-optional_operator:
-	DefaultUnwrapping | ThrowableUnwrapping | ForcedUnwrapping |
+optional_unwrapping_operator:
+	DefaultUnwrapping | ThrowableUnwrapping | ForcedUnwrapping;
+optional_chaining_operator:
 	ForcedOptionalChaining | ThrowableOptionalChaining;
 
 arrow_operator: Arrow;
@@ -211,6 +217,8 @@ expression
 	| literal_expression						#literal_expression_
 	| expression Dot Identifier					#field_expression_
 	| expression Dot path_expression function_call_operator	#member_function_call_expression_
+	| expression optional_unwrapping_operator	#optional_unwrapping_expression_
+	| expression optional_chaining_operator Identifier		#optional_chaining_expression_
 	| expression function_call_operator			#function_call_expresison_
 	| expression arithmetic_operator expression #arithmetic_expression_
 	| path_expression							#path_expression_
@@ -224,6 +232,8 @@ expression
 	| unary_bit_operator expression				#bit_expression_
 	| expression binary_boolean_operator expression	#boolean_expression_
 	| unary_boolean_operator expression			#boolean_expression_
+	| KeywordIf LeftParenthese expression RightParenthese expression (KeywordElse expression)?	#if_expression_
+	| KeywordDo LeftCurly statements RightCurly	#do_expression_
 	;
 
 tuple_expression:
