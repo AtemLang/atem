@@ -26,13 +26,14 @@ while_statement:
 	KeywordWhile;
 
 declaration:
-	function_declaration
+	function_declaration |
+	variable_declaration
 	;
 
 function_declaration:
-	function_name Colon attributes+? function_signature? KeywordFunc Assign code_block;
+	function_name Colon attributes? function_signature? KeywordFunc Assign code_block;
 
-function_name: Identifier | operator;
+function_name: Identifier;
 
 function_signature:
 	function_parameter_clause KeywordThrows? function_result;
@@ -54,7 +55,10 @@ default_argument_clause: Assign expression;
 
 type_annotation: Colon attributes? type;
 
-type: Identifier;
+variable_declaration:
+	variable_name? type_annotation? Assign expression;
+
+variable_name: Identifier;
 
 control_transfer_statement:
 	return_statement;
@@ -62,66 +66,11 @@ control_transfer_statement:
 return_statement:
 	KeywordReturn expression?;
 
-operator:
-	operator_head operator_characters? |
-	dot_operator_head dot_operator_characters;
-
-operator_head:
-	(Divide |
-	Assign |
-	Sub |
-	Add |
-	Bang |
-	Mul |
-	RemainderDivide |
-	LessThan |
-	GreaterThan |
-	Reflect |
-	Question) |
-	OperatorHeadOther;
-
-operator_character:
-	operator_head | OperatorFollowingCharacter;
-
-operator_characters: (
-		{_input.get(_input.index()-1).getType() != Whitespace}? operator_character
-	)+;
-
-dot_operator_head: Dot;
-dot_operator_character: Dot | operator_character;
-dot_operator_characters: (
-		{_input.get(_input.index()-1).getType() != Whitespace}? dot_operator_character
-	)+;
-
-try_operator:
-	KeywordTry (Question | Bang)?;
-
-as_operator:
-	KeywordAs (Question | Bang)?;
-
-is_operator:
-	KeywordIs;
-
-conditional_operator:
-	KeywordIf LeftParenthese expression RightParenthese expression KeywordElse expression;
-
-assignment_operator:
-	Assign;
-
-prefix_operator:
-	;
-
-binary_operator:
-	;
-
-postfix_operator:
-	;
-
 closure_expression:
-	Colon closure_signature? Assign statements? RightCurly;
+	Colon closure_signature? Assign LeftCurly statements? RightCurly;
 
 closure_signature:
-	capture_list? closure_parameter_clause KeywordThrows? function_result? |;
+	capture_list? closure_parameter_clause KeywordThrows? function_result?;
 
 capture_list: LeftSquare capture_list_items RightSquare;
 capture_list_items: capture_list_item+;
@@ -146,28 +95,6 @@ simple_path_element:
 	KeywordThis |
 	KeywordSelf;
 
-expression:
-	try_operator? prefix_expression binary_expressions?;
-
-expressions:
-	expression (Comma expression)*;
-
-prefix_expression:
-	prefix_operator? postfix_expression;
-
-binary_expressions:
-	binary_operator prefix_expression |
-	(assignment_operator | conditional_operator) try_operator? prefix_expression |
-	as_operator |
-	is_operator;
-
-postfix_expression:
-	primary_expression (
-		function_call_suffix
-	)* 
-	postfix_operator*?
-	;
-
 function_call_suffix:
 	function_call_argument_clause? trailing_closures | 
 	function_call_argument_clause;
@@ -181,12 +108,11 @@ function_call_argument_list:
 function_call_argument:
 	argument_name? (
 		Identifier |
-		expression |
-		operator
+		expression
 	);
 
 argument_name:
-	Identifier assignment_operator;
+	Identifier Assign;
 argument_names: argument_name+;
 
 trailing_closures:
@@ -197,8 +123,96 @@ labeled_trailing_closure:
 
 labeled_trailing_closures: labeled_trailing_closure+;
 
-primary_expression:
-	literal_expression;
+type:
+	basic_type;
+
+basic_type:
+	integer_type | floating_point_type | boolean_type | byte_type | unit_type | character_type | string_type | comptime_type;
+
+integer_type:
+	KeywordInt8 | KeywordInt16 | KeywordInt32 | KeywordInt64 | KeywordInt128 |
+	KeywordUInt8 | KeywordUInt16 | KeywordUInt32 | KeywordUInt64 | KeywordUInt128;
+
+floating_point_type:
+	KeywordFloat16 | KeywordFloat32 | KeywordFloat64 | KeywordFloat80 | KeywordFloat128;
+
+boolean_type: KeywordBool;
+
+byte_type: KeywordByte;
+
+unit_type: KeywordUnit;
+
+character_type: KeywordChar8 | KeywordChar16 | KeywordChar32;
+
+string_type: KeywordString;
+
+comptime_type: KeywordCompileTimeChar | KeywordCompileTimeFloat | KeywordCompileTimeInt | KeywordCompileTimeString;
+
+arithmetic_operator:
+	Add | OverflowingAdd | SaturatingAdd |
+	Sub | OverflowingSub | SaturatingSub |
+	Mul | OverflowingMul | SaturatingMul |
+	Divide | RemainderDivide |
+	Power | OverflowingPower | SaturatingPower;
+
+assignment_operator:
+	Assign | 
+	AddAssign | OverflowingAddAssign | SaturatingAddAssign |
+	SubAssign | OverflowingSubAssign | SaturatingSubAssign |
+	MulAssign | OverflowingMulAssign | SaturatingMulAssign |
+	PowerAssign | OverflowingPowerAssign | SaturatingPowerAssign |
+	DivideAssign | RemainderDivideAssign |
+	BitLeftShiftAssign | SaturatingBitLeftShiftAssign | BitRightShiftAssign |
+	BitAndAssign | BitOrAssign | BitNotAssign;
+
+comparison_operator:
+	GreaterThan | LessThan |
+	GreaterThanOrEqual | LessThanOrEqual |
+	Equal | NotEqual | ThreeWayComparison;
+
+binary_bit_operator:
+	BitAnd | BitOr |
+	BitLeftShift | SaturatingBitLeftShift | BitRightShift;
+
+unary_bit_operator:
+	BitNot | BitXor;
+
+pointer_operator:
+	PointerType | PointerDeref | ObjectAddress;
+
+reflect_operator:
+	Reflect | Reify;
+
+range_operator:
+	ClosedRange | RightOpenRange | LeftOpenRange | OpenedRange;
+
+optional_operator:
+	DefaultUnwrapping | ThrowableUnwrapping | ForcedUnwrapping |
+	ForcedOptionalChaining | ThrowableOptionalChaining;
+
+arrow_operator: Arrow;
+
+try_operator: KeywordTry (Question | Bang)?;
+
+type_casting_operator: (KeywordIs | (KeywordAs (Question | Bang)?));
+
+expression
+	: literal_expression	#literal_expression_
+	| expression arithmetic_operator expression #arithmetic_expression_
+	| path_expression	#path_expression_
+	| expression assignment_operator expression	#assignment_expression_
+	;
+
+path_expression:
+	(KeywordGlobal Dot)? path_expression_element (Dot path_expression_element)*;
+path_expression_element:
+	Identifier |
+	KeywordSuper |
+	KeywordSelf |
+	KeywordThis |
+	KeywordOuter |
+	KeywordModule |
+	KeywordPackage;
 
 literal_expression:
 	literal;
@@ -207,7 +221,8 @@ literal:
 	numeric_literal |
 	boolean_literal |
 	null_literal |
-	undefined_literal;
+	undefined_literal |
+	default_literal;
 
 numeric_literal:
 	integer_literal |
@@ -227,3 +242,5 @@ boolean_literal: KeywordTrue | KeywordFalse;
 null_literal: KeywordNull;
 
 undefined_literal: KeywordUndefined;
+
+default_literal: KeywordDefault;
