@@ -288,7 +288,7 @@ expression
 	: LeftParenthese expression RightParenthese	#parentheses_expression_
 	| literal_expression						#literal_expression_
 	| expression Dot Identifier					#field_expression_
-	| expression Dot path_expression function_call_operator	#member_function_call_expression_
+	| expression function_call_operator	#member_function_call_expression_
 	| expression optional_unwrapping_operator	#optional_unwrapping_expression_
 	| expression optional_chaining_operator Identifier		#optional_chaining_expression_
 	| expression function_call_operator			#function_call_expresison_
@@ -308,7 +308,7 @@ expression
 	| KeywordDo LeftCurly statements RightCurly	#do_expression_
 	| import_expression							#import_expression_
 	| expression type_casting_operator expression	#type_cast_expression_
-	| type_expression							#type_expression_
+	| closure_expression						#closure_expression_
 	;
 
 import_expression:
@@ -325,7 +325,7 @@ tuple_element:
 	(Identifier Assign)? expression;
 
 path_expression:
-	(KeywordGlobal Dot)? path_expression_element (Dot path_expression_element)*;
+	(KeywordGlobal Dot)? path_expression_element (Dot path_expression_element)*?;
 path_expression_element:
 	Identifier |
 	KeywordSuper |
@@ -347,7 +347,6 @@ literal:
 	string_literal |
 	null_literal |
 	undefined_literal |
-	type_literal |
 	default_literal;
 
 type_literal:
