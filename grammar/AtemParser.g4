@@ -75,13 +75,13 @@ import_kind:
 	| KeywordFunc;
 
 project_declaration:
-	path_expression Colon attributes? KeywordProject;
+	path_expression Colon KeywordProject attributes?;
 
 package_declaration:
 	attributes? KeywordPackage path_expression;
 
 module_declaration:
-	(path_expression Colon attributes? KeywordModule ) | (path_expression Colon attributes? KeywordModule Assign code_block_no_label);
+	(path_expression Colon KeywordModule attributes?) | (path_expression Colon KeywordModule attributes? Assign code_block_no_label);
 
 typealias_declaration:
 	attributes? access_level_specifier? typealias_name Colon KeywordAlias KeywordType Assign type_expression;
@@ -195,10 +195,13 @@ type:
 	tuple_type |
 	function_type |
 	static_array_type |
+	dynamic_array_type |
+	map_type |
+	set_type |
 	never_type
 	;
 
-parenthesized_type: RightParenthese type LeftParenthese;
+parenthesized_type: RightParenthese type_expression LeftParenthese;
 
 never_type: KeywordNever;
 
@@ -206,13 +209,22 @@ tuple_type:
     LeftParenthese ((tuple_type_element Comma)+ tuple_type_element?)? RightParenthese;
 
 tuple_type_element:
-    attributes? type | Identifier Colon attributes? type;
+    attributes? type_expression | Identifier Colon attributes? type_expression;
 
 optional_type:
-	Question type;
+	Question type_expression;
 
 static_array_type:
-    LeftSquare (expression | Underscore) RightSquare type;
+    LeftSquare (expression | Underscore) RightSquare (type_expression | Underscore);
+
+dynamic_array_type:
+    LeftSquare RightSquare (type_expression | Underscore);
+
+map_type:
+	LeftSquare (type_expression | Underscore) RightSquare (type_expression | Underscore);
+
+set_type:
+	LeftSquare (type_expression | Underscore) RightSquare;
 
 simple_type:
 	integer_type | floating_point_type | boolean_type | byte_type | unit_type | character_type | string_type | comptime_type;
