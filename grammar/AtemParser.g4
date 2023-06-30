@@ -8,21 +8,16 @@ program: statements? EOF;
 
 statement: 
 	((
-		statement_
-	) Semicolon?) | 
-	((
-		statement_
-	)? Semicolon);
+		loop_statement |
+		declaration_statement |
+		control_transfer_statement |
+		branch_statement |
+		import_statement |
+		defer_statement |
+		expression
+	) Semicolon?) | Semicolon;
 
 statements: statement+;
-
-statement_:
-	loop_statement |
-	declaration_statement |
-	control_transfer_statement |
-	branch_statement |
-	import_statement |
-	expression;
 
 loop_statement:
 	for_statement |
@@ -172,6 +167,9 @@ capture_list_item: Identifier;
 
 closure_parameter_clause: Identifier;
 
+defer_statement:
+	KeywordDefer code_block;
+
 code_block_no_label:
 	LeftCurly statements? RightCurly;
 
@@ -180,17 +178,7 @@ code_block:
 
 attribute: At attribute_name;
 attributes: attribute+;
-attribute_name: simple_path;
-
-simple_path:
-	Dot? simple_path_element (Dot simple_path_element)*;
-
-simple_path_element:
-	Identifier |
-	KeywordSuper |
-	KeywordOuter |
-	KeywordThis |
-	KeywordSelf;
+attribute_name: path_expression;
 
 function_call_operator:
 	function_call_argument_clause? trailing_closures | 
@@ -364,7 +352,13 @@ expression
 	| import_expression							#import_expression_
 	| expression type_casting_operator expression	#type_cast_expression_
 	| closure_expression						#closure_expression_
+	| expression Dot KeywordInit					#init_expression_
+	| expression Dot KeywordDeinit					#deinit_expression_
+	| expression Dot KeywordSelf					#self_expression_
+	| code_block_expression						#code_block_expression_
 	;
+
+code_block_expression: code_block;
 
 type_expression:
     type;
