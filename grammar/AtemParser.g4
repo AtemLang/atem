@@ -8,21 +8,21 @@ program: statements? EOF;
 
 statement: 
 	((
-		loop_statement |
-		declaration |
-		control_transfer_statement |
-		branch_statement |
-		expression
+		statement_
 	) Semicolon?) | 
 	((
-		loop_statement |
-		declaration |
-		control_transfer_statement |
-		branch_statement |
-		expression
+		statement_
 	)? Semicolon);
 
 statements: statement+;
+
+statement_:
+	loop_statement |
+	declaration_statement |
+	control_transfer_statement |
+	branch_statement |
+	import_statement |
+	expression;
 
 loop_statement:
 	for_statement |
@@ -44,25 +44,43 @@ if_statement:
 	(KeywordElse if_statement)*?
 	(KeywordElse code_block)?);
 
+declaration_statement:
+	declarator declaration;
+
+declarator:
+	access_level_specifier? declarator_name Colon type? Assign;
+
+declarator_name: path_expression;
+
 declaration:
-	function_declaration 	|
-	variable_declaration 	|
-	import_declaration 		|
 	package_declaration 	|
 	project_declaration		|
 	module_declaration		|
+	function_declaration 	|
+	variable_declaration 	|
+	constant_declaration	|
 	import_alias_declaration|
 	typealias_declaration
 	;
 
 import_alias_declaration:
-	attributes? access_level_specifier? import_alias_name Colon KeywordAlias Assign import_expression;
+	import_expression;
 
-import_alias_name:
-	Identifier;
+import_expression:
+	KeywordImport import_kind? attributes? import_path_expression_list;
 
-import_declaration:
-	attributes? KeywordImport import_kind? path_expression;
+import_statement:
+	KeywordImport import_kind? attributes? import_path_expression_list;
+
+import_path_expression_list:
+	import_path_expression |
+	LeftCurly import_path_expression+ RightCurly;
+import_path_expression:
+	import_path_expression_element (Dot import_path_expression_element)+ (Dot Mul)?;
+import_path_expression_element:
+	Identifier |
+	import_element_list;
+import_element_list: LeftCurly import_path_expression_element (Comma import_path_expression_element)+ Comma? RightCurly;
 
 import_kind:
 	KeywordAlias
@@ -75,25 +93,38 @@ import_kind:
 	| KeywordFunc;
 
 project_declaration:
-	path_expression Colon KeywordProject attributes?;
+	KeywordProject attributes? project_member_list;
+
+project_member_list:
+	KeywordThis | LeftCurly project_members RightCurly;
+
+project_member:
+	path_expression;
+
+project_members: project_member+;
 
 package_declaration:
-	attributes? KeywordPackage path_expression;
+	KeywordPackage attributes? package_member_list;
+
+package_member_list:
+	KeywordThis | LeftCurly package_members RightCurly;
+
+package_member:
+	path_expression;
+
+package_members: package_member+;
 
 module_declaration:
-	(path_expression Colon KeywordModule attributes?) | (path_expression Colon KeywordModule attributes? Assign code_block_no_label);
+	(KeywordModule attributes?) | (KeywordModule attributes? code_block_no_label);
 
 typealias_declaration:
-	attributes? access_level_specifier? typealias_name Colon KeywordAlias KeywordType Assign type_expression;
-
-typealias_name:
-	Identifier;
+	KeywordAlias KeywordType type_expression;
 
 access_level_specifier:
 	KeywordPrivate | KeywordFilePrivate | KeywordInternal | KeywordPublic | KeywordOpen;
 
 function_declaration:
-	function_name Colon KeywordFunc attributes? function_type? Assign code_block;
+	KeywordFunc attributes? function_type? code_block;
 
 function_name: Identifier;
 
@@ -118,9 +149,10 @@ default_argument_clause: Assign expression;
 type_annotation: attributes? type_expression;
 
 variable_declaration:
-	variable_name? Colon type_annotation? Assign expression;
+	KeywordVar expression;
 
-variable_name: Identifier;
+constant_declaration:
+	KeywordConst? expression;
 
 control_transfer_statement:
 	return_statement;
@@ -332,14 +364,10 @@ expression
 	| import_expression							#import_expression_
 	| expression type_casting_operator expression	#type_cast_expression_
 	| closure_expression						#closure_expression_
-	| type_expression                           #type_expression_
 	;
 
 type_expression:
     type;
-
-import_expression:
-	attributes? KeywordImport import_kind? path_expression;
 
 tuple_expression:
 	LeftParenthese RightParenthese |

@@ -84,6 +84,7 @@ KeywordPackage: 'package';
 KeywordPrivate: 'private';	
 KeywordProject: 'project';	
 KeywordPublic: 'public';
+KeywordRecursive: 'recursive';
 KeywordReloc: 'reloc';
 KeywordRequire: 'require';	
 KeywordReturn: 'return';	
@@ -110,6 +111,7 @@ KeywordUndefined: 'undefined';
 KeywordUnion: 'union';	
 KeywordUnit: 'Unit';
 KeywordUsing: 'using';	
+KeywordVar: 'var';
 KeywordVirtual: 'virtual';	
 KeywordWhile: 'while';	
 
