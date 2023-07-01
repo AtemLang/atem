@@ -48,9 +48,10 @@ declaration_statement:
 	declarator declaration;
 
 declarator:
-	access_level_specifier? declarator_name declarate_operator;
+	access_level_specifier? declarator_name declare_operator;
 
-declarate_operator: Colon type_expression? Assign;
+declare_operator: Colon (attributes? type_expression)? Assign;
+empty_declare_operator: Colon Assign;
 
 declarator_name: path_expression;
 
@@ -69,15 +70,83 @@ declaration
 udt_declaration
 	: struct_declaration
 	| class_declaration
-	| concept_declaration
+	| protocol_declaration
 	| union_declaration
 	| enum_declaration;
 
 struct_declaration: KeywordStruct;
 
-class_declaration: KeywordClass;
+class_declaration: KeywordClass extension_list? initializer_list? deinitializer_list? member_list;
 
-concept_declaration: KeywordConcept;
+extension_list: KeywordExtend LeftCurly extension_item+ RightCurly;
+extension_item: inherit_clause | impl_clause;
+
+inherit_clause: KeywordInherit inherit_list;
+inherit_list: LeftCurly inherit_item (Comma inherit_item)+ Comma? RightCurly;
+inherit_item: path_expression;
+
+impl_clause: KeywordImpl;
+impl_list: LeftCurly impl_items RightCurly;
+impl_item: path_expression impl_with_clause;
+impl_items: impl_item+;
+impl_with_clause: KeywordWith impl_member_list;
+impl_member_list: LeftCurly impl_members RightCurly;
+impl_member
+	: associated_type_impl
+	| associated_variable_impl
+	| associated_constant_impl
+	| associated_function_impl
+	;
+impl_members: impl_member+;
+associated_type_impl: KeywordOverride associated_declarator typealias_declaration;
+associated_variable_impl: KeywordOverride associated_declarator variable_declaration;
+associated_constant_impl: KeywordOverride associated_declarator constant_declaration;
+associated_function_impl: KeywordOverride associated_declarator function_declaration;
+associated_declarator: access_level_specifier? associated_name declare_operator;
+associated_name: Identifier;
+
+initializer_list: KeywordInit initializer_member_list;
+initializer_member_list: LeftCurly initializer_members RightCurly;
+initializer_member: empty_declare_operator initializer_type function_body;
+initializer_type: function_parameter_clause? function_specifiers? contract_list?;
+initializer_members: initializer_member+;
+
+deinitializer_list: KeywordDeinit deinitializer_member_list;
+deinitializer_member_list: LeftCurly deinitializer_members RightCurly;
+deinitializer_member: empty_declare_operator deinitializer_type function_body;
+deinitializer_type: function_parameter_clause? function_specifiers? contract_list?;
+deinitializer_members: deinitializer_member+;
+
+member_list: LeftCurly members RightCurly;
+member 
+	: member_type
+	| member_variable
+	| member_constant
+	| member_function
+	;
+members: member+;
+member_type: member_declarator typealias_declaration;
+member_variable: member_declarator storage_level_specifier? variable_declaration getter_and_setter_list?;
+member_constant: member_declarator storage_level_specifier? constant_declaration getter_list?;
+member_function: member_declarator storage_level_specifier? function_declaration;
+member_declarator: access_level_specifier? member_name declare_operator;
+member_name: Identifier;
+getter_and_setter_list: KeywordWith LeftCurly getter_and_setter_items RightCurly;
+getter_list: KeywordWith LeftCurly getter_declaration RightCurly;
+getter_and_setter_item
+	: getter_declaration
+	| setter_declaration
+	;
+getter_and_setter_items: getter_and_setter_item+;
+getter_declaration: empty_declare_operator KeywordGet getter_type function_body;
+getter_type: function_specifiers? contract_list?;
+setter_declaration: empty_declare_operator KeywordSet setter_type function_body;
+setter_type: setter_parameter_clause? function_specifiers? contract_list?;
+setter_parameter_clause: RightParenthese setter_parameter LeftParenthese;
+setter_parameter: setter_parameter_name (Colon type_annotation)?;
+setter_parameter_name: Identifier;
+
+protocol_declaration: KeywordProtocol;
 
 union_declaration: KeywordUnion;
 
@@ -125,7 +194,7 @@ import_kind:
 	| KeywordClass
 	| KeywordUnion
 	| KeywordEnum
-	| KeywordConcept
+	| KeywordProtocol
 	| KeywordConst
 	| KeywordMutable
 	| KeywordFunc;
@@ -166,14 +235,14 @@ function_declaration:
 
 function_body: code_block | Assign expression;
 
-contract_list: KeywordRequire LeftCurly contract (Comma contract)+ Comma? RightCurly | KeywordRequire contract;
+contract_list: KeywordRequire LeftCurly contract+ RightCurly | KeywordRequire contract;
 
 contract:
 	contract_precondition | contract_postcondition;
 
 contract_precondition: KeywordExpect expression;
 
-contract_postcondition: KeywordEnsure (KeywordWith return_value_name declarate_operator KeywordReturn) expression;
+contract_postcondition: KeywordEnsure (KeywordWith return_value_name declare_operator KeywordReturn) expression;
 
 return_value_name: Identifier;
 
@@ -383,13 +452,15 @@ expression
 	| reflect_operator expression														#reflection_expression_
 	| expression PointerDeref															#derefence_expression_
 	| expression ObjectAddress															#object_address_expression_
-	| (
-		function_declaration
-		| udt_declaration
-		| project_declaration
-		| package_declaration
-		| module_declaration
-	)																					#declaration_expression_
+	| declaration_expression															#declaration_expression_
+	;
+
+declaration_expression
+	: function_declaration
+	| udt_declaration
+	| project_declaration
+	| package_declaration
+	| module_declaration
 	;
 
 code_block_expression: code_block;
@@ -402,6 +473,8 @@ type_expression
 	| tuple_type
 	| optional_type
 	| collection_type
+	| any_type
+	| some_type
 	| type_expression PointerType
 	| KeywordIf expression KeywordThen type_expression (KeywordElse type_expression)?
 	| KeywordWhile expression KeywordThen type_expression (KeywordElse type_expression)?
@@ -447,6 +520,10 @@ tuple_type_element:
 
 optional_type:
 	Question type_expression;
+
+any_type: KeywordAny type_expression;
+
+some_type: KeywordSome type_expression;
 
 static_array_type:
     LeftSquare (expression | Underscore) (Comma	expression | Underscore)+ Comma? RightSquare (type_expression | Underscore);
