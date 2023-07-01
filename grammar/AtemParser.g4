@@ -404,7 +404,16 @@ type_expression
     : type
 	| Identifier
 	| KeywordIf expression KeywordThen type_expression (KeywordElse type_expression)?
-	| KeywordDo LeftCurly statements RightCurly
+	| KeywordWhile expression KeywordThen type_expression (KeywordElse type_expression)?
+	| KeywordRepeat type_expression KeywordWhile expression (KeywordElse type_expression)?
+	| KeywordFor Identifier KeywordIn attributes? KeywordIn expression type_expression (KeywordElse type_expression)?
+	| code_block_expression
+	| KeywordUnreachable
+	| KeywordThrow expression
+	| KeywordReturn type_expression?
+	| KeywordBreak code_block_name? (KeywordWith type_expression)?
+	| KeywordContinue code_block_name?
+	| KeywordComptime type_expression
 	;
 
 tuple_expression:
