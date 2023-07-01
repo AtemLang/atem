@@ -102,6 +102,7 @@ KeywordSuccess: 'success';
 KeywordSuper: 'super';
 KeywordThen: 'then';
 KeywordThis: 'this';	
+KeywordThreadLocal: 'threadLocal';
 KeywordThrow: 'throw';	
 KeywordThrows: 'throws';	
 KeywordTrue: 'true';	

@@ -53,16 +53,31 @@ declarate_operator: Colon type_expression? Assign;
 
 declarator_name: path_expression;
 
-declaration:
-	package_declaration 	|
-	project_declaration		|
-	module_declaration		|
-	function_declaration 	|
-	variable_declaration 	|
-	constant_declaration	|
-	import_alias_declaration|
-	typealias_declaration
+declaration
+	: package_declaration
+	| project_declaration
+	| module_declaration
+	| function_declaration
+	| variable_declaration
+	| constant_declaration
+	| import_alias_declaration
+	| typealias_declaration
+	| struct_declaration
+	| class_declaration
+	| concept_declaration
+	| union_declaration
+	| enum_declaration
 	;
+
+struct_declaration: KeywordStruct;
+
+class_declaration: KeywordClass;
+
+concept_declaration: KeywordConcept;
+
+union_declaration: KeywordUnion;
+
+enum_declaration: KeywordEnum;
 
 import_alias_declaration:
 	import_expression;
@@ -87,6 +102,7 @@ import_kind:
 	KeywordAlias
 	| KeywordStruct
 	| KeywordClass
+	| KeywordUnion
 	| KeywordEnum
 	| KeywordConcept
 	| KeywordConst
@@ -125,7 +141,9 @@ access_level_specifier:
 	KeywordPrivate | KeywordFilePrivate | KeywordInternal | KeywordPublic | KeywordOpen;
 
 function_declaration:
-	KeywordFunc attributes? function_type? contract_list? code_block;
+	KeywordFunc attributes? function_type? contract_list? function_body;
+
+function_body: code_block | expression;
 
 contract_list: KeywordRequire LeftCurly contract+ RightCurly | KeywordRequire contract;
 
@@ -169,10 +187,16 @@ default_argument_clause: Assign expression;
 type_annotation: attributes? type_expression;
 
 variable_declaration:
-	KeywordVar expression;
+	KeywordVar storage_level_specifier? expression;
 
 constant_declaration:
-	KeywordConst? expression;
+	KeywordConst? storage_level_specifier? expression;
+
+storage_level_specifier
+	: KeywordGlobal
+	| KeywordStatic
+	| KeywordThreadLocal
+	;
 
 control_transfer_statement:
 	return_statement;
@@ -231,66 +255,6 @@ labeled_trailing_closure:
 	Identifier Assign closure_expression;
 
 labeled_trailing_closures: labeled_trailing_closure+;
-
-type:
-	parenthesized_type |
-	simple_type |
-	optional_type |
-	tuple_type |
-	function_type |
-	static_array_type |
-	dynamic_array_type |
-	map_type |
-	set_type |
-	never_type
-	;
-
-parenthesized_type: RightParenthese type_expression LeftParenthese;
-
-never_type: KeywordNever;
-
-tuple_type:
-    LeftParenthese ((tuple_type_element Comma)+ tuple_type_element?)? RightParenthese;
-
-tuple_type_element:
-    attributes? type_expression | Identifier Colon attributes? type_expression;
-
-optional_type:
-	Question type_expression;
-
-static_array_type:
-    LeftSquare (expression | Underscore) RightSquare (type_expression | Underscore);
-
-dynamic_array_type:
-    LeftSquare RightSquare (type_expression | Underscore);
-
-map_type:
-	LeftSquare (type_expression | Underscore) RightSquare (type_expression | Underscore);
-
-set_type:
-	LeftSquare (type_expression | Underscore) RightSquare;
-
-simple_type:
-	integer_type | floating_point_type | boolean_type | byte_type | unit_type | character_type | string_type | comptime_type;
-
-integer_type:
-	KeywordInt8 | KeywordInt16 | KeywordInt32 | KeywordInt64 | KeywordInt128 |
-	KeywordUInt8 | KeywordUInt16 | KeywordUInt32 | KeywordUInt64 | KeywordUInt128;
-
-floating_point_type:
-	KeywordFloat16 | KeywordFloat32 | KeywordFloat64 | KeywordFloat80 | KeywordFloat128;
-
-boolean_type: KeywordBool;
-
-byte_type: KeywordByte;
-
-unit_type: KeywordUnit;
-
-character_type: KeywordChar8 | KeywordChar16 | KeywordChar32;
-
-string_type: KeywordString;
-
-comptime_type: KeywordCompileTimeChar | KeywordCompileTimeFloat | KeywordCompileTimeInt | KeywordCompileTimeString;
 
 arithmetic_operator:
 	Add | OverflowingAdd | SaturatingAdd |
@@ -397,8 +361,12 @@ expression
 code_block_expression: code_block;
 
 type_expression
-    : type
-	| Identifier
+	: Identifier
+	| RightParenthese type_expression LeftParenthese
+	| basic_type
+	| tuple_type
+	| optional_type
+	| collection_type
 	| KeywordIf expression KeywordThen type_expression (KeywordElse type_expression)?
 	| KeywordWhile expression KeywordThen type_expression (KeywordElse type_expression)?
 	| KeywordRepeat type_expression KeywordWhile expression (KeywordElse type_expression)?
@@ -411,6 +379,74 @@ type_expression
 	| KeywordContinue code_block_name?
 	| KeywordComptime type_expression
 	;
+
+basic_type
+	: never_type
+	| integer_type
+	| floating_point_type
+	| boolean_type
+	| byte_type
+	| unit_type
+	| character_type
+	| string_type
+	| unit_type
+	| comptime_type
+	| type_type
+	;
+
+collection_type
+	: static_array_type
+	| dynamic_array_type
+	| map_type
+	| set_type
+	;
+
+never_type: KeywordNever;
+
+tuple_type:
+    LeftParenthese ((tuple_type_element Comma)+ tuple_type_element?)? RightParenthese;
+
+tuple_type_element:
+    attributes? type_expression | Identifier Colon attributes? type_expression;
+
+optional_type:
+	Question type_expression;
+
+static_array_type:
+    LeftSquare (expression | Underscore) (Comma	expression | Underscore)+ Comma? RightSquare (type_expression | Underscore);
+
+dynamic_array_type:
+    LeftSquare RightSquare (type_expression | Underscore);
+
+map_type:
+	LeftSquare (type_expression | Underscore) Colon (type_expression | Underscore) RightSquare;
+
+set_type:
+	LeftSquare (type_expression | Underscore) RightSquare;
+
+simple_type:
+	integer_type | floating_point_type | boolean_type | byte_type | unit_type | character_type | string_type | comptime_type;
+
+integer_type:
+	KeywordInt8 | KeywordInt16 | KeywordInt32 | KeywordInt64 | KeywordInt128 |
+	KeywordUInt8 | KeywordUInt16 | KeywordUInt32 | KeywordUInt64 | KeywordUInt128;
+
+floating_point_type:
+	KeywordFloat16 | KeywordFloat32 | KeywordFloat64 | KeywordFloat80 | KeywordFloat128;
+
+boolean_type: KeywordBool;
+
+byte_type: KeywordByte;
+
+unit_type: KeywordUnit;
+
+character_type: KeywordChar8 | KeywordChar16 | KeywordChar32;
+
+string_type: KeywordString;
+
+comptime_type: KeywordCompileTimeChar | KeywordCompileTimeFloat | KeywordCompileTimeInt | KeywordCompileTimeString;
+
+type_type: KeywordType;
 
 tuple_expression:
 	LeftParenthese RightParenthese |
