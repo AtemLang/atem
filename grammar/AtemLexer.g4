@@ -70,6 +70,7 @@ KeywordInt128: 'Int128';
 KeywordInternal: 'internal';	
 KeywordIs: 'is';	
 KeywordLazy: 'lazy';	
+KeywordMatch: 'match';
 KeywordModule: 'module';	
 KeywordMutable: 'mutable';	
 KeywordNamespace: 'namespace';	

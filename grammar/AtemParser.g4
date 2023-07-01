@@ -34,7 +34,8 @@ repeat_while_statement:
 	KeywordRepeat code_block KeywordWhile expression (KeywordElse code_block)?;
 
 branch_statement:
-	if_statement;
+	if_statement |
+	match_statement;
 
 if_statement:
 	(KeywordIf expression code_block
@@ -42,6 +43,9 @@ if_statement:
 	(KeywordIf expression code_block
 	(KeywordElse if_statement)*?
 	(KeywordElse code_block)?);
+
+match_statement:
+	KeywordMatch;
 
 declaration_statement:
 	declarator declaration;
@@ -62,12 +66,15 @@ declaration
 	| constant_declaration
 	| import_alias_declaration
 	| typealias_declaration
-	| struct_declaration
+	| udt_declaration
+	;
+
+udt_declaration
+	: struct_declaration
 	| class_declaration
 	| concept_declaration
 	| union_declaration
-	| enum_declaration
-	;
+	| enum_declaration;
 
 struct_declaration: KeywordStruct;
 
@@ -375,6 +382,13 @@ expression
 	| reflect_operator expression														#reflection_expression_
 	| expression PointerDeref															#derefence_expression_
 	| expression ObjectAddress															#object_address_expression_
+	| (
+		function_declaration
+		| udt_declaration
+		| project_declaration
+		| package_declaration
+		| module_declaration
+	)																					#declaration_expression_
 	;
 
 code_block_expression: code_block;
