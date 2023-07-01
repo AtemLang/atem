@@ -74,17 +74,33 @@ udt_declaration
 	| union_declaration
 	| enum_declaration;
 
-struct_declaration: KeywordStruct extension_list? initializer_list? deinitializer_list? member_list;
+struct_declaration: KeywordStruct attributes? final_specifier? extension_list? initializer_list? deinitializer_list? member_list;
 
-class_declaration: KeywordClass extension_list? initializer_list? deinitializer_list? member_list;
+class_declaration: KeywordClass attributes? final_specifier? extension_list? initializer_list? deinitializer_list? member_list;
+
+final_specifier: KeywordFinal;
 
 extension_list: KeywordExtend LeftCurly extension_item+ RightCurly;
 extension_item: inherit_clause | impl_clause;
 
 inherit_clause: KeywordInherit inherit_list;
 inherit_list: LeftCurly inherit_items RightCurly | inherit_item;
-inherit_item: path_expression;
+inherit_item: path_expression inherit_member_list?;
 inherit_items: inherit_item+;
+inherit_member_list: LeftCurly inherit_members RightCurly;
+inherit_member
+	: inherit_type_override
+	| inherit_variable_override
+	| inherit_constant_override
+	| inherit_function_override
+	;
+inherit_members: inherit_member+;
+inherit_type_override: KeywordOverride inherit_declarator typealias_declaration;
+inherit_variable_override: KeywordOverride inherit_declarator variable_declaration getter_and_setter_list?;
+inherit_constant_override: KeywordOverride inherit_declarator constant_declaration getter_list?;
+inherit_function_override: KeywordOverride inherit_declarator function_declaration;
+inherit_declarator: access_level_specifier? final_specifier? inherit_name declare_operator;
+inherit_name: Identifier;
 
 impl_clause: KeywordImpl impl_list;
 impl_list: LeftCurly impl_items RightCurly | impl_item;
@@ -99,22 +115,22 @@ impl_member
 	| associated_function_impl
 	;
 impl_members: impl_member+;
-associated_type_impl: KeywordOverride associated_declarator typealias_declaration;
-associated_variable_impl: KeywordOverride associated_declarator variable_declaration;
-associated_constant_impl: KeywordOverride associated_declarator constant_declaration;
-associated_function_impl: KeywordOverride associated_declarator function_declaration;
-associated_declarator: access_level_specifier? associated_name declare_operator;
+associated_type_impl: KeywordRequire associated_declarator typealias_declaration;
+associated_variable_impl: KeywordRequire associated_declarator variable_declaration getter_and_setter_list?;
+associated_constant_impl: KeywordRequire associated_declarator constant_declaration getter_list?;
+associated_function_impl: KeywordRequire associated_declarator function_declaration;
+associated_declarator: access_level_specifier? final_specifier? associated_name declare_operator;
 associated_name: Identifier;
 
 initializer_list: KeywordInit initializer_member_list;
 initializer_member_list: LeftCurly initializer_members RightCurly;
-initializer_member: empty_declare_operator initializer_type function_body;
+initializer_member: final_specifier? empty_declare_operator initializer_type function_body;
 initializer_type: function_parameter_clause? function_specifiers? contract_list?;
 initializer_members: initializer_member+;
 
 deinitializer_list: KeywordDeinit deinitializer_member_list;
 deinitializer_member_list: LeftCurly deinitializer_members RightCurly;
-deinitializer_member: empty_declare_operator deinitializer_type function_body;
+deinitializer_member: final_specifier? empty_declare_operator deinitializer_type function_body;
 deinitializer_type: function_parameter_clause? function_specifiers? contract_list?;
 deinitializer_members: deinitializer_member+;
 
@@ -130,7 +146,7 @@ member_type: member_declarator typealias_declaration;
 member_variable: member_declarator storage_level_specifier? variable_declaration getter_and_setter_list?;
 member_constant: member_declarator storage_level_specifier? constant_declaration getter_list?;
 member_function: member_declarator storage_level_specifier? function_declaration;
-member_declarator: access_level_specifier? member_name declare_operator;
+member_declarator: access_level_specifier? final_specifier? member_name declare_operator;
 member_name: Identifier;
 getter_and_setter_list: KeywordWith LeftCurly getter_and_setter_items RightCurly;
 getter_list: KeywordWith LeftCurly getter_declaration RightCurly;
@@ -139,9 +155,9 @@ getter_and_setter_item
 	| setter_declaration
 	;
 getter_and_setter_items: getter_and_setter_item+;
-getter_declaration: empty_declare_operator KeywordGet getter_type function_body;
+getter_declaration: final_specifier? empty_declare_operator KeywordGet getter_type function_body;
 getter_type: function_specifiers? contract_list?;
-setter_declaration: empty_declare_operator KeywordSet setter_type function_body;
+setter_declaration: final_specifier? empty_declare_operator KeywordSet setter_type function_body;
 setter_type: setter_parameter_clause? function_specifiers? contract_list?;
 setter_parameter_clause: LeftParenthese setter_parameter RightParenthese;
 setter_parameter: setter_parameter_name (Colon type_annotation)?;
@@ -151,23 +167,15 @@ protocol_declaration: KeywordProtocol;
 
 union_declaration: KeywordUnion;
 
-enum_declaration: KeywordEnum enumerator_list;
-
+enum_declaration: KeywordEnum attributes? enumerator_list;
 enumerator_list: LeftCurly enumerator (Comma enumerator)+ Comma? RightCurly;
-
 enumerator: enumerator_name enumerator_associated_value_clause? enumerator_representation?;
-
 enumerator_associated_value_clause: Colon LeftParenthese enumerator_associated_value_list? RightParenthese;
-
 enumerator_associated_value_list: enumerator_associated_value (Comma enumerator_associated_value)*;
-
 enumerator_associated_value:
 	attributes? enumerator_associated_value_name (Colon type_annotation)? default_argument_clause?;
-
 enumerator_associated_value_name: Identifier;
-
 enumerator_representation: Assign expression;
-
 enumerator_name: Identifier;
 
 import_alias_declaration:
