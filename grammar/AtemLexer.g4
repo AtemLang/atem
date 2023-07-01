@@ -113,6 +113,7 @@ KeywordUInt128: 'UInt128';
 KeywordUndefined: 'undefined';	
 KeywordUnion: 'union';	
 KeywordUnit: 'Unit';
+KeywordUnreachable: 'unreachable';
 KeywordUsing: 'using';	
 KeywordVar: 'var';
 KeywordVirtual: 'virtual';	
