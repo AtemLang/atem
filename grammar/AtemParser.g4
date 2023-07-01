@@ -181,16 +181,11 @@ return_statement:
 	KeywordReturn expression?;
 
 closure_expression:
-	Colon closure_signature? Assign code_block;
-
-closure_signature:
-	capture_list? closure_parameter_clause KeywordThrows? function_result?;
+	KeywordFunc? capture_list? function_type? code_block;
 
 capture_list: LeftSquare capture_list_items RightSquare;
 capture_list_items: capture_list_item+;
 capture_list_item: Identifier;
-
-closure_parameter_clause: Identifier;
 
 defer_statement:
 	KeywordDefer defer_kind? code_block;
@@ -382,7 +377,7 @@ expression
 	| KeywordFor Identifier KeywordIn attributes? KeywordIn expression 
 	  expression (KeywordElse expression)?												#for_expression_
 	| import_expression																	#import_expression_
-	| expression type_casting_operator expression										#type_cast_expression_
+	| expression type_casting_operator type_expression									#type_cast_expression_
 	| closure_expression																#closure_expression_
 	| expression Dot KeywordInit														#init_expression_
 	| expression Dot KeywordDeinit														#deinit_expression_
@@ -396,6 +391,7 @@ expression
 	| KeywordContinue code_block_name?													#continue_expression_
 	| KeywordAssert function_call_operator												#assert_expression_
 	| KeywordComptime expression														#comptime_expression_
+	| reflect_operator expression														#reflection_expression_
 	;
 
 code_block_expression: code_block;
