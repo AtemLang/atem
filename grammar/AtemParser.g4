@@ -197,14 +197,23 @@ protocol_requirement_item
 protocol_requirement_items: protocol_requirement_item+;
 protocol_requirement_type: requirement_declarator typealias_declaration (requirement_default_clause type_expression)?;
 protocol_requirement_function: requirement_declarator KeywordFunc attributes? function_type? (requirement_default_clause function_body)?;
-protocol_requirement_variable: requirement_declarator KeywordVar (requirement_default_clause variable_declaration)?;
-protocol_requirement_constant: requirement_declarator KeywordConst (requirement_default_clause constant_declaration)?;
-protocol_requirement_initializer: empty_requirement_declarator (requirement_default_clause)?;
-protocol_requirement_deinitializer: empty_requirement_declarator (requirement_default_clause)?;
+protocol_requirement_variable: requirement_declarator KeywordVar requirement_getter_and_setter (requirement_default_clause variable_declaration)?;
+protocol_requirement_constant: requirement_declarator KeywordConst requirement_getter (requirement_default_clause constant_declaration)?;
+protocol_requirement_initializer: empty_requirement_declarator (requirement_default_clause initializer_declaration)?;
+protocol_requirement_deinitializer: empty_requirement_declarator (requirement_default_clause deinitializer_declaration)?;
 requirement_declarator: KeywordRequire Question? requirement_name declare_operator;
 empty_requirement_declarator: KeywordRequire Question? empty_declare_operator;
 requirement_name: Identifier;
 requirement_default_clause: KeywordDefault Assign;
+requirement_getter_and_setter: LeftCurly requirement_getter_and_setter_item (Comma requirement_getter_and_setter_item)+ Comma RightCurly;
+requirement_getter: LeftCurly KeywordGet RightCurly;
+requirement_getter_and_setter_item
+	: KeywordGet
+	| KeywordSet
+	;
+
+initializer_declaration: KeywordInit initializer_type code_block;
+deinitializer_declaration: KeywordDeinit deinitializer_type code_block;
 
 union_declaration: KeywordUnion attributes? final_specifier?;
 
