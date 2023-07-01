@@ -142,7 +142,7 @@ getter_declaration: empty_declare_operator KeywordGet getter_type function_body;
 getter_type: function_specifiers? contract_list?;
 setter_declaration: empty_declare_operator KeywordSet setter_type function_body;
 setter_type: setter_parameter_clause? function_specifiers? contract_list?;
-setter_parameter_clause: RightParenthese setter_parameter LeftParenthese;
+setter_parameter_clause: LeftParenthese setter_parameter RightParenthese;
 setter_parameter: setter_parameter_name (Colon type_annotation)?;
 setter_parameter_name: Identifier;
 
