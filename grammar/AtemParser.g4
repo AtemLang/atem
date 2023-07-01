@@ -79,6 +79,12 @@ struct_declaration: KeywordStruct attributes? final_specifier? extension_list? i
 class_declaration: KeywordClass attributes? final_specifier? extension_list? initializer_list? deinitializer_list? member_list;
 
 final_specifier: KeywordFinal;
+member_specifier
+	: KeywordStatic
+	| KeywordMutable
+	| KeywordFinal
+	;
+member_specifiers: member_specifier+;
 
 extension_list: KeywordExtend LeftCurly extension_item+ RightCurly;
 extension_item: inherit_clause | impl_clause;
@@ -99,7 +105,7 @@ inherit_type_override: KeywordOverride inherit_declarator typealias_declaration;
 inherit_variable_override: KeywordOverride inherit_declarator variable_declaration getter_and_setter_list?;
 inherit_constant_override: KeywordOverride inherit_declarator constant_declaration getter_list?;
 inherit_function_override: KeywordOverride inherit_declarator function_declaration;
-inherit_declarator: access_level_specifier? final_specifier? inherit_name declare_operator;
+inherit_declarator: access_level_specifier? member_specifiers? inherit_name declare_operator;
 inherit_name: Identifier;
 
 impl_clause: KeywordImpl impl_list;
@@ -119,18 +125,18 @@ associated_type_impl: KeywordRequire associated_declarator typealias_declaration
 associated_variable_impl: KeywordRequire associated_declarator variable_declaration getter_and_setter_list?;
 associated_constant_impl: KeywordRequire associated_declarator constant_declaration getter_list?;
 associated_function_impl: KeywordRequire associated_declarator function_declaration;
-associated_declarator: access_level_specifier? final_specifier? associated_name declare_operator;
+associated_declarator: access_level_specifier? member_specifiers? associated_name declare_operator;
 associated_name: Identifier;
 
 initializer_list: KeywordInit initializer_member_list;
 initializer_member_list: LeftCurly initializer_members RightCurly;
-initializer_member: final_specifier? empty_declare_operator initializer_type function_body;
+initializer_member: member_specifiers? empty_declare_operator initializer_type function_body;
 initializer_type: function_parameter_clause? function_specifiers? contract_list?;
 initializer_members: initializer_member+;
 
 deinitializer_list: KeywordDeinit deinitializer_member_list;
 deinitializer_member_list: LeftCurly deinitializer_members RightCurly;
-deinitializer_member: final_specifier? empty_declare_operator deinitializer_type function_body;
+deinitializer_member: member_specifiers? empty_declare_operator deinitializer_type function_body;
 deinitializer_type: function_parameter_clause? function_specifiers? contract_list?;
 deinitializer_members: deinitializer_member+;
 
@@ -140,13 +146,27 @@ member
 	| member_variable
 	| member_constant
 	| member_function
+	| member_nested_type
 	;
 members: member+;
+member_nested_type
+	: nested_class
+	| nested_struct
+	| nested_protocol
+	| nested_union
+	| nested_enum
+	;
+nested_class: declarator class_declaration;
+nested_struct: declarator struct_declaration;
+nested_protocol: declarator protocol_declaration;
+nested_union: declarator union_declaration;
+nested_enum: declarator enum_declaration;
+
 member_type: member_declarator typealias_declaration;
 member_variable: member_declarator storage_level_specifier? variable_declaration getter_and_setter_list?;
 member_constant: member_declarator storage_level_specifier? constant_declaration getter_list?;
 member_function: member_declarator storage_level_specifier? function_declaration;
-member_declarator: access_level_specifier? final_specifier? member_name declare_operator;
+member_declarator: access_level_specifier? member_specifiers? member_name declare_operator;
 member_name: Identifier;
 getter_and_setter_list: KeywordWith LeftCurly getter_and_setter_items RightCurly;
 getter_list: KeywordWith LeftCurly getter_declaration RightCurly;
@@ -155,19 +175,37 @@ getter_and_setter_item
 	| setter_declaration
 	;
 getter_and_setter_items: getter_and_setter_item+;
-getter_declaration: final_specifier? empty_declare_operator KeywordGet getter_type function_body;
+getter_declaration: member_specifiers? empty_declare_operator KeywordGet getter_type function_body;
 getter_type: function_specifiers? contract_list?;
-setter_declaration: final_specifier? empty_declare_operator KeywordSet setter_type function_body;
+setter_declaration: member_specifiers? empty_declare_operator KeywordSet setter_type function_body;
 setter_type: setter_parameter_clause? function_specifiers? contract_list?;
 setter_parameter_clause: LeftParenthese setter_parameter RightParenthese;
 setter_parameter: setter_parameter_name (Colon type_annotation)?;
 setter_parameter_name: Identifier;
 
-protocol_declaration: KeywordProtocol;
+protocol_declaration: KeywordProtocol attributes? final_specifier? protocol_requirement_list;
+protocol_requirement_list: LeftCurly protocol_requirement_items RightCurly;
+protocol_requirement_item
+	: protocol_requirement_type
+	| protocol_requirement_function
+	| protocol_requirement_variable
+	| protocol_requirement_constant
+	| protocol_requirement_initializer
+	| protocol_requirement_deinitializer
+	;
+protocol_requirement_items: protocol_requirement_item+;
+protocol_requirement_type: requirement_declarator;
+protocol_requirement_function: requirement_declarator;
+protocol_requirement_variable: requirement_declarator;
+protocol_requirement_constant: requirement_declarator;
+protocol_requirement_initializer: empty_requirement_declarator;
+protocol_requirement_deinitializer: empty_requirement_declarator;
+requirement_declarator: KeywordRequire;
+empty_requirement_declarator: KeywordRequire;
 
-union_declaration: KeywordUnion;
+union_declaration: KeywordUnion attributes? final_specifier?;
 
-enum_declaration: KeywordEnum attributes? enumerator_list;
+enum_declaration: KeywordEnum attributes? final_specifier? extension_list? initializer_list? deinitializer_list? enumerator_list;
 enumerator_list: LeftCurly enumerator (Comma enumerator)+ Comma? RightCurly;
 enumerator: enumerator_name enumerator_associated_value_clause? enumerator_representation?;
 enumerator_associated_value_clause: Colon LeftParenthese enumerator_associated_value_list? RightParenthese;
