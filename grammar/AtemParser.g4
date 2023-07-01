@@ -183,7 +183,8 @@ setter_parameter_clause: LeftParenthese setter_parameter RightParenthese;
 setter_parameter: setter_parameter_name (Colon type_annotation)?;
 setter_parameter_name: Identifier;
 
-protocol_declaration: KeywordProtocol attributes? final_specifier? protocol_requirement_list;
+protocol_declaration: KeywordProtocol attributes? final_specifier? protocol_extend_list? protocol_requirement_list;
+protocol_extend_list: LeftCurly RightCurly;
 protocol_requirement_list: LeftCurly protocol_requirement_items RightCurly;
 protocol_requirement_item
 	: protocol_requirement_type
@@ -194,14 +195,16 @@ protocol_requirement_item
 	| protocol_requirement_deinitializer
 	;
 protocol_requirement_items: protocol_requirement_item+;
-protocol_requirement_type: requirement_declarator;
-protocol_requirement_function: requirement_declarator;
-protocol_requirement_variable: requirement_declarator;
-protocol_requirement_constant: requirement_declarator;
-protocol_requirement_initializer: empty_requirement_declarator;
-protocol_requirement_deinitializer: empty_requirement_declarator;
-requirement_declarator: KeywordRequire;
-empty_requirement_declarator: KeywordRequire;
+protocol_requirement_type: requirement_declarator typealias_declaration (requirement_default_clause type_expression)?;
+protocol_requirement_function: requirement_declarator KeywordFunc attributes? function_type? (requirement_default_clause function_body)?;
+protocol_requirement_variable: requirement_declarator KeywordVar (requirement_default_clause variable_declaration)?;
+protocol_requirement_constant: requirement_declarator KeywordConst (requirement_default_clause constant_declaration)?;
+protocol_requirement_initializer: empty_requirement_declarator (requirement_default_clause)?;
+protocol_requirement_deinitializer: empty_requirement_declarator (requirement_default_clause)?;
+requirement_declarator: KeywordRequire Question? requirement_name declare_operator;
+empty_requirement_declarator: KeywordRequire Question? empty_declare_operator;
+requirement_name: Identifier;
+requirement_default_clause: KeywordDefault Assign;
 
 union_declaration: KeywordUnion attributes? final_specifier?;
 
@@ -499,7 +502,6 @@ expression
 	| reflect_operator expression														#reflection_expression_
 	| expression PointerDeref															#derefence_expression_
 	| expression ObjectAddress															#object_address_expression_
-	| declaration_expression															#declaration_expression_
 	;
 
 declaration_expression
