@@ -77,7 +77,24 @@ concept_declaration: KeywordConcept;
 
 union_declaration: KeywordUnion;
 
-enum_declaration: KeywordEnum;
+enum_declaration: KeywordEnum enumerator_list;
+
+enumerator_list: LeftCurly enumerator (Comma enumerator)+ Comma? RightCurly;
+
+enumerator: enumerator_name enumerator_associated_value_clause? enumerator_representation?;
+
+enumerator_associated_value_clause: Colon LeftParenthese enumerator_associated_value_list? RightParenthese;
+
+enumerator_associated_value_list: enumerator_associated_value (Comma enumerator_associated_value)*;
+
+enumerator_associated_value:
+	attributes? enumerator_associated_value_name (Colon type_annotation)? default_argument_clause?;
+
+enumerator_associated_value_name: Identifier;
+
+enumerator_representation: Assign expression;
+
+enumerator_name: Identifier;
 
 import_alias_declaration:
 	import_expression;
@@ -300,10 +317,10 @@ reflect_operator:
 range_operator:
 	ClosedRange | RightOpenRange | LeftOpenRange | OpenedRange;
 
-optional_unwrapping_operator:
-	DefaultUnwrapping | ThrowableUnwrapping | ForcedUnwrapping;
-optional_chaining_operator:
-	ForcedOptionalChaining | ThrowableOptionalChaining;
+binary_optional_unwrapping_operator:
+	DefaultUnwrapping;
+unary_optional_unwrapping_operator:
+	Question | Bang;
 
 arrow_operator: Arrow;
 
@@ -320,8 +337,8 @@ expression
 	| literal_expression																#literal_expression_
 	| expression Dot Identifier															#field_expression_
 	| expression function_call_operator													#member_function_call_expression_
-	| expression optional_unwrapping_operator											#optional_unwrapping_expression_
-	| expression optional_chaining_operator Identifier									#optional_chaining_expression_
+	| expression unary_optional_unwrapping_operator										#unary_optional_unwrapping_expression_
+	| expression binary_optional_unwrapping_operator expression							#binary_optional_unwrapping_expression_
 	| expression function_call_operator													#function_call_expresison_
 	| expression arithmetic_operator expression 										#arithmetic_expression_
 	| path_expression																	#path_expression_
@@ -356,6 +373,8 @@ expression
 	| KeywordAssert function_call_operator												#assert_expression_
 	| KeywordComptime expression														#comptime_expression_
 	| reflect_operator expression														#reflection_expression_
+	| expression PointerDeref															#derefence_expression_
+	| expression ObjectAddress															#object_address_expression_
 	;
 
 code_block_expression: code_block;
@@ -363,10 +382,12 @@ code_block_expression: code_block;
 type_expression
 	: Identifier
 	| RightParenthese type_expression LeftParenthese
+	| path_expression
 	| basic_type
 	| tuple_type
 	| optional_type
 	| collection_type
+	| type_expression PointerType
 	| KeywordIf expression KeywordThen type_expression (KeywordElse type_expression)?
 	| KeywordWhile expression KeywordThen type_expression (KeywordElse type_expression)?
 	| KeywordRepeat type_expression KeywordWhile expression (KeywordElse type_expression)?

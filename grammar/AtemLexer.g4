@@ -313,10 +313,6 @@ LeftOpenRange: '<..';
 OpenedRange: '<.<';
 
 DefaultUnwrapping: '??';
-ThrowableUnwrapping: '.?';
-ForcedUnwrapping: '.!';
-ThrowableOptionalChaining: '?.';
-ForcedOptionalChaining: '!.';
 
 Arrow: '->';
 
