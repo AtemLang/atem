@@ -21,13 +21,17 @@ statements: statement+;
 
 loop_statement:
 	for_statement |
-	while_statement;
+	while_statement |
+	repeat_while_statement;
 
 for_statement:
-	KeywordFor LeftParenthese Identifier Colon attributes? KeywordIn expression RightParenthese code_block;
+	KeywordFor Identifier KeywordIn attributes? KeywordIn expression code_block;
 
 while_statement:
-	KeywordWhile LeftParenthese expression RightParenthese code_block;
+	KeywordWhile expression code_block;
+
+repeat_while_statement:
+	KeywordRepeat code_block KeywordWhile expression;
 
 branch_statement:
 	if_statement;
@@ -43,7 +47,7 @@ declaration_statement:
 	declarator declaration;
 
 declarator:
-	access_level_specifier? declarator_name Colon type? Assign;
+	access_level_specifier? declarator_name Colon type_expression? Assign;
 
 declarator_name: path_expression;
 
@@ -168,7 +172,9 @@ capture_list_item: Identifier;
 closure_parameter_clause: Identifier;
 
 defer_statement:
-	KeywordDefer code_block;
+	KeywordDefer defer_kind? code_block;
+
+defer_kind: KeywordSuccess | KeywordFail;
 
 code_block_no_label:
 	LeftCurly statements? RightCurly;
@@ -347,7 +353,7 @@ expression
 	| unary_bit_operator expression				#bit_expression_
 	| expression binary_boolean_operator expression	#boolean_expression_
 	| unary_boolean_operator expression			#boolean_expression_
-	| KeywordIf LeftParenthese expression RightParenthese expression (KeywordElse expression)?	#if_expression_
+	| KeywordIf expression KeywordThen expression (KeywordElse expression)?	#if_expression_
 	| KeywordDo LeftCurly statements RightCurly	#do_expression_
 	| import_expression							#import_expression_
 	| expression type_casting_operator expression	#type_cast_expression_
@@ -356,12 +362,17 @@ expression
 	| expression Dot KeywordDeinit					#deinit_expression_
 	| expression Dot KeywordSelf					#self_expression_
 	| code_block_expression						#code_block_expression_
+	| type_expression							#type_expression_
 	;
 
 code_block_expression: code_block;
 
-type_expression:
-    type;
+type_expression
+    : type
+	| Identifier
+	| KeywordIf expression KeywordThen type_expression (KeywordElse type_expression)?
+	| KeywordDo LeftCurly statements RightCurly
+	;
 
 tuple_expression:
 	LeftParenthese RightParenthese |

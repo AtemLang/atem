@@ -41,6 +41,7 @@ KeywordEnum: 'enum';
 KeywordExpect: 'expect';
 KeywordExtend: 'extend';
 KeywordExtern: 'extern';	
+KeywordFail: 'fail';
 KeywordFalse: 'false';	
 KeywordFilePrivate: 'filePrivate';	
 KeywordFinal: 'final';	
@@ -87,6 +88,7 @@ KeywordPublic: 'public';
 KeywordRecursive: 'recursive';
 KeywordReloc: 'reloc';
 KeywordRequire: 'require';	
+KeywordRepeat: 'repeat';
 KeywordReturn: 'return';	
 KeywordSelf: 'self';	
 KeywordSet: 'set';	
@@ -94,6 +96,7 @@ KeywordSome: 'some';
 KeywordStatic: 'static';	
 KeywordString: 'String';
 KeywordStruct: 'stuct';	
+KeywordSuccess: 'success';
 KeywordSuper: 'super';
 KeywordThen: 'then';
 KeywordThis: 'this';	
@@ -114,6 +117,7 @@ KeywordUsing: 'using';
 KeywordVar: 'var';
 KeywordVirtual: 'virtual';	
 KeywordWhile: 'while';	
+KeywordWith: 'with';
 
 //Identifier
 
