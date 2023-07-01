@@ -74,7 +74,7 @@ udt_declaration
 	| union_declaration
 	| enum_declaration;
 
-struct_declaration: KeywordStruct;
+struct_declaration: KeywordStruct extension_list? initializer_list? deinitializer_list? member_list;
 
 class_declaration: KeywordClass extension_list? initializer_list? deinitializer_list? member_list;
 
@@ -82,11 +82,12 @@ extension_list: KeywordExtend LeftCurly extension_item+ RightCurly;
 extension_item: inherit_clause | impl_clause;
 
 inherit_clause: KeywordInherit inherit_list;
-inherit_list: LeftCurly inherit_item (Comma inherit_item)+ Comma? RightCurly;
+inherit_list: LeftCurly inherit_items RightCurly | inherit_item;
 inherit_item: path_expression;
+inherit_items: inherit_item+;
 
-impl_clause: KeywordImpl;
-impl_list: LeftCurly impl_items RightCurly;
+impl_clause: KeywordImpl impl_list;
+impl_list: LeftCurly impl_items RightCurly | impl_item;
 impl_item: path_expression impl_with_clause;
 impl_items: impl_item+;
 impl_with_clause: KeywordWith impl_member_list;

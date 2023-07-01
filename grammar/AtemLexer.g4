@@ -100,7 +100,7 @@ KeywordSet: 'set';
 KeywordSome: 'some';	
 KeywordStatic: 'static';	
 KeywordString: 'String';
-KeywordStruct: 'stuct';	
+KeywordStruct: 'struct';	
 KeywordSuccess: 'success';
 KeywordSuper: 'super';
 KeywordThen: 'then';
