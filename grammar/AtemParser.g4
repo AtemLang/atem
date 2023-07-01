@@ -47,7 +47,9 @@ declaration_statement:
 	declarator declaration;
 
 declarator:
-	access_level_specifier? declarator_name Colon type_expression? Assign;
+	access_level_specifier? declarator_name declarate_operator;
+
+declarate_operator: Colon type_expression? Assign;
 
 declarator_name: path_expression;
 
@@ -123,12 +125,31 @@ access_level_specifier:
 	KeywordPrivate | KeywordFilePrivate | KeywordInternal | KeywordPublic | KeywordOpen;
 
 function_declaration:
-	KeywordFunc attributes? function_type? code_block;
+	KeywordFunc attributes? function_type? contract_list? code_block;
+
+contract_list: KeywordRequire LeftCurly contract+ RightCurly | KeywordRequire contract;
+
+contract:
+	contract_precondition | contract_postcondition;
+
+contract_precondition: KeywordExpect expression;
+
+contract_postcondition: KeywordEnsure (KeywordWith return_value_name declarate_operator KeywordReturn) expression;
+
+return_value_name: Identifier;
 
 function_name: Identifier;
 
 function_type:
-	function_parameter_clause KeywordThrows? function_result;
+	function_parameter_clause function_result function_specifiers?;
+
+function_specifier
+	: KeywordRecursive
+	| KeywordThrows
+	| KeywordPure
+	;
+
+function_specifiers: function_specifier+;
 
 function_result:
 	Arrow attributes? type_expression;
@@ -374,6 +395,7 @@ expression
 	| KeywordBreak code_block_name? (KeywordWith expression)?							#break_expression_
 	| KeywordContinue code_block_name?													#continue_expression_
 	| KeywordAssert function_call_operator												#assert_expression_
+	| KeywordComptime expression														#comptime_expression_
 	;
 
 code_block_expression: code_block;
