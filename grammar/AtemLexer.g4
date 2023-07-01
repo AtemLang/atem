@@ -193,32 +193,32 @@ fragment IdentifierCharacters: IdentifierCharacter+;
 
 //Literals
 
-BinaryLiteral: '0b' BinaryDigit BinaryLiteralCharacters?;
+BinaryLiteral: Sign? '0b' BinaryDigit BinaryLiteralCharacters?;
 fragment BinaryDigit: [01];
 fragment BinaryLiteralCharacter: BinaryDigit | '_';
 fragment BinaryLiteralCharacters: BinaryLiteralCharacter+;
 
-OctalLiteral: '0o' OctalDigit OctalLiteralCharacters?;
+OctalLiteral: Sign? '0o' OctalDigit OctalLiteralCharacters?;
 fragment OctalDigit: [0-7];
 fragment OctalLiteralCharacter: OctalDigit | '_';
 fragment OctalLiteralCharacters: OctalLiteralCharacter+;
 
 DecimalDigits: DecimalDigit+;
-DecimalLiteral: DecimalDigit DecimalLiteralCharacters?;
+DecimalLiteral: Sign? DecimalDigit DecimalLiteralCharacters?;
 fragment DecimalDigit: [0-9];
 fragment DecimalLiteralCharacter: DecimalDigit | '_';
 fragment DecimalLiteralCharacters: DecimalLiteralCharacter+;
 
 HexadecimalLiteral:
-	'0x' HexadecimalDigit HexadecimalLiteralCharacters?;
+	Sign? '0x' HexadecimalDigit HexadecimalLiteralCharacters?;
 fragment HexadecimalDigit: [0-9a-fA-F];
 fragment HexadecimalLiteralCharacter: HexadecimalDigit | '_';
 fragment HexadecimalLiteralCharacters:
 	HexadecimalLiteralCharacter+;
 
 FloatingPointLiteral:
-	DecimalLiteral DecimalFraction? DecimalExponent?
-	| HexadecimalLiteral HexadecimalFraction? HexadecimalExponent;
+	Sign? DecimalLiteral DecimalFraction? DecimalExponent?
+	| Sign? HexadecimalLiteral HexadecimalFraction? HexadecimalExponent;
 fragment DecimalFraction: '.' DecimalLiteral;
 fragment DecimalExponent:
 	FloatingPointE Sign? DecimalLiteral;

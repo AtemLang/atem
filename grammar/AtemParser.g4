@@ -25,7 +25,7 @@ loop_statement:
 	repeat_while_statement;
 
 for_statement:
-	KeywordFor Identifier KeywordIn attributes? KeywordIn expression code_block (KeywordElse code_block)?;
+	KeywordFor attributes? Identifier KeywordIn expression code_block (KeywordElse code_block)?;
 
 while_statement:
 	KeywordWhile expression code_block (KeywordElse code_block)?;
@@ -38,11 +38,8 @@ branch_statement:
 	match_statement;
 
 if_statement:
-	(KeywordIf expression code_block
-	(KeywordElse code_block)? ) |
-	(KeywordIf expression code_block
-	(KeywordElse if_statement)*?
-	(KeywordElse code_block)?);
+	(KeywordIf expression code_block (KeywordElse code_block)? ) |
+	(KeywordIf expression code_block (KeywordElse if_statement)*? (KeywordElse code_block)?);
 
 match_statement:
 	KeywordMatch;
@@ -165,11 +162,11 @@ access_level_specifier:
 	KeywordPrivate | KeywordFilePrivate | KeywordInternal | KeywordPublic | KeywordOpen;
 
 function_declaration:
-	KeywordFunc attributes? function_type? contract_list? function_body;
+	KeywordFunc attributes? function_type? function_body;
 
-function_body: code_block | expression;
+function_body: code_block | Assign expression;
 
-contract_list: KeywordRequire LeftCurly contract+ RightCurly | KeywordRequire contract;
+contract_list: KeywordRequire LeftCurly contract (Comma contract)+ Comma? RightCurly | KeywordRequire contract;
 
 contract:
 	contract_precondition | contract_postcondition;
@@ -183,7 +180,7 @@ return_value_name: Identifier;
 function_name: Identifier;
 
 function_type:
-	function_parameter_clause function_result function_specifiers?;
+	function_parameter_clause function_result function_specifiers? contract_list?;
 
 function_specifier
 	: KeywordRecursive
@@ -287,6 +284,9 @@ arithmetic_operator:
 	Divide | RemainderDivide |
 	Power | OverflowingPower | SaturatingPower;
 
+negation_operator:
+	Sub | OverflowingSub;
+
 assignment_operator:
 	Assign | 
 	AddAssign | OverflowingAddAssign | SaturatingAddAssign |
@@ -348,6 +348,7 @@ expression
 	| expression binary_optional_unwrapping_operator expression							#binary_optional_unwrapping_expression_
 	| expression function_call_operator													#function_call_expresison_
 	| expression arithmetic_operator expression 										#arithmetic_expression_
+	| negation_operator expression														#negation_expression_
 	| path_expression																	#path_expression_
 	| expression assignment_operator expression											#assignment_expression_
 	| expression comparison_operator expression											#comparison_expression_
