@@ -105,7 +105,10 @@ inherit_type_override: KeywordOverride inherit_declarator typealias_declaration;
 inherit_variable_override: KeywordOverride inherit_declarator variable_declaration getter_and_setter_list?;
 inherit_constant_override: KeywordOverride inherit_declarator constant_declaration getter_list?;
 inherit_function_override: KeywordOverride inherit_declarator function_declaration;
+inherit_initializer_override: KeywordOverride empty_inherit_declarator initializer_declaration;
+inherit_deinitializer_override: KeywordOverride empty_inherit_declarator deinitializer_declaration;
 inherit_declarator: access_level_specifier? member_specifiers? inherit_name declare_operator;
+empty_inherit_declarator: access_level_specifier? member_specifiers? empty_declare_operator;
 inherit_name: Identifier;
 
 impl_clause: KeywordImpl impl_list;
@@ -125,7 +128,10 @@ associated_type_impl: KeywordRequire associated_declarator typealias_declaration
 associated_variable_impl: KeywordRequire associated_declarator variable_declaration getter_and_setter_list?;
 associated_constant_impl: KeywordRequire associated_declarator constant_declaration getter_list?;
 associated_function_impl: KeywordRequire associated_declarator function_declaration;
+associated_initializer_impl: KeywordRequire empty_declare_operator initializer_declaration;
+associated_deinitializer_impl: KeywordRequire empty_declare_operator deinitializer_declaration;
 associated_declarator: access_level_specifier? member_specifiers? associated_name declare_operator;
+empty_associated_declarator: access_level_specifier? member_specifiers? empty_declare_operator;
 associated_name: Identifier;
 
 initializer_list: KeywordInit initializer_member_list;
