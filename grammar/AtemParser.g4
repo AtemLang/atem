@@ -140,7 +140,7 @@ deinitializer_member: member_specifiers? empty_declare_operator deinitializer_ty
 deinitializer_type: function_parameter_clause? function_specifiers? contract_list?;
 deinitializer_members: deinitializer_member+;
 
-member_list: LeftCurly members RightCurly;
+member_list: KeywordMember LeftCurly members RightCurly;
 member 
 	: member_type
 	| member_variable
@@ -217,7 +217,7 @@ deinitializer_declaration: KeywordDeinit deinitializer_type code_block;
 
 union_declaration: KeywordUnion attributes? final_specifier?;
 
-enum_declaration: KeywordEnum attributes? final_specifier? extension_list? initializer_list? deinitializer_list? enumerator_list;
+enum_declaration: KeywordEnum attributes? final_specifier? extension_list? initializer_list? deinitializer_list? member_list? enumerator_list;
 enumerator_list: LeftCurly enumerator (Comma enumerator)+ Comma? RightCurly;
 enumerator: enumerator_name enumerator_associated_value_clause? enumerator_representation?;
 enumerator_associated_value_clause: Colon LeftParenthese enumerator_associated_value_list? RightParenthese;

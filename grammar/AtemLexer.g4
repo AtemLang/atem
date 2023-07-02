@@ -71,6 +71,7 @@ KeywordInternal: 'internal';
 KeywordIs: 'is';	
 KeywordLazy: 'lazy';	
 KeywordMatch: 'match';
+KeywordMember: 'member';
 KeywordModule: 'module';	
 KeywordMutable: 'mutable';	
 KeywordNamespace: 'namespace';	
