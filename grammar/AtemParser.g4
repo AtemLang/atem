@@ -8,10 +8,7 @@ program: statements? EOF;
 
 statement: 
 	((
-		loop_statement |
 		declaration_statement |
-		control_transfer_statement |
-		branch_statement |
 		import_statement |
 		defer_statement |
 		expression
@@ -19,33 +16,8 @@ statement:
 
 statements: statement+;
 
-loop_statement:
-	for_statement |
-	while_statement |
-	repeat_while_statement;
-
-for_statement:
-	KeywordFor attributes? Identifier KeywordIn expression code_block (KeywordElse code_block)?;
-
-while_statement:
-	KeywordWhile expression code_block (KeywordElse code_block)?;
-
-repeat_while_statement:
-	KeywordRepeat code_block KeywordWhile expression (KeywordElse code_block)?;
-
-branch_statement:
-	if_statement |
-	match_statement;
-
-if_statement:
-	(KeywordIf expression code_block (KeywordElse code_block)? ) |
-	(KeywordIf expression code_block (KeywordElse if_statement)*? (KeywordElse code_block)?);
-
-match_statement:
-	KeywordMatch;
-
 declaration_statement:
-	declarator declaration;
+	declarator declaration_expression;
 
 declarator:
 	access_level_specifier? declarator_name declare_operator;
@@ -54,25 +26,6 @@ declare_operator: Colon (attributes? type_expression)? Assign;
 empty_declare_operator: Colon Assign;
 
 declarator_name: path_expression;
-
-declaration
-	: package_declaration
-	| project_declaration
-	| module_declaration
-	| function_declaration
-	| variable_declaration
-	| constant_declaration
-	| import_alias_declaration
-	| typealias_declaration
-	| udt_declaration
-	;
-
-udt_declaration
-	: struct_declaration
-	| class_declaration
-	| protocol_declaration
-	| union_declaration
-	| enum_declaration;
 
 struct_declaration: KeywordStruct attributes? final_specifier? extension_list? initializer_list? deinitializer_list? member_list;
 
@@ -305,9 +258,9 @@ contract_list: KeywordRequire LeftCurly contract+ RightCurly | KeywordRequire co
 contract:
 	contract_precondition | contract_postcondition;
 
-contract_precondition: KeywordExpect expression;
+contract_precondition: KeywordExpect expression (KeywordWith expression)?;
 
-contract_postcondition: KeywordEnsure (KeywordWith return_value_name declare_operator KeywordReturn) expression;
+contract_postcondition: KeywordEnsure (KeywordWith return_value_name declare_operator KeywordReturn) expression (KeywordWith expression)?;
 
 return_value_name: Identifier;
 
@@ -345,19 +298,13 @@ variable_declaration:
 	KeywordVar storage_level_specifier? expression;
 
 constant_declaration:
-	KeywordConst? storage_level_specifier? expression;
+	KeywordVal storage_level_specifier? expression;
 
 storage_level_specifier
 	: KeywordGlobal
 	| KeywordStatic
 	| KeywordThreadLocal
 	;
-
-control_transfer_statement:
-	return_statement;
-
-return_statement:
-	KeywordReturn expression?;
 
 closure_expression:
 	KeywordFunc? capture_list? function_type? code_block;
@@ -476,6 +423,7 @@ async_operator: KeywordAsync;
 expression
 	: LeftParenthese expression RightParenthese											#parentheses_expression_
 	| literal_expression																#literal_expression_
+	| expression Comma expression														#comma_expression_
 	| expression Dot Identifier															#field_expression_
 	| expression function_call_operator													#member_function_call_expression_
 	| expression unary_optional_unwrapping_operator										#unary_optional_unwrapping_expression_
@@ -494,11 +442,6 @@ expression
 	| unary_bit_operator expression														#bit_expression_
 	| expression binary_boolean_operator expression										#boolean_expression_
 	| unary_boolean_operator expression													#boolean_expression_
-	| KeywordIf expression KeywordThen expression (KeywordElse expression)?				#if_expression_
-	| KeywordWhile expression KeywordThen expression (KeywordElse expression)?			#while_expression_
-	| KeywordRepeat expression KeywordWhile expression (KeywordElse expression)?		#repeat_while_expression_
-	| KeywordFor Identifier KeywordIn attributes? KeywordIn expression 
-	  expression (KeywordElse expression)?												#for_expression_
 	| import_expression																	#import_expression_
 	| expression type_casting_operator type_expression									#type_cast_expression_
 	| closure_expression																#closure_expression_
@@ -512,19 +455,37 @@ expression
 	| KeywordReturn expression?															#return_expression_
 	| KeywordBreak code_block_name? (KeywordWith expression)?							#break_expression_
 	| KeywordContinue code_block_name?													#continue_expression_
-	| KeywordAssert function_call_operator												#assert_expression_
+	| KeywordAssert expression (KeywordWith expression)?								#assert_expression_
 	| KeywordComptime expression														#comptime_expression_
 	| reflect_operator expression														#reflection_expression_
 	| expression PointerDeref															#derefence_expression_
 	| expression ObjectAddress															#object_address_expression_
+	| declaration_expression															#declaretion_expression_
+	| KeywordIf expression ((KeywordThen expression) | (code_block))  
+	  (KeywordElse (expression | code_block))?											#if_expression_
+	| KeywordWhile expression ((KeywordThen expression) | (code_block))  
+      (KeywordElse (expression | code_block))?											#while_expression_
+	| KeywordRepeat expression ((KeywordThen expression) | (code_block))  
+	  (KeywordElse (expression | code_block))?											#repeat_while_expression_
+	| KeywordFor Identifier KeywordIn attributes? KeywordIn expression 
+	  ((KeywordThen expression) | (code_block)) 
+	  (KeywordElse (expression | code_block) )?											#for_expression_
 	;
 
 declaration_expression
-	: function_declaration
-	| udt_declaration
+	: package_declaration
 	| project_declaration
-	| package_declaration
 	| module_declaration
+	| function_declaration
+	| variable_declaration
+	| constant_declaration
+	| import_alias_declaration
+	| typealias_declaration
+	| struct_declaration
+	| class_declaration
+	| protocol_declaration
+	| union_declaration
+	| enum_declaration
 	;
 
 code_block_expression: code_block;
@@ -540,10 +501,10 @@ type_expression
 	| any_type
 	| some_type
 	| type_expression PointerType
-	| KeywordIf expression KeywordThen type_expression (KeywordElse type_expression)?
-	| KeywordWhile expression KeywordThen type_expression (KeywordElse type_expression)?
-	| KeywordRepeat type_expression KeywordWhile expression (KeywordElse type_expression)?
-	| KeywordFor Identifier KeywordIn attributes? KeywordIn expression type_expression (KeywordElse type_expression)?
+	| KeywordIf expression ((KeywordThen type_expression) | (code_block)) (KeywordElse (KeywordThen type_expression | code_block))?
+	| KeywordWhile expression KeywordThen type_expression (KeywordElse (type_expression | code_block))?
+	| KeywordRepeat ((KeywordThen type_expression) | (code_block)) KeywordWhile expression (KeywordElse (type_expression | code_block))?
+	| KeywordFor Identifier KeywordIn attributes? KeywordIn expression ((KeywordThen type_expression) | (code_block)) (KeywordElse (type_expression | code_block))?
 	| code_block_expression
 	| KeywordUnreachable
 	| KeywordThrow expression
