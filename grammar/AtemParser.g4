@@ -478,6 +478,7 @@ expression
 	| code_block_expression																#code_block_expression_
 	| type_expression																	#type_expression_
 	| KeywordUnreachable																#unreachable_expression_
+	| KeywordFallthrough																#fallthrough_expression_
 	| KeywordThrow expression															#throw_expression_
 	| KeywordReturn expression?															#return_expression_
 	| KeywordBreak code_block_name? (KeywordWith expression)?							#break_expression_
@@ -729,7 +730,7 @@ tuple_pattern_element: pattern | Identifier Colon pattern;
 
 wildcard_pattern: Underscore;
 identifier_pattern: Identifier;
-value_binding_pattern: KeywordVar pattern | KeywordVal pattern;
+value_binding_pattern: KeywordLet KeywordVar pattern | KeywordLet pattern;
 tuple_pattern: LeftParenthese tuple_pattern_element_list? RightParenthese;
 enumerator_pattern: type_expression? Dot enumerator_name tuple_pattern?;
 optional_pattern: Identifier Question;
