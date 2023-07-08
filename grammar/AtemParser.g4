@@ -275,7 +275,7 @@ access_level_specifier:
 function_declaration:
 	KeywordFunc attributes? function_type? function_body;
 
-function_body: code_block | Assign expression;
+function_body: code_block | expression;
 
 contract_list: KeywordRequire LeftCurly contract+ RightCurly | KeywordRequire contract;
 
@@ -460,6 +460,8 @@ expression
 	| expression assignment_operator expression											#assignment_expression_
 	| expression comparison_operator expression											#comparison_expression_
 	| try_operator expression															#try_expression_
+	| expression KeywordCatch (pattern (Comma pattern)* require_clause?)?
+	  ((KeywordThen expression) | (code_block))											#catch_expression_
 	| async_operator expression															#async_expression_
 	| await_operator expression															#await_expression_
 	| expression range_operator expression												#range_expression_
@@ -489,18 +491,41 @@ expression
 	| KeywordUse declaration_statement_or_list KeywordIn expression						#use_in_expression_
 	| KeywordUsing expression															#using_expression_
 	| declaration_expression															#declaretion_expression_
-	| KeywordIf expression ((KeywordThen expression) | (code_block))  
-	  (KeywordElse (expression | code_block))?											#if_expression_
-	| KeywordWhile expression ((KeywordThen expression) | (code_block))  
-      (KeywordElse (expression | code_block))?											#while_expression_
-	| KeywordRepeat expression ((KeywordThen expression) | (code_block))  
-	  (KeywordElse (expression | code_block))?											#repeat_while_expression_
-	| KeywordFor Identifier KeywordIn attributes? expression 
-	  ((KeywordThen expression) | (code_block)) 
-	  (KeywordElse (expression | code_block) )?											#for_expression_
+	| if_expression																		#if_expression_
+	| while_expression						 											#while_expression_
+	| repeat_while_expression															#repeat_while_expression_
+	| for_expression																	#for_expression_
+	| expression KeywordMatch (match_case | (LeftCurly match_case+ RightCurly))
+	  (KeywordElse expression_or_block)?												#match_expression_
 	;
 
 code_block_expression: code_block;
+
+require_clause: KeywordRequire expression;
+
+then_expression_or_block: (KeywordThen expression) | (code_block);
+expression_or_block: expression | code_block;
+
+if_expression:
+	KeywordIf expression then_expression_or_block  
+	  (KeywordElse expression_or_block)?;
+
+while_expression:
+	KeywordWhile expression then_expression_or_block  
+      (KeywordElse expression_or_block)?;
+
+repeat_while_expression:
+	KeywordRepeat expression then_expression_or_block  
+	  (KeywordElse expression_or_block)?;
+
+for_expression:
+	KeywordFor Identifier KeywordIn attributes? expression require_clause?
+	  then_expression_or_block 
+	  (KeywordElse expression_or_block)?;
+
+match_case: match_case_label Colon (expression | code_block);
+match_case_label: attributes? match_item_list;
+match_item_list: pattern require_clause? (Comma pattern require_clause?)*;
 
 type_expression
 	: Identifier
@@ -622,13 +647,15 @@ path_expression_element:
 literal_expression:
 	literal;
 
-literal:
-	numeric_literal |
-	boolean_literal |
-	string_literal |
-	null_literal |
-	undefined_literal |
-	default_literal;
+literal
+	: numeric_literal
+	| boolean_literal
+	| string_literal
+	| null_literal
+	| undefined_literal
+	| default_literal
+	| array_literal
+	;
 
 numeric_literal:
 	integer_literal |
@@ -650,6 +677,8 @@ null_literal: KeywordNull;
 undefined_literal: KeywordUndefined;
 
 default_literal: KeywordDefault;
+
+array_literal: LeftCurly (expression (Comma expression)* Comma?)? RightCurly;
 
 // String Literals
 string_literal:
@@ -682,3 +711,26 @@ interpolated_string_literal:
 			| tuple_element Comma tuple_element_list
 		) RightParenthese
 	)* MultiLineStringClose;
+
+pattern
+	: wildcard_pattern (Colon type_annotation)?										#wildcard_pattern_
+	| identifier_pattern (Colon type_annotation)?									#identifier_pattern_
+	| value_binding_pattern (Colon type_annotation)?								#value_binding_pattern_
+	| tuple_pattern																	#tuple_pattern_
+	| enumerator_pattern															#enumerator_pattern_
+	| optional_pattern																#optional_pattern_
+	| KeywordIs type_expression 													#is_pattern_
+	| pattern KeywordAs type_expression												#as_pattern_
+	| expression																	#expression_pattern_
+	;
+
+tuple_pattern_element_list: tuple_pattern_element (Comma tuple_pattern_element)* Comma?;
+tuple_pattern_element: pattern | Identifier Colon pattern;
+
+wildcard_pattern: Underscore;
+identifier_pattern: Identifier;
+value_binding_pattern: KeywordVar pattern | KeywordVal pattern;
+tuple_pattern: LeftParenthese tuple_pattern_element_list? RightParenthese;
+enumerator_pattern: type_expression? Dot enumerator_name tuple_pattern?;
+optional_pattern: Identifier Question;
+expression_pattern: expression;
