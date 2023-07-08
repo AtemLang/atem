@@ -27,6 +27,23 @@ empty_declare_operator: Colon Assign;
 
 declarator_name: path_expression;
 
+declaration_expression
+	: package_declaration
+	| project_declaration
+	| module_declaration
+	| namespace_declaration
+	| function_declaration
+	| variable_declaration
+	| constant_declaration
+	| import_alias_declaration
+	| typealias_declaration
+	| struct_declaration
+	| class_declaration
+	| protocol_declaration
+	| union_declaration
+	| enum_declaration
+	;
+
 struct_declaration: KeywordStruct attributes? final_specifier? extension_list? initializer_list? deinitializer_list? member_list;
 
 class_declaration: KeywordClass attributes? final_specifier? extension_list? initializer_list? deinitializer_list? member_list;
@@ -242,6 +259,9 @@ package_members: package_member+;
 module_declaration:
 	(KeywordModule attributes?) | (KeywordModule attributes? code_block_no_label);
 
+namespace_declaration:
+	KeywordNamespace attributes? code_block_no_label;
+
 typealias_declaration:
 	KeywordAlias KeywordType type_expression;
 
@@ -425,6 +445,7 @@ expression
 	| literal_expression																#literal_expression_
 	| expression Comma expression														#comma_expression_
 	| expression Dot Identifier															#field_expression_
+	| Dot Identifier																	#anonymous_field_expression_
 	| expression function_call_operator													#member_function_call_expression_
 	| expression unary_optional_unwrapping_operator										#unary_optional_unwrapping_expression_
 	| expression binary_optional_unwrapping_operator expression							#binary_optional_unwrapping_expression_
@@ -460,6 +481,7 @@ expression
 	| reflect_operator expression														#reflection_expression_
 	| expression PointerDeref															#derefence_expression_
 	| expression ObjectAddress															#object_address_expression_
+	| expression KeywordWith LeftCurly expression+ RightCurly							#with_expression_
 	| declaration_expression															#declaretion_expression_
 	| KeywordIf expression ((KeywordThen expression) | (code_block))  
 	  (KeywordElse (expression | code_block))?											#if_expression_
@@ -467,25 +489,9 @@ expression
       (KeywordElse (expression | code_block))?											#while_expression_
 	| KeywordRepeat expression ((KeywordThen expression) | (code_block))  
 	  (KeywordElse (expression | code_block))?											#repeat_while_expression_
-	| KeywordFor Identifier KeywordIn attributes? KeywordIn expression 
+	| KeywordFor Identifier KeywordIn attributes? expression 
 	  ((KeywordThen expression) | (code_block)) 
 	  (KeywordElse (expression | code_block) )?											#for_expression_
-	;
-
-declaration_expression
-	: package_declaration
-	| project_declaration
-	| module_declaration
-	| function_declaration
-	| variable_declaration
-	| constant_declaration
-	| import_alias_declaration
-	| typealias_declaration
-	| struct_declaration
-	| class_declaration
-	| protocol_declaration
-	| union_declaration
-	| enum_declaration
 	;
 
 code_block_expression: code_block;
