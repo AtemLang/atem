@@ -16,6 +16,10 @@ statement:
 
 statements: statement+;
 
+declaration_statement_or_list: declaration_statement | declaration_statement_list;
+
+declaration_statement_list: LeftCurly declaration_statement (Comma declaration_statement)* Comma? RightCurly;
+
 declaration_statement:
 	declarator declaration_expression;
 
@@ -482,6 +486,8 @@ expression
 	| expression PointerDeref															#derefence_expression_
 	| expression ObjectAddress															#object_address_expression_
 	| expression KeywordWith LeftCurly expression+ RightCurly							#with_expression_
+	| KeywordUse declaration_statement_or_list KeywordIn expression						#use_in_expression_
+	| KeywordUsing expression															#using_expression_
 	| declaration_expression															#declaretion_expression_
 	| KeywordIf expression ((KeywordThen expression) | (code_block))  
 	  (KeywordElse (expression | code_block))?											#if_expression_
