@@ -24,7 +24,7 @@ declaration_statement:
 	declarator declaration_expression;
 
 declarator:
-	access_level_specifier? declarator_name declare_operator;
+	access_level_specifier? storage_level_specifier? declarator_name declare_operator;
 
 declare_operator: Colon (attributes? type_expression)? Assign;
 empty_declare_operator: Colon Assign;
@@ -81,8 +81,8 @@ inherit_constant_override: KeywordOverride inherit_declarator constant_declarati
 inherit_function_override: KeywordOverride inherit_declarator function_declaration;
 inherit_initializer_override: KeywordOverride empty_inherit_declarator initializer_declaration;
 inherit_deinitializer_override: KeywordOverride empty_inherit_declarator deinitializer_declaration;
-inherit_declarator: access_level_specifier? member_specifiers? inherit_name declare_operator;
-empty_inherit_declarator: access_level_specifier? member_specifiers? empty_declare_operator;
+inherit_declarator: access_level_specifier? storage_level_specifier? member_specifiers? inherit_name declare_operator;
+empty_inherit_declarator: access_level_specifier? storage_level_specifier? member_specifiers? empty_declare_operator;
 inherit_name: Identifier;
 
 impl_clause: KeywordImpl impl_list;
@@ -104,8 +104,8 @@ associated_constant_impl: KeywordRequire associated_declarator constant_declarat
 associated_function_impl: KeywordRequire associated_declarator function_declaration;
 associated_initializer_impl: KeywordRequire empty_declare_operator initializer_declaration;
 associated_deinitializer_impl: KeywordRequire empty_declare_operator deinitializer_declaration;
-associated_declarator: access_level_specifier? member_specifiers? associated_name declare_operator;
-empty_associated_declarator: access_level_specifier? member_specifiers? empty_declare_operator;
+associated_declarator: access_level_specifier? storage_level_specifier? member_specifiers? associated_name declare_operator;
+empty_associated_declarator: access_level_specifier? storage_level_specifier? member_specifiers? empty_declare_operator;
 associated_name: Identifier;
 
 initializer_list: KeywordInit initializer_member_list;
@@ -136,17 +136,17 @@ member_nested_type
 	| nested_union
 	| nested_enum
 	;
-nested_class: declarator class_declaration;
-nested_struct: declarator struct_declaration;
-nested_protocol: declarator protocol_declaration;
-nested_union: declarator union_declaration;
-nested_enum: declarator enum_declaration;
+nested_class: member_declarator class_declaration;
+nested_struct: member_declarator struct_declaration;
+nested_protocol: member_declarator protocol_declaration;
+nested_union: member_declarator union_declaration;
+nested_enum: member_declarator enum_declaration;
 
 member_type: member_declarator typealias_declaration;
-member_variable: member_declarator storage_level_specifier? variable_declaration getter_and_setter_list?;
-member_constant: member_declarator storage_level_specifier? constant_declaration getter_list?;
-member_function: member_declarator storage_level_specifier? function_declaration;
-member_declarator: access_level_specifier? member_specifiers? member_name declare_operator;
+member_variable: member_declarator variable_declaration getter_and_setter_list?;
+member_constant: member_declarator constant_declaration getter_list?;
+member_function: member_declarator function_declaration;
+member_declarator: access_level_specifier? storage_level_specifier? member_specifiers? member_name declare_operator;
 member_name: Identifier;
 getter_and_setter_list: KeywordWith LeftCurly getter_and_setter_items RightCurly;
 getter_list: KeywordWith LeftCurly getter_declaration RightCurly;
@@ -181,8 +181,8 @@ protocol_requirement_variable: requirement_declarator KeywordVar requirement_get
 protocol_requirement_constant: requirement_declarator KeywordConst requirement_getter? (requirement_default_clause constant_declaration getter_list?)?;
 protocol_requirement_initializer: empty_requirement_declarator KeywordInit (requirement_default_clause initializer_declaration)?;
 protocol_requirement_deinitializer: empty_requirement_declarator KeywordDeinit (requirement_default_clause deinitializer_declaration)?;
-requirement_declarator: KeywordRequire Question? requirement_name declare_operator;
-empty_requirement_declarator: KeywordRequire Question? empty_declare_operator;
+requirement_declarator: KeywordRequire Question? access_level_specifier? storage_level_specifier? member_specifiers? requirement_name declare_operator;
+empty_requirement_declarator: KeywordRequire Question? access_level_specifier? storage_level_specifier? member_specifiers? empty_declare_operator;
 requirement_name: Identifier;
 requirement_default_clause: KeywordDefault Assign;
 requirement_getter_and_setter: LeftCurly requirement_getter_and_setter_item (Comma requirement_getter_and_setter_item)+ Comma RightCurly;
@@ -198,7 +198,14 @@ deinitializer_declaration: KeywordDeinit deinitializer_type code_block;
 union_declaration: KeywordUnion attributes? final_specifier?;
 
 enum_declaration: KeywordEnum attributes? final_specifier? extension_list? initializer_list? deinitializer_list? member_list? enumerator_list;
-enumerator_list: LeftCurly enumerator (Comma enumerator)+ Comma? RightCurly;
+enumerator_list: LeftCurly enumeration_item (Comma enumeration_item)+ Comma? RightCurly;
+enumeration_item
+	: enumerator
+	| member_variable
+	| member_constant
+	| member_function
+	| member_nested_type
+	;
 enumerator: enumerator_name enumerator_associated_value_clause? enumerator_representation?;
 enumerator_associated_value_clause: Colon LeftParenthese enumerator_associated_value_list? RightParenthese;
 enumerator_associated_value_list: enumerator_associated_value (Comma enumerator_associated_value)*;
