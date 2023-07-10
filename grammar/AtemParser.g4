@@ -451,6 +451,11 @@ await_operator: KeywordAwait;
 
 async_operator: KeywordAsync;
 
+pipeline_operator
+	: PlaceholderPipeline
+	| LeftThreadingPipeline
+	;
+
 expression
 	: LeftParenthese expression RightParenthese											#parentheses_expression_
 	| literal_expression																#literal_expression_
@@ -495,6 +500,8 @@ expression
 	| reflect_operator expression														#reflection_expression_
 	| expression PointerDeref															#derefence_expression_
 	| expression ObjectAddress															#object_address_expression_
+	| RemainderDivide expression?														#placeholder_expression_
+	| expression pipeline_operator expression											#pipeline_expression_
 	| expression KeywordWith LeftCurly expression+ RightCurly							#with_expression_
 	| KeywordUse declaration_statement_or_list KeywordIn expression						#use_in_expression_
 	| KeywordUsing expression															#using_expression_
@@ -710,14 +717,14 @@ interpolated_string_literal:
 		| InterpolataionSingleLine (
 			expression
 			| tuple_element Comma tuple_element_list
-		) RightParenthese
+		) RightCurly
 	)* SingleLineStringClose
 	| MultiLineStringOpen (
 		QuotedMultiLineText
 		| InterpolataionMultiLine (
 			expression
 			| tuple_element Comma tuple_element_list
-		) RightParenthese
+		) RightCurly
 	)* MultiLineStringClose;
 
 pattern

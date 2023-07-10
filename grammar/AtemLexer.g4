@@ -1,5 +1,16 @@
 lexer grammar AtemLexer;
 
+@lexer::header {
+	#include <stack>
+}
+@lexer::members {
+	std::stack<int> curly = std::stack<int>{};
+
+	void reset() override{
+		curly = std::stack<int>{};
+	}
+}
+
 //Keywords
 
 KeywordAbstract: 'abstract';
@@ -239,8 +250,26 @@ fragment Sign: [+-];
 
 //Operators
 
-LeftCurly: '{';
-RightCurly: '}';
+LeftCurly: '{' { 
+					if (!curly.empty()) {
+						int top = curly.top();
+						curly.pop();
+						curly.push(top + 1);
+						curly.pop();
+					}
+				};
+RightCurly: '}' { if(!curly.empty()) 
+					{
+						int top = curly.top();
+						curly.pop();
+						curly.push(top - 1); 
+						if(curly.top() == 0) 
+						{ 
+							curly.pop();
+							popMode();
+						}
+					}
+				};
 LeftParenthese: '(';
 RightParenthese: ')';
 LeftSquare: '[';
@@ -323,6 +352,9 @@ OpenedRange: '<.<';
 DefaultUnwrapping: '??';
 
 Arrow: '->';
+
+PlaceholderPipeline: '|>';
+LeftThreadingPipeline: '/>';
 
 OperatorHeadOther:
 	[\u00A1-\u00A7]
@@ -416,7 +448,7 @@ SingleLineStringOpen: '"' -> pushMode(SingleLine);
 mode SingleLine;
 
 InterpolataionSingleLine:
-	'\\(' -> pushMode(DEFAULT_MODE);
+	'${' {curly.push(1); } -> pushMode(DEFAULT_MODE);
 
 SingleLineStringClose: '"' -> popMode;
 
@@ -425,7 +457,7 @@ QuotedSingleLineText: QuotedText;
 mode MultiLine;
 
 InterpolataionMultiLine:
-	'\\(' -> pushMode(DEFAULT_MODE);
+	'${' {curly.push(1); } -> pushMode(DEFAULT_MODE);
 
 MultiLineStringClose: '"""' -> popMode;
 
@@ -445,7 +477,7 @@ QuotedMultiLineExtendedText: ~["]+ | '"' '"'?;
 
 fragment QuotedText: QuotedTextItem+;
 
-fragment QuotedTextItem: EscapedCharacter | ~["\n\r\\];
+fragment QuotedTextItem: EscapedCharacter | ~["\n\r$];
 
 fragment MultilineQuotedText:
 	EscapedCharacter
