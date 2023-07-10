@@ -46,7 +46,11 @@ declaration_expression
 	| protocol_declaration
 	| union_declaration
 	| enum_declaration
+	| test_declaration
 	;
+
+test_declaration: KeywordTest attributes? test_name? code_block_no_label;
+test_name: string_literal;
 
 struct_declaration: KeywordStruct attributes? final_specifier? extension_list? initializer_list? deinitializer_list? member_list;
 

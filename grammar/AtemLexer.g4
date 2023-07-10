@@ -117,6 +117,7 @@ KeywordString: 'String';
 KeywordStruct: 'struct';	
 KeywordSuccess: 'success';
 KeywordSuper: 'super';
+KeywordTest: 'test';
 KeywordThen: 'then';
 KeywordThis: 'this';	
 KeywordThreadLocal: 'threadLocal';
