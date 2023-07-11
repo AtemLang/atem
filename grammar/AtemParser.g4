@@ -536,23 +536,28 @@ require_clause: KeywordRequire expression;
 
 then_expression_or_block: (KeywordThen expression) | (code_block);
 expression_or_block: expression | code_block;
+then_type_expression_or_block: (KeywordThen type_expression) | (code_block);
+type_expression_or_block: type_expression | code_block;
 
 if_expression:
 	KeywordIf expression then_expression_or_block  
-	  (KeywordElse expression_or_block)?;
+	(KeywordElse expression_or_block)?;
 
 while_expression:
 	KeywordWhile expression then_expression_or_block  
-      (KeywordElse expression_or_block)?;
+	(KeywordWith then_expression_or_block)?
+    (KeywordElse expression_or_block)?;
 
 repeat_while_expression:
 	KeywordRepeat expression then_expression_or_block  
-	  (KeywordElse expression_or_block)?;
+	(KeywordWith then_expression_or_block)?
+	(KeywordElse expression_or_block)?;
 
 for_expression:
 	KeywordFor Identifier KeywordIn attributes? expression require_clause?
-	  then_expression_or_block 
-	  (KeywordElse expression_or_block)?;
+	then_expression_or_block 
+	(KeywordWith then_expression_or_block)?
+	(KeywordElse expression_or_block)?;
 
 match_case: match_case_label Colon (expression | code_block);
 match_case_label: attributes? match_item_list;
@@ -570,13 +575,15 @@ type_expression
 	| collection_type
 	| any_type
 	| some_type
+	| const_type
 	| type_expression PointerType
-	| KeywordIf expression ((KeywordThen type_expression) | (code_block)) (KeywordElse (KeywordThen type_expression | code_block))?
-	| KeywordWhile expression KeywordThen type_expression (KeywordElse (type_expression | code_block))?
-	| KeywordRepeat ((KeywordThen type_expression) | (code_block)) KeywordWhile expression (KeywordElse (type_expression | code_block))?
-	| KeywordFor Identifier KeywordIn attributes? KeywordIn expression ((KeywordThen type_expression) | (code_block)) (KeywordElse (type_expression | code_block))?
+	| if_expression
+	| while_expression
+	| repeat_while_expression
+	| for_expression
 	| code_block_expression
 	| KeywordUnreachable
+	| KeywordFallthrough
 	| KeywordThrow expression
 	| KeywordReturn type_expression?
 	| KeywordBreak code_block_name? (KeywordWith type_expression)?
@@ -621,7 +628,7 @@ any_type: KeywordAny type_expression;
 some_type: KeywordSome type_expression;
 
 static_array_type:
-    LeftSquare (expression | Underscore) (Comma	expression | Underscore)+ Comma? RightSquare (type_expression | Underscore);
+    LeftSquare (expression | Underscore) (Comma	expression | Underscore)* Comma? RightSquare (type_expression | Underscore);
 
 dynamic_array_type:
     LeftSquare RightSquare (type_expression | Underscore);
@@ -630,7 +637,10 @@ map_type:
 	LeftSquare (type_expression | Underscore) Colon (type_expression | Underscore) RightSquare;
 
 set_type:
-	LeftSquare (type_expression | Underscore) RightSquare;
+	LeftSquare Colon (type_expression | Underscore) RightSquare;
+
+const_type
+	: KeywordConst type_expression;
 
 simple_type:
 	integer_type | floating_point_type | boolean_type | byte_type | unit_type | character_type | string_type | comptime_type;
