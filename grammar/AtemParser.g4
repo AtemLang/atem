@@ -168,8 +168,8 @@ setter_parameter: setter_parameter_name (Colon type_annotation)?;
 setter_parameter_name: Identifier;
 
 protocol_declaration: KeywordProtocol attributes? final_specifier? protocol_extend_list? protocol_requirement_list;
-protocol_extend_list: LeftCurly RightCurly;
-protocol_requirement_list: LeftCurly protocol_requirement_items RightCurly;
+protocol_extend_list: KeywordExtend LeftCurly RightCurly;
+protocol_requirement_list: KeywordMember LeftCurly protocol_requirement_items RightCurly;
 protocol_requirement_item
 	: protocol_requirement_type
 	| protocol_requirement_function
