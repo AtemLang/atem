@@ -469,6 +469,18 @@ pipeline_operator
 array_index_operator
 	: LeftSquare expression (Comma expression)* Comma? RightSquare;
 
+tuple_index_operator
+	: Dot LeftSquare expression (Comma expression)* Comma? RightSquare;
+
+builtin_function_operator
+	: Builtin;
+
+builtin_function_name
+	: BuiltinCompileError
+	| BuiltinCompileInfo
+	| BuiltinCompileWarning
+	;
+
 expression
 	: LeftParenthese expression RightParenthese											#parentheses_expression_
 	| literal_expression																#literal_expression_
@@ -483,6 +495,7 @@ expression
 	| negation_operator expression														#negation_expression_
 	| path_expression																	#path_expression_
 	| expression array_index_operator													#array_index_expression_
+	| expression tuple_index_operator													#tuple_index_expression_
 	| expression assignment_operator expression											#assignment_expression_
 	| expression comparison_operator expression											#comparison_expression_
 	| try_operator expression															#try_expression_
@@ -528,6 +541,8 @@ expression
 	| for_expression																	#for_expression_
 	| expression KeywordMatch (match_case | (LeftCurly match_case+ RightCurly))
 	  (KeywordElse expression_or_block)?												#match_expression_
+	| builtin_function_operator builtin_function_name function_call_operator			#builtin_function_call
+	| Underscore																		#wildcard_expression_
 	;
 
 code_block_expression: code_block;
@@ -569,6 +584,7 @@ type_expression
 	| path_expression function_call_operator
 	| path_expression
 	| type_expression array_index_operator
+	| type_expression tuple_index_operator
 	| basic_type
 	| tuple_type
 	| optional_type
@@ -589,6 +605,8 @@ type_expression
 	| KeywordBreak code_block_name? (KeywordWith type_expression)?
 	| KeywordContinue code_block_name?
 	| KeywordComptime type_expression
+	| builtin_function_operator builtin_function_name function_call_operator
+	| Underscore
 	;
 
 basic_type
@@ -614,8 +632,10 @@ collection_type
 
 never_type: KeywordNever;
 
-tuple_type:
-    LeftParenthese ((tuple_type_element Comma)+ tuple_type_element?)? RightParenthese;
+tuple_type
+    : LeftParenthese ((tuple_type_element Comma)+ tuple_type_element?)? RightParenthese
+	| LeftParenthese ClosedRange RightParenthese
+	;
 
 tuple_type_element:
     attributes? type_expression | Identifier Colon attributes? type_expression;
@@ -628,16 +648,16 @@ any_type: KeywordAny type_expression;
 some_type: KeywordSome type_expression;
 
 static_array_type:
-    LeftSquare (expression | Underscore) (Comma	expression | Underscore)* Comma? RightSquare (type_expression | Underscore);
+    LeftSquare expression (Comma expression)* Comma? RightSquare type_expression;
 
 dynamic_array_type:
-    LeftSquare RightSquare (type_expression | Underscore);
+    LeftSquare RightSquare type_expression;
 
 map_type:
-	LeftSquare (type_expression | Underscore) Colon (type_expression | Underscore) RightSquare;
+	LeftSquare type_expression Colon type_expression RightSquare;
 
 set_type:
-	LeftSquare Colon (type_expression | Underscore) RightSquare;
+	LeftSquare type_expression RightSquare;
 
 const_type
 	: KeywordConst type_expression;
@@ -666,9 +686,9 @@ comptime_type: KeywordCompileTimeChar | KeywordCompileTimeFloat | KeywordCompile
 
 type_type: KeywordType;
 
-tuple_expression:
-	LeftParenthese RightParenthese |
-	LeftParenthese tuple_element Comma tuple_element_list RightParenthese;
+tuple_expression
+	: LeftParenthese RightParenthese
+	| LeftParenthese tuple_element Comma tuple_element_list RightParenthese;
 
 tuple_element_list:
 	tuple_element (Comma tuple_element)*;
@@ -694,6 +714,7 @@ literal
 	: numeric_literal
 	| boolean_literal
 	| string_literal
+	| char_literal
 	| null_literal
 	| undefined_literal
 	| default_literal
@@ -754,6 +775,9 @@ interpolated_string_literal:
 			| tuple_element Comma tuple_element_list
 		) RightCurly
 	)* MultiLineStringClose;
+
+char_literal
+	: CharLiteralOpen ValidChar CharLiteralClose;
 
 pattern
 	: wildcard_pattern (Colon type_annotation)?										#wildcard_pattern_

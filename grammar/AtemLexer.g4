@@ -357,6 +357,8 @@ Arrow: '->';
 PlaceholderPipeline: '|>';
 LeftThreadingPipeline: '/>';
 
+Builtin: '##' -> pushMode(BuiltinFunction);
+
 OperatorHeadOther:
 	[\u00A1-\u00A7]
 	| [\u00A9\u00AB]
@@ -505,3 +507,22 @@ fragment EscapedNewline:
 fragment InlineSpaces: [\u0009\u0020];
 
 fragment LineBreak: [\u000A\u000D]| '\u000D' '\u000A';
+
+mode DEFAULT_MODE;
+
+CharLiteralOpen: '\'' -> pushMode(CharLiteral);
+
+mode CharLiteral;
+
+ValidChar
+	: EscapedCharacter
+	| ~ ['\\\r\n]
+	;
+
+CharLiteralClose: '\'' -> popMode;
+
+mode BuiltinFunction;
+
+BuiltinCompileError: 'compileError' -> popMode;
+BuiltinCompileInfo: 'compileInfo' -> popMode;
+BuiltinCompileWarning: 'compileWarning' -> popMode;
