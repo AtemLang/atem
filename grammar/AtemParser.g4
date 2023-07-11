@@ -46,15 +46,21 @@ declaration_expression
 	| protocol_declaration
 	| union_declaration
 	| enum_declaration
+	| extension_declaration
 	| test_declaration
 	;
 
 test_declaration: KeywordTest attributes? test_name? code_block_no_label;
 test_name: string_literal;
 
-struct_declaration: KeywordStruct attributes? final_specifier? extension_list? initializer_list? deinitializer_list? member_list;
+struct_declaration: KeywordStruct udt_parameter_clause? attributes? final_specifier? extension_list? initializer_list? deinitializer_list? member_list;
 
-class_declaration: KeywordClass attributes? final_specifier? extension_list? initializer_list? deinitializer_list? member_list;
+class_declaration: KeywordClass udt_parameter_clause? attributes? final_specifier? extension_list? initializer_list? deinitializer_list? member_list;
+
+extension_declaration: KeywordExtend path_expression KeywordWith attributes? extension_list? initializer_list? deinitializer_list? member_list;
+
+udt_parameter_clause
+	: LeftParenthese function_parameter_list? RightParenthese;
 
 final_specifier: KeywordFinal;
 member_specifier
@@ -167,7 +173,7 @@ setter_parameter_clause: LeftParenthese setter_parameter RightParenthese;
 setter_parameter: setter_parameter_name (Colon type_annotation)?;
 setter_parameter_name: Identifier;
 
-protocol_declaration: KeywordProtocol attributes? final_specifier? protocol_extend_list? protocol_requirement_list;
+protocol_declaration: KeywordProtocol udt_parameter_clause? attributes? final_specifier? protocol_extend_list? protocol_requirement_list;
 protocol_extend_list: KeywordExtend LeftCurly RightCurly;
 protocol_requirement_list: KeywordMember LeftCurly protocol_requirement_items RightCurly;
 protocol_requirement_item
@@ -201,7 +207,7 @@ deinitializer_declaration: KeywordDeinit deinitializer_type code_block;
 
 union_declaration: KeywordUnion attributes? final_specifier?;
 
-enum_declaration: KeywordEnum attributes? final_specifier? extension_list? initializer_list? deinitializer_list? member_list? enumerator_list;
+enum_declaration: KeywordEnum udt_parameter_clause? attributes? final_specifier? extension_list? initializer_list? deinitializer_list? member_list? enumerator_list;
 enumerator_list: LeftCurly enumeration_item (Comma enumeration_item)+ Comma? RightCurly;
 enumeration_item
 	: enumerator
@@ -460,12 +466,15 @@ pipeline_operator
 	| LeftThreadingPipeline
 	;
 
+array_index_operator
+	: LeftSquare expression (Comma expression)* Comma? RightSquare;
+
 expression
 	: LeftParenthese expression RightParenthese											#parentheses_expression_
 	| literal_expression																#literal_expression_
 	| expression Comma expression														#comma_expression_
-	| expression Dot Identifier															#field_expression_
-	| Dot Identifier																	#anonymous_field_expression_
+	| expression Dot path_expression_element											#field_expression_
+	| Dot path_expression_element														#anonymous_field_expression_
 	| expression function_call_operator													#member_function_call_expression_
 	| expression unary_optional_unwrapping_operator										#unary_optional_unwrapping_expression_
 	| expression binary_optional_unwrapping_operator expression							#binary_optional_unwrapping_expression_
@@ -473,6 +482,7 @@ expression
 	| expression arithmetic_operator expression 										#arithmetic_expression_
 	| negation_operator expression														#negation_expression_
 	| path_expression																	#path_expression_
+	| expression array_index_operator													#array_index_expression_
 	| expression assignment_operator expression											#assignment_expression_
 	| expression comparison_operator expression											#comparison_expression_
 	| try_operator expression															#try_expression_
@@ -489,7 +499,9 @@ expression
 	| expression type_casting_operator type_expression									#type_cast_expression_
 	| closure_expression																#closure_expression_
 	| expression Dot KeywordInit														#init_expression_
+	| Dot KeywordInit																	#anonymous_init_expression_
 	| expression Dot KeywordDeinit														#deinit_expression_
+	| Dot KeywordDeinit																	#anonymous_deinit_expression_
 	| expression Dot KeywordSelf														#self_expression_
 	| code_block_expression																#code_block_expression_
 	| type_expression																	#type_expression_
@@ -549,7 +561,9 @@ match_item_list: pattern require_clause? (Comma pattern require_clause?)*;
 type_expression
 	: Identifier
 	| RightParenthese type_expression LeftParenthese
+	| path_expression function_call_operator
 	| path_expression
+	| type_expression array_index_operator
 	| basic_type
 	| tuple_type
 	| optional_type
