@@ -108,12 +108,13 @@ impl_member
 	| associated_function_impl
 	;
 impl_members: impl_member+;
-associated_type_impl: KeywordRequire associated_declarator typealias_declaration;
-associated_variable_impl: KeywordRequire associated_declarator variable_declaration getter_and_setter_list?;
-associated_constant_impl: KeywordRequire associated_declarator constant_declaration getter_list?;
-associated_function_impl: KeywordRequire associated_declarator function_declaration;
-associated_initializer_impl: KeywordRequire empty_declare_operator initializer_declaration;
-associated_deinitializer_impl: KeywordRequire empty_declare_operator deinitializer_declaration;
+default_clause: Assign default_literal;
+associated_type_impl: KeywordRequire associated_declarator typealias_declaration | default_clause;
+associated_variable_impl: KeywordRequire associated_declarator variable_declaration | default_clause getter_and_setter_list?;
+associated_constant_impl: KeywordRequire associated_declarator constant_declaration | default_clause getter_list?;
+associated_function_impl: KeywordRequire associated_declarator function_declaration | default_clause;
+associated_initializer_impl: KeywordRequire empty_declare_operator initializer_declaration | default_clause;
+associated_deinitializer_impl: KeywordRequire empty_declare_operator deinitializer_declaration | default_clause;
 associated_declarator: access_level_specifier? storage_level_specifier? member_specifiers? associated_name declare_operator;
 empty_associated_declarator: access_level_specifier? storage_level_specifier? member_specifiers? empty_declare_operator;
 associated_name: Identifier;
@@ -173,7 +174,7 @@ setter_parameter_clause: LeftParenthese setter_parameter RightParenthese;
 setter_parameter: setter_parameter_name (Colon type_annotation)?;
 setter_parameter_name: Identifier;
 
-protocol_declaration: KeywordProtocol udt_parameter_clause? attributes? final_specifier? protocol_extend_list? protocol_requirement_list;
+protocol_declaration: KeywordProtocol udt_parameter_clause? attributes? final_specifier? protocol_extend_list? protocol_requirement_list (KeywordWith Identifier)?;
 protocol_extend_list: KeywordExtend LeftCurly RightCurly;
 protocol_requirement_list: KeywordMember LeftCurly protocol_requirement_items RightCurly;
 protocol_requirement_item
@@ -262,7 +263,7 @@ package_declaration:
 	KeywordPackage udt_parameter_clause? attributes? package_member_list?;
 
 package_member_list
-	: LeftCurly package_member+ RightCurly;
+	: KeywordMember LeftCurly package_member+ RightCurly;
 	
 package_member
 	: path_expression;
