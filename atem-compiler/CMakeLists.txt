@@ -19,7 +19,7 @@ include_directories ("${LLVM}/include")
 include_directories("/")
 link_directories ("${LLVM}/lib")
 
-add_executable (atem "main.cpp" include/Utils/boolean.h src/Lex/Lexer.cpp include/Lex/Lexer.h include/Lex/Token.h src/Lex/Token.cpp include/Lex/TokenEnum.h include/Basic/SourceLocation.h src/Basic/SourceLocation.cpp include/Basic/Source.h src/Basic/Source.cpp src/AST/ASTNode.cpp include/AST/ASTNode.h include/AST/ExprASTNode.h include/Utils/TerseLambda.h include/Utils/declval.h include/Utils/fwd.h include/Utils/Lift.h include/AST/StmtASTNode.h include/AST/DeclASTNode.h include/Basic/RawSourceFile.h src/Basic/RawSourceFile.cpp include/Utils/co_resource.h include/Utils/addressof.h include/Exception/Exception.h)
+add_executable (atem "main.cpp")
 
 target_link_libraries(atem
         PRIVATE

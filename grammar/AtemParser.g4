@@ -57,7 +57,7 @@ struct_declaration: KeywordStruct udt_parameter_clause? attributes? final_specif
 
 class_declaration: KeywordClass udt_parameter_clause? attributes? final_specifier? extension_list? initializer_list? deinitializer_list? member_list;
 
-extension_declaration: KeywordExtend path_expression KeywordWith attributes? extension_list? initializer_list? deinitializer_list? member_list;
+extension_declaration: KeywordExtend path_expression KeywordWith attributes? extension_list? initializer_list? deinitializer_list? member_list enumerator_list?;
 
 udt_parameter_clause
 	: LeftParenthese function_parameter_list? RightParenthese;
@@ -539,10 +539,12 @@ expression
 	| while_expression						 											#while_expression_
 	| repeat_while_expression															#repeat_while_expression_
 	| for_expression																	#for_expression_
+	| foreach_expression																#foreach_expression_
 	| expression KeywordMatch (match_case | (LeftCurly match_case+ RightCurly))
 	  (KeywordElse expression_or_block)?												#match_expression_
 	| builtin_function_operator builtin_function_name function_call_operator			#builtin_function_call
 	| Underscore																		#wildcard_expression_
+	| KeywordAsm LeftParenthese string_literal RightParenthese							#assembly_expression_
 	;
 
 code_block_expression: code_block;
@@ -550,6 +552,7 @@ code_block_expression: code_block;
 require_clause: KeywordRequire expression;
 
 then_expression_or_block: (KeywordThen expression) | (code_block);
+then_expression_or_then_block: (KeywordThen expression) | (KeywordThen code_block);
 expression_or_block: expression | code_block;
 then_type_expression_or_block: (KeywordThen type_expression) | (code_block);
 type_expression_or_block: type_expression | code_block;
@@ -560,18 +563,25 @@ if_expression:
 
 while_expression:
 	KeywordWhile expression then_expression_or_block  
-	(KeywordWith then_expression_or_block)?
+	then_expression_or_then_block?
     (KeywordElse expression_or_block)?;
 
 repeat_while_expression:
 	KeywordRepeat expression then_expression_or_block  
-	(KeywordWith then_expression_or_block)?
+	KeywordWhile expression
+	then_expression_or_then_block?
 	(KeywordElse expression_or_block)?;
 
 for_expression:
 	KeywordFor Identifier KeywordIn attributes? expression require_clause?
 	then_expression_or_block 
-	(KeywordWith then_expression_or_block)?
+	then_expression_or_then_block?
+	(KeywordElse expression_or_block)?;
+
+foreach_expression:
+	KeywordForeach Identifier KeywordIn attributes? expression require_clause?
+	then_expression_or_block 
+	then_expression_or_then_block?
 	(KeywordElse expression_or_block)?;
 
 match_case: match_case_label Colon (expression | code_block);
@@ -597,6 +607,7 @@ type_expression
 	| while_expression
 	| repeat_while_expression
 	| for_expression
+	| foreach_expression
 	| code_block_expression
 	| KeywordUnreachable
 	| KeywordFallthrough

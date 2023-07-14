@@ -63,6 +63,7 @@ KeywordFloat64: 'Float64';
 KeywordFloat80: 'Float80';
 KeywordFloat128: 'Float128';
 KeywordFor: 'for';
+KeywordForeach: 'foreach';
 KeywordForward: 'forward';
 KeywordFunc: 'func';	
 KeywordGet: 'get';	
