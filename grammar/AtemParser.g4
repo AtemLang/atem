@@ -256,32 +256,22 @@ import_kind:
 	| KeywordFunc;
 
 project_declaration:
-	KeywordProject attributes? project_member_list;
-
-project_member_list:
-	KeywordThis | LeftCurly project_members RightCurly;
-
-project_member:
-	path_expression;
-
-project_members: project_member+;
+	KeywordProject attributes? aggregate_initialization_list?;
 
 package_declaration:
-	KeywordPackage attributes? package_member_list;
+	KeywordPackage udt_parameter_clause? attributes? package_member_list?;
 
-package_member_list:
-	KeywordThis | LeftCurly package_members RightCurly;
-
-package_member:
-	path_expression;
-
-package_members: package_member+;
+package_member_list
+	: LeftCurly package_member+ RightCurly;
+	
+package_member
+	: path_expression;
 
 module_declaration:
-	(KeywordModule attributes?) | (KeywordModule attributes? code_block_no_label);
+	(KeywordModule udt_parameter_clause? attributes?) | (KeywordModule udt_parameter_clause? attributes? code_block_no_label);
 
 namespace_declaration:
-	KeywordNamespace attributes? code_block_no_label;
+	KeywordNamespace udt_parameter_clause? attributes? code_block_no_label;
 
 typealias_declaration:
 	KeywordAlias KeywordType type_expression;
@@ -545,6 +535,18 @@ expression
 	| builtin_function_operator builtin_function_name function_call_operator			#builtin_function_call
 	| Underscore																		#wildcard_expression_
 	| KeywordAsm LeftParenthese string_literal RightParenthese							#assembly_expression_
+	| aggregate_initialization_expression												#aggregate_initialization_expression_
+	;
+
+aggregate_initialization_expression
+	: type_expression Dot KeywordInit aggregate_initialization_list;
+
+aggregate_initialization_list
+	: LeftCurly aggregate_initialization_member+ RightCurly;
+
+aggregate_initialization_member
+	: Dot expression Assign expression
+	| Dot expression aggregate_initialization_list
 	;
 
 code_block_expression: code_block;
